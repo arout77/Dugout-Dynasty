@@ -38,6 +38,7 @@ $commands = [
     App\Commands\ImportLeagueStatsCommand::class,
     App\Commands\ImportHitterStatsCommand::class,
     App\Commands\SimulateBatterTestCommand::class,
+    App\Commands\FixScheduleCommand::class,
 ];
 
 // 4. Use the container to resolve and register each command

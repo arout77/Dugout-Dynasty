@@ -1,0 +1,30 @@
+{
+  "name": "rhapsody",
+  "version": "1.0.0",
+  "description": "Rhapsody\r ==========\r Rhapsody is a lightweight web development framework built for PHP 8 and offers extreme performance, a modular architecture, elegant syntax and an easy to use philosophy.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tailwindcss -i ./public/css/main.css -o ./public/css/style.css --watch",
+    "build": "tailwindcss -i ./public/css/main.css -o ./public/css/style.css --minify",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arout77/Rhapsody-Framework.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arout77/Rhapsody-Framework/issues"
+  },
+  "homepage": "https://github.com/arout77/Rhapsody-Framework#readme",
+  "devDependencies": {
+    "tailwindcss": "^3.4.18"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.17",
+    "autoprefixer": "^10.4.22",
+    "postcss": "^8.5.6"
+  }
+}
