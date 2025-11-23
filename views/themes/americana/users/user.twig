@@ -1,0 +1,37 @@
+{% extends "layouts/main.twig" %}
+
+{% block content %}
+    {# Check if the user data was actually found in the database #}
+    {% if user %}
+        <h2 class="text-3xl font-bold text-gray-800 mb-2">User Profile</h2>
+        <hr class="mb-6">
+
+        <div class="space-y-4">
+            <div>
+                <span class="font-bold text-gray-600">User ID:</span>
+                <span class="font-mono bg-gray-200 p-1 rounded">{{ user.user_id }}</span>
+            </div>
+            <div>
+                <span class="font-bold text-gray-600">Name:</span>
+                <span>{{ user.name }}</span>
+            </div>
+            <div>
+                <span class="font-bold text-gray-600">Email:</span>
+                <span>{{ user.email }}</span>
+            </div>
+        </div>
+
+        <div class="mt-8">
+            <a href="{{ base_url }}/users" class="text-blue-500 hover:underline">&larr; Back to All Users</a>
+        </div>
+
+    {% else %}
+        <h2 class="text-3xl font-bold text-red-600">User Not Found</h2>
+        <p class="text-gray-600 mt-4">
+            We couldn't find a user with that ID.
+        </p>
+        <div class="mt-8">
+            <a href="{{ base_url }}/users" class="text-blue-500 hover:underline">&larr; Back to All Users</a>
+        </div>
+    {% endif %}
+{% endblock %}

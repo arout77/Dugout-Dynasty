@@ -1,0 +1,24 @@
+<?php
+
+declare(strict_types=1);
+
+use Phinx\Migration\AbstractMigration;
+
+final class {{ className }} extends AbstractMigration
+{
+    /**
+     * The Change method is for writing reversible migrations.
+     *
+     * The Phinx library will automatically reverse the migration when rolling back.
+     * For more complex migrations, you may need to use the `up()` and `down()` methods.
+     */
+    public function change(): void
+    {
+        // Example:
+        // $table = $this->table('posts');
+        // $table->addColumn('title', 'string', ['limit' => 255])
+        //       ->addColumn('body', 'text')
+        //       ->addColumn('created_at', 'timestamp', ['default' => 'CURRENT_TIMESTAMP'])
+        //       ->create();
+    }
+}

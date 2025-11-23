@@ -1,0 +1,78 @@
+{% extends "docs/_layout.twig" %}
+
+{% block doc_content %}
+    <h1>Performance & Caching</h1>
+    <p>
+        Rhapsody is built for performance and includes a robust, multi-driver caching system. This allows you to store the results of expensive operations, such as complex database queries or external API calls, to significantly speed up your application.
+    </p>
+
+    <h2>Cache Drivers</h2>
+    <p>
+        The framework supports multiple cache backends, or "drivers." You can switch between them with a single configuration change, allowing you to use a simple file-based cache locally and a high-performance Redis cache in production.
+    </p>
+    <p>The driver is configured in your <code>.env</code> file:</p>
+    <pre><code class="language-bash">
+# Use the local filesystem for caching
+CACHE_DRIVER=file
+
+# Use a Redis server for caching
+CACHE_DRIVER=redis
+</code></pre>
+
+    <h3>Redis Configuration</h3>
+    <p>
+        When using the <code>redis</code> driver, you must also provide the connection details for your Redis server in your <code>.env</code> file.
+    </p>
+    <pre><code class="language-bash">
+REDIS_HOST=127.0.0.1
+REDIS_PORT=6379
+REDIS_PASSWORD=null
+</code></pre>
+
+    <hr>
+
+    <h2>Using the Cache</h2>
+    <p>
+        The cache is managed by the <code>Core\Cache</code> class, which is available via the service container. The most common way to interact with the cache is the <code>remember()</code> method.
+    </p>
+
+    <h3>The `remember()` Method</h3>
+    <p>This method is a "cache-aside" implementation that simplifies the process of getting and setting cache items:</p>
+    <ol>
+        <li>It checks if a value exists in the cache for a given key.</li>
+        <li>If it exists and is not expired, it returns the cached value.</li>
+        <li>If it does not exist, it executes the provided function, saves its return value to the cache for a specified number of minutes, and then returns that value.</li>
+    </ol>
+    <pre><code class="language-php">
+use Core\Cache;
+
+class PostController extends BaseController
+{
+    public function __construct(protected Cache $cache, /*...*/) {}
+    
+    public function index()
+    {
+        // This query will only run if 'posts.all' is not in the cache
+        // or has expired. Otherwise, the result is fetched directly from
+        // the cache (file or Redis), avoiding a database hit.
+        $posts = $this->cache->remember('posts.all', 60, function () {
+            // Expensive operation, like a database query
+            return $this->postModel->findAll();
+        });
+
+        return $this->view('posts/index.twig', ['posts' => $posts]);
+    }
+}
+</code></pre>
+    <p>
+        This method works seamlessly regardless of which driver is active.
+    </p>
+    
+    <h3>Other Cache Methods</h3>
+    <ul>
+        <li><code>$this->cache->get('key')</code>: Retrieve an item from the cache.</li>
+        <li><code>$this->cache->put('key', $value, $minutes)</code>: Store an item in the cache.</li>
+        <li><code>$this->cache->has('key')</code>: Check if an item exists in the cache.</li>
+        <li><code>$this->cache->forget('key')</code>: Remove an item from the cache.</li>
+    </ul>
+{% endblock %}

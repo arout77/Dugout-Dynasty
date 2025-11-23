@@ -1,0 +1,52 @@
+{% extends "docs/_layout.twig" %}
+
+{% block doc_content %}
+    <h1>Routing</h1>
+    <p>
+        The router is the heart of the Rhapsody framework. It maps incoming browser requests to specific controller methods,
+        allowing you to create clean, human-readable URLs. All routes for your web application are defined in the <code>/routes/web.php</code> and <code>/routes/api.php</code> files.
+    </p>
+
+    <h2>Basic Routing</h2>
+    <p>
+        The most basic route accepts a URI and a callback. The callback is typically an array containing the controller class
+        and the method name to execute. You can define routes for different HTTP methods like GET and POST.
+    </p>
+    <pre><code class="language-php">// routes/web.php
+use App\Controllers\PageController;
+use Core\Router;
+
+// A GET route that shows the about page
+Router::get('/about', [PageController::class, 'about']);
+
+// A POST route that handles a form submission
+Router::post('/contact', [PageController::class, 'handleContact']);</code></pre>
+
+    <h2>Dynamic Routes with Parameters</h2>
+    <p>
+        Often, you'll need to capture segments of the URI, such as a user ID or a blog post slug. You can do this by defining
+        route parameters. Parameters are enclosed in curly braces <code>{}</code> and should consist of alphabetic characters.
+    </p>
+    <p>
+        These captured parameters are automatically passed as arguments to your controller method.
+    </p>
+    <pre><code class="language-php">// Route definition
+Router::get('/users/{user_id}', [PageController::class, 'viewUser']);
+
+// Corresponding controller method
+// app/Controllers/PageController.php
+public function viewUser(Request $request, string $user_id)
+{
+    // The framework automatically provides the $user_id from the URL
+    $user = (new User())->getUserById($user_id);
+    // ...
+}</code></pre>
+    <p><strong>Important:</strong> The router always passes the <code>Core\Request</code> object as the first argument to your controller method, followed by any dynamic route parameters in the order they appear in the URI.</p>
+
+    <h2>Route Naming and URL Generation</h2>
+    <p>Currently, Rhapsody does not have named routes. URLs should be generated in your views using the global <code>base_url</code> Twig variable to ensure they work correctly, especially in a subdirectory setup.</p>
+    <pre><code class="language-twig">&lt;!-- In a Twig template --&gt;
+&lt;a href="&lcub;&lcub; base_url }}/users"&gt;View All Users&lt;/a&gt;
+&lt;a href="&lcub;&lcub; base_url }}/users/{{ user.user_id }}"&gt;View Profile&lt;/a&gt;</code></pre>
+
+{% endblock %}

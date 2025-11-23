@@ -1,0 +1,89 @@
+{% extends "layouts/main.twig" %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ base_url }}/public/css/prism.css">
+<script type="text/javascript" src="{{ base_url }}/public/js/prism.js"></script>
+
+<div class="flex flex-col md:flex-row -mx-4">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="w-full md:w-1/4 px-4 mb-8 md:mb-0">
+        <div class="sticky top-8">
+            <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4">Getting Started</h3>
+            <ul class="space-y-2 mb-6">
+                <li><a href="{{ base_url }}/docs/installation" class="docs-link">Installation & Setup</a></li>
+                <li><a href="{{ base_url }}/docs/updating" class="docs-link">Updating the Framework</a></li>
+            </ul>
+
+            <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4">The Basics</h3>
+            <ul class="space-y-2 mb-6">
+                <li><a href="{{ base_url }}/docs/routing" class="docs-link">Routing</a></li>
+                <li><a href="{{ base_url }}/docs/request" class="docs-link">The Request Object</a></li>
+                <li><a href="{{ base_url }}/docs/response" class="docs-link">The Response Object</a></li>
+                <li><a href="{{ base_url }}/docs/controllers" class="docs-link">Controllers & DI</a></li>
+                <li><a href="{{ base_url }}/docs/views" class="docs-link">Views & Templating</a></li>
+                <li><a href="{{ base_url }}/docs/validation" class="docs-link">Validation</a></li>
+            </ul>
+
+             <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4">Database</h3>
+             <ul class="space-y-2 mb-6">
+                <li><a href="{{ base_url }}/docs/models" class="docs-link">Basic DB (PDO)</a></li>
+                <li><a href="{{ base_url }}/docs/doctrine" class="docs-link">Doctrine ORM</a></li>
+            </ul>
+            
+            <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4">Features</h3>
+             <ul class="space-y-2 mb-6">
+                <li><a href="{{ base_url }}/docs/caching" class="docs-link">Performance & Caching</a></li>
+                <li><a href="{{ base_url }}/docs/middleware" class="docs-link">Middleware & Auth</a></li>
+                <li><a href="{{ base_url }}/docs/security" class="docs-link">Security (CSRF)</a></li>
+                <li><a href="{{ base_url }}/docs/events" class="docs-link">Events & Listeners</a></li>
+                <li><a href="{{ base_url }}/docs/file-uploader" class="docs-link">File Uploader</a></li>
+                <li><a href="{{ base_url }}/docs/image-processing" class="docs-link">Image Processing</a></li>
+                <li><a href="{{ base_url }}/docs/pagination" class="docs-link">Pagination</a></li>
+                <li><a href="{{ base_url }}/docs/mailer" class="docs-link">Sending Mail</a></li>
+            </ul>
+
+            <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4">Tooling</h3>
+            <ul class="space-y-2">
+                 <li><a href="{{ base_url }}/docs/cli" class="docs-link">The Rhapsody Console</a></li>
+                 <li><a href="{{ base_url }}/docs/logging" class="docs-link">Logging</a></li>
+            </ul>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <section class="w-full md:w-3/4 px-4">
+        <div class="prose dark:prose-invert max-w-none">
+            {% block doc_content %}{% endblock %}
+        </div>
+    </section>
+
+</div>
+{# ... styles ... #}
+<style>
+    .docs-link {
+        @apply block text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:font-semibold;
+    }
+    /* Styles for prose from Tailwind typography plugin */
+    .prose { color: #374151; max-width: 80ch; }
+    .prose h1 { font-size: 2.25em; margin-top: 0; margin-bottom: 0.88em; font-weight: 800; }
+    .prose h2 { font-size: 1.5em; margin-top: 2em; margin-bottom: 1em; font-weight: 700; }
+    .prose h3 { font-size: 1.25em; margin-top: 1.6em; margin-bottom: 0.6em; font-weight: 600; }
+    .prose p { margin-top: 1.25em; margin-bottom: 1.25em; }
+    .prose a { color: #2563EB; text-decoration: underline; }
+    .prose strong { color: #1F2937; font-weight: 600; }
+    .prose code { color: #D11686; font-size: 1.1rem; font-family: monospace; font-weight: bold; padding: 0px 2px; }
+    .prose pre { background-color: #1F2937; color: #E5E7EB; padding: 1em; border-radius: .5rem; overflow-x: auto; font-size: 1.1rem; }
+    .prose pre code { color: inherit; background-color: transparent; padding: 0; }
+    .prose ul { margin: 1.25em 0; padding-left: 1.625em; list-style-type: disc; }
+    .prose li p { margin: 0.5em 0; }
+
+    .dark div.prose.dark\:prose-invert.max-w-none { color: #CFCFCF; }
+    .dark div.prose.dark\:prose-invert.max-w-none { color: #D1D5DB; }
+    .dark div.prose.dark\:prose-invert.max-w-none h1, .dark div.prose.dark\:prose-invert.max-w-none h2, .dark div.prose.dark\:prose-invert.max-w-none h3, .dark div.prose.dark\:prose-invert.max-w-none strong { color: #F9FAFB; }
+    .dark div.prose.dark\:prose-invert.max-w-none a { color: #60A5FA; }
+    .dark div.prose.dark\:prose-invert.max-w-none pre { background-color: #010914; }
+    .dark div.prose.dark\:prose-invert.max-w-none pre code{ color: #19a325; }
+    .dark div.prose.dark\:prose-invert.max-w-none code { color: #bb156c; font-weight: bold; }
+</style>
+{% endblock %}

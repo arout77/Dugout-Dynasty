@@ -1,0 +1,67 @@
+{% extends "docs/_layout.twig" %}
+
+{% block doc_content %}
+    <h1>Image Processing</h1>
+    <p class="lead">
+        Rhapsody integrates with the powerful <a href="https://image.intervention.io/" target="_blank">Intervention Image</a> library to provide easy, on-the-fly image manipulation. This allows you to resize, compress, and cache images simply by changing the URL, saving storage space and improving performance.
+    </p>
+
+    <hr>
+
+    <h2>Installation</h2>
+    <p>
+        First, add the library to your project using Composer:
+    </p>
+    <pre><code class="language-bash">composer require intervention/image</code></pre>
+
+    <h2>The ImageController</h2>
+    <p>
+        An `ImageController` is included to handle all image manipulation requests. It acts as a wrapper around the Intervention Image library, managing the process of finding, processing, and caching images.
+    </p>
+    <p>
+        The controller is configured to find your source images in the `public/media/images/` directory and will store cached (processed) images in the `storage/cache/images/` directory. Ensure the cache directory is writable by your web server.
+    </p>
+
+    <h2>Routing</h2>
+    <p>
+        A wildcard route is used to capture all image requests. Add the following to your `routes/web.php` file:
+    </p>
+    <pre><code class="language-php">
+// in routes/web.php
+use App\Controllers\ImageController;
+
+Router::get('/img/{path:.+}', [ImageController::class, 'show']);
+</code></pre>
+    <p>
+        This route directs any URL starting with `/img/` to the `ImageController`, which handles the processing.
+    </p>
+
+
+    <h2>Usage in Twig</h2>
+    <p>
+        To use the image processor, simply change your `<img>` source attributes from a direct path to the new image route, and append query parameters to manipulate the image.
+    </p>
+    
+    <h4>Example: Resizing an Image</h4>
+    <p>Let's say you have an image located at `public/media/images/wrestlers/hogan.webp`.</p>
+    
+    <p><strong>Original HTML:</strong></p>
+    <pre><code class="language-html">&lt;img src="{{ base_url }}/public/media/images/wrestlers/hogan.webp"&gt;</code></pre>
+
+    <p><strong>Optimized HTML with resizing:</strong></p>
+    <pre><code class="language-html">&lt;!-- Request a 150x150 version --&gt;
+&lt;img src="{{ base_url }}/img/wrestlers/hogan.webp?w=150&h=150"&gt;
+
+&lt;!-- Request a 300px wide version with 80% quality --&gt;
+&lt;img src="{{ base_url }}/img/wrestlers/hogan.webp?w=300&q=80"&gt;
+</code></pre>
+
+    <h2>Available Parameters</h2>
+    <p>You can pass several parameters in the URL query string:</p>
+    <ul>
+        <li><code>w</code> - The target width in pixels.</li>
+        <li><code>h</code> - The target height in pixels. If only one dimension is provided, the image will be scaled proportionally.</li>
+        <li><code>q</code> - The compression quality (from 0 to 100). Defaults to 90.</li>
+        <li><code>fit</code> - How the image is resized. Options include `contain`, `cover` (default), `fill`, `stretch`.</li>
+    </ul>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends "docs/_layout.twig" %}
+
+{% block doc_content %}
+    <h1>Pagination</h1>
+    <p>
+        Rhapsody includes a reusable <code>Core\Pagination</code> class to make breaking up large sets of data into simple, navigable pages easy.
+        The pagination system is designed to work seamlessly with your models and controllers.
+    </p>
+
+    <h2>1. Model Setup</h2>
+    <p>To use pagination, your model needs two methods:</p>
+    <ul>
+        <li>A method to count the total number of records (e.g., <code>countAll()</code>).</li>
+        <li>A method to fetch a specific "slice" of records using <code>LIMIT</code> and <code>OFFSET</code> (e.g., <code>findPaginated()</code>).</li>
+    </ul>
+    <pre><code>// app/Models/User.php
+public function countAll(): int
+{
+    $stmt = $this->db->query("SELECT COUNT(user_id) FROM users");
+    return (int) $stmt->fetchColumn();
+}
+
+public function findPaginated(int $limit, int $offset): array
+{
+    $sql = "SELECT ... FROM users ... LIMIT :limit OFFSET :offset";
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll();
+}</code></pre>
+
+    <h2>2. Controller Logic</h2>
+    <p>In your controller, you'll bring everything together:</p>
+    <ol>
+        <li>Get the current page number and desired limit from the request.</li>
+        <li>Get the total count of items from your model.</li>
+        <li>Create a new instance of the <code>Pagination</code> class.</li>
+        <li>Use the pagination object's <code>getLimit()</code> and <code>getOffset()</code> methods to fetch the correct data slice from your model.</li>
+        <li>Pass both the data and the pagination object to your view.</li>
+    </ol>
+    <pre><code>// app/Controllers/PageController.php
+use Core\Pagination;
+use Core\Request;
+
+public function showUsers(Request $request): Response
+{
+    $usersPerPage = (int) $request->getQueryParam('limit', 10);
+    $currentPage = (int) $request->getQueryParam('page', 1);
+
+    $totalUsers = $this->userModel->countAll();
+
+    $pagination = new Pagination($totalUsers, $usersPerPage, $currentPage);
+
+    $users = $this->userModel->findPaginated(
+        $pagination->getLimit(),
+        $pagination->getOffset()
+    );
+
+    return $this->view('home/users.twig', [
+        'users' => $users,
+        'pagination' => $pagination,
+        'currentLimit' => $usersPerPage,
+        'allowedLimits' => [5, 10, 25, 50]
+    ]);
+}</code></pre>
+
+    <h2>3. Rendering in the View</h2>
+    <p>
+        In your Twig template, you can now call the <code>render()</code> method on the pagination object to generate the navigation links.
+        The <code>|raw</code> filter is required to output the HTML.
+    </p>
+    <pre><code>&lt;!-- views/home/users.twig --&gt;
+&lt;div class="flex justify-center mt-8"&gt;
+    {{ pagination.render()|raw }}
+&lt;/div&gt;</code></pre>
+    <p>The <code>render()</code> method is smart enough to preserve existing query string parameters (like your "results per page" limit) when generating page links.</p>
+
+{% endblock %}

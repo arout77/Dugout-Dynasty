@@ -1,0 +1,31 @@
+{% extends "docs/_layout.twig" %}
+
+{% block doc_content %}
+    <h1>Advanced SEO</h1>
+    <p>Rhapsody includes several features to help you optimize your application for search engines and social media sharing.</p>
+
+    <h2>Dynamic Meta Tags</h2>
+    <p>You can provide a unique title and meta description for any page by passing a third argument to the <code>view()</code> helper in your controller. The framework will automatically use this data to generate <code>&lt;title&gt;</code>, <code>&lt;meta name="description"&gt;</code>, and Open Graph tags.</p>
+    <pre><code>// In a controller
+public function viewUser(Request $request, string $user_id)
+{
+    $user = $this->userModel->findById($user_id);
+
+    $meta = [
+        'title' => $user['name'] . ' - Profile | Rhapsody',
+        'description' => 'View the profile for ' . $user['name'] . '.'
+    ];
+
+    return $this->view('users/user.twig', ['user' => $user], $meta);
+}</code></pre>
+
+    <h2>Canonical URLs</h2>
+    <p>The main layout automatically generates a <code>&lt;link rel="canonical"&gt;</code> tag for every page. This tells search engines the preferred URL for your content, preventing duplicate content issues. This relies on the <code>APP_URL</code> variable being set correctly in your <code>.env</code> file.</p>
+    
+    <h2>Sitemap</h2>
+    <p>The framework can automatically generate a <code>sitemap.xml</code> file for you. Simply navigate to <code>/sitemap.xml</code>. This file lists all your public pages, making it easy for search engines like Google to discover and index your entire site. You can customize which pages are included by editing <code>app/Controllers/SitemapController.php</code>.</p>
+    
+    <h2>robots.txt</h2>
+    <p>A basic <code>robots.txt</code> file is included in the project root. You can edit this file to provide instructions to search engine crawlers, such as which pages or directories to disallow.</p>
+
+{% endblock %}

@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Listeners;
+
+use Core\Events\Event;
+use Core\Events\ListenerInterface;
+
+class {{ classname }} implements ListenerInterface
+{
+    /**
+     * Create the event listener.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        //
+    }
+
+    /**
+     * Handle the event.
+     *
+     * @param  \Core\Events\Event  $event
+     * @return void
+     */
+    public function handle(Event $event): void
+    {
+        //
+    }
+}

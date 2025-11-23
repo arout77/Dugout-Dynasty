@@ -1,0 +1,254 @@
+{% extends "layouts/main.twig" %}
+
+{% block full_width_content %}
+<link rel="stylesheet" href="{{ base_url }}/public/css/prism.css">
+<!-- Animated Background Container -->
+<div class="fixed inset-0 z-2">
+    <div class="animated-blob" style="width: 40vw;height: 40vw;top: -10vh;left: -10vw;--color-start: #720697;--color-end: #720697;--duration: 25s;--delay: 0s;--x-start: 0vw;--y-start: 0vh;--scale-start: 1;--x-mid: 20vw;--y-mid: 20vh;--scale-mid: 1.2;--x-end: 10vw;--y-end: 10vh;--scale-end: 1;"></div>
+    <div class="animated-blob" style="width: 20vw;height: 30vw;top: 60vh;left: 70vw;--color-start: #1647f9;--color-end: #be03ff;--duration: 30s;--delay: 5s;--x-start: 0vw;--y-start: 0vh;--scale-start: 0.8;--x-mid: -10vw;--y-mid: -20vh;--scale-mid: 1;--x-end: 0vw;--y-end: 0vh;--scale-end: 0.8;"></div>
+    <div class="animated-blob" style="width: 50vw;height: 50vw;top: 30vh;left: -30vw;--color-start: #3aa4ff;--color-end: #6a0497;--duration: 40s;--delay: 10s;--x-start: 0vw;--y-start: 0vh;--scale-start: 1.1;--x-mid: 30vw;--y-mid: -10vh;--scale-mid: 0.9;--x-end: 10vw;--y-end: 20vh;--scale-end: 1.1;"></div>
+    <div class="animated-blob" style="width: 19vw;height: 35vw;top: -5vh;left: 80vw;--color-start: rgb(59 130 246 / 0.5);--color-end: rgb(59 130 246 / 0.5);--duration: 35s;--delay: 15s;--x-start: 0vw;--y-start: 0vh;--scale-start: 0.9;--x-mid: -20vw;--y-mid: 10vh;--x-end: -10vw;--y-end: -5vh;--scale-end: 0.9;"></div>
+</div>
+<style>
+    .bg-grid { background-image: linear-gradient(to right, rgba(255, 255, 255, 0.20) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 1px, transparent 1px); background-size: 3rem 3rem; }
+    .feature-card { transition: transform 0.2s ease-out, box-shadow 0.2s ease-out; }
+    .feature-card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+    .marquee-container { overflow: hidden; position: relative; width: 100%; }
+    .marquee { display: inline-block; white-space: nowrap; animation: marquee 30s linear infinite; }
+    .marquee > span { display: inline-block; padding: 0 2rem; font-weight: 600; font-size: 1.125rem; }
+    @keyframes marquee { 0% { transform: translateX(0%); } 100% { transform: translateX(-50%); } }
+</style>
+
+<!-- ======================================= -->
+<!-- Hero Section                            -->
+<!-- ======================================= -->
+<section class="relative bg-gray-900 text-white overflow-hidden">
+    <div class="absolute inset-0 bg-grid [mask-image:radial-gradient(ellipse_at_center,white_10%,transparent_70%)]"></div>
+    <div class="relative container mx-auto px-6 py-24 md:py-32 lg:py-40 text-center">
+        <div class="mb-4">
+            <span class="inline-block font-semibold px-4 py-1 border-2 border-pink-600 rounded-full text-pink-400">Elegant. Performant. Modern.</span>
+        </div>
+        <h1 class="text-4xl sm:text-5xl md:text-7xl font-extrabold text-white leading-tight tracking-tight mb-6">
+            Compose Your Masterpiece
+        </h1>
+        <p class="max-w-3xl mx-auto text-lg md:text-xl text-gray-300 mb-10">
+            The pragmatic PHP framework for developers who love modern tooling but crave simplicity. Rhapsody hits the sweet spot between heavy full-stack frameworks and bare-bones micro-frameworks.
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+            <a href="{{ base_url }}/docs/installation" class="sm:w-auto bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-lg text-lg transition duration-300 transform hover:scale-105 shadow-lg">
+                Get Started in 5 Minutes
+            </a>
+            <a href="{{ base_url }}/docs" class="sm:w-auto border-1 border-gray-200 bg-purple-700 hover:bg-purple-600 text-gray-300 font-bold py-3 px-8 rounded-lg text-lg transition duration-300 transform hover:scale-105">
+                Read the Docs
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Marquee -->
+<div class="marquee-container bg-gray-800 text-gray-300 py-3 border-y border-gray-700">
+    <div class="marquee">
+        <span>Dependency Injection</span><span class="text-blue-400 mx-4">&diams;</span>
+        <span>Doctrine ORM</span><span class="text-blue-400 mx-4">&diams;</span>
+        <span>Redis Caching</span><span class="text-blue-400 mx-4">&diams;</span>
+        <span>Event Handling</span><span class="text-blue-400 mx-4">&diams;</span>
+        <span>Database Migrations</span><span class="text-blue-400 mx-4">&diams;</span>
+        <span>REST API Ready</span><span class="text-blue-400 mx-4">&diams;</span>
+        <span>Dependency Injection</span><span class="text-blue-400 mx-4">&diams;</span>
+        <span>Doctrine ORM</span><span class="text-blue-400 mx-4">&diams;</span>
+        <span>Powerful Console</span><span class="text-blue-400 mx-4">&diams;</span>
+        <span>Redis Caching</span><span class="text-blue-400 mx-4">&diams;</span>
+        <span>Powerful Console</span><span class="text-blue-400 mx-4">&diams;</span>
+        <span>Database Migrations</span><span class="text-blue-400 mx-4">&diams;</span>
+        <span>REST API Ready</span><span class="text-blue-400 mx-4">&diams;</span>
+        <span>Dual Database Layers</span><span class="text-blue-400 mx-4">&diams;</span>
+        <span>Twig Template Engine</span><span class="text-blue-400 mx-4">&diams;</span>
+    </div>
+</div>
+<!-- Sweet Spot Section -->
+    <section id="sweet-spot" class="py-20 md:py-28 bg-gray-800/50">
+        <div class="container mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold tracking-tight dark:text-white">Find Your Perfect Balance</h2>
+                <p class="mt-4 text-xl dark:text-gray-300">Stop choosing between too much complexity and not enough features. Rhapsody is designed to be *just right*.</p>
+            </div>
+            <div class="grid xs:grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <!-- Too Heavy -->
+                <div class="bg-gray-900 p-8 rounded-xl border border-gray-700">
+                    <h3 class="text-2xl font-bold text-red-400 mb-4">Too Heavy</h3>
+                    <p class="text-gray-300 mb-6">Full-stack frameworks like Laravel are powerful, but their large ecosystem and steep learning curve can be overkill for many projects.</p>
+                    <span class="text-5xl">🐘</span>
+                </div>
+                <!-- Just Right -->
+                <div class="bg-indigo-900 p-8 rounded-xl border-2 border-indigo-500 transform scale-105 shadow-2xl shadow-indigo-500/20">
+                    <h3 class="text-2xl font-bold text-green-400 mb-4">Just Right: Rhapsody</h3>
+                    <p class="text-gray-300 mb-6">Rhapsody provides the modern tooling you love—DI, ORM, CLI—in a lightweight, transparent package. It's productive out-of-the-box without the bloat.</p>
+                    <span class="text-5xl">🎯</span>
+                </div>
+                <!-- Too Bare -->
+                <div class="bg-gray-900 p-8 rounded-xl border border-gray-700">
+                    <h3 class="text-2xl font-bold text-yellow-400 mb-4">Too Bare</h3>
+                    <p class="text-gray-300 mb-6">Micro-frameworks like Slim are fast, but require you to build your own toolkit, spending time on configuration instead of creation.</p>
+                    <span class="text-5xl">🦴</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======================================= -->
+    <!-- Features Grid                           -->
+    <!-- ======================================= -->
+    <section id="features" class="py-20 md:py-28 bg-gray-900 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-gray-300">A Curated, Modern Toolset</h2>
+                <p class="mt-4 text-xl text-gray-300 mb-12">Everything You Need. Nothing You Don't.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <div class="text-center p-6 bg-indigo-200 dark:bg-gray-700 rounded-lg shadow-lg">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" /></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Dual Database Layers</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Choose your tool. Use the simplicity and control of the PDO-based BaseModel, or leverage the power and abstraction of the fully integrated Doctrine ORM.</p>
+                </div>
+                <div class="text-center p-6 bg-indigo-200 dark:bg-gray-700 rounded-lg shadow-lg">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Elegant Architecture</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Leverage a powerful Service Container and Dependency Injection to build clean, maintainable, and testable applications from the ground up.</p>
+                </div>
+                <div class="text-center p-6 bg-indigo-200 dark:bg-gray-700 rounded-lg shadow-lg">
+                     <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Middleware Pipeline</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Protect your application with a middleware pipeline, with built-in support for authentication, and CSRF protection.</p>
+                </div>
+                <div class="text-center p-6 bg-indigo-200 dark:bg-gray-700 rounded-lg shadow-lg">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">The Rhapsody Console</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Speed up development with a powerful CLI. Generate controllers, models, and middleware. Manage migrations and caches.</p>
+                </div>
+                <div class="text-center p-6 bg-indigo-200 dark:bg-gray-700 rounded-lg shadow-lg">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 mx-auto mb-4">
+                       <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10m16-10v10M8 7h8m-8 5h8m-8 5h8" /></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Database Migrations</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Keep your database schema in version control. Create, modify, and share your database structure reliably.</p>
+                </div>
+                <div class="text-center p-6 bg-indigo-200 dark:bg-gray-700 rounded-lg shadow-lg">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Robust Validation</h3>
+                    <p class="text-gray-600 dark:text-gray-300">An extensible validation engine with over a dozen rules to ensure your incoming data is always clean and secure.</p>
+                </div>
+                 <div class="text-center p-6 bg-indigo-200 dark:bg-gray-700 rounded-lg shadow-lg">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">High-Performance Caching</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Built for speed with a multi-driver cache system. Use file-based caching out of the box, or switch to Redis for enterprise-grade performance with a single config change.</p>
+                </div>
+                 <div class="text-center p-6 bg-indigo-200 dark:bg-gray-700 rounded-lg shadow-lg">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 mx-auto mb-4">
+                       <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Event-Driven & Decoupled</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Use the built-in Event Dispatcher to build a clean, modular architecture where components can react to application events without tight coupling.</p>
+                </div>
+                <div class="text-center p-6 bg-indigo-200 dark:bg-gray-700 rounded-lg shadow-lg">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Twig Templating</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Secure, fast, and flexible templating with inheritance, caching, and easy data binding.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======================================= -->
+    <!-- Code & Eloquence Section                -->
+    <!-- ======================================= -->
+    <section class="py-20 md:py-28 bg-gray-200 dark:bg-gray-800">
+        <div class="container mx-auto px-6">
+            <div class="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center bg-white">
+                <div class="mb-12 lg:mb-0 pl-8">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Code That Sparks Joy</h2>
+                    <p class="text-gray-800 text-lg mb-6">
+                        Rhapsody's syntax is designed to be intuitive and expressive. Define routes, create controllers with auto-wired dependencies, and build your application with a workflow that feels natural and un-obstructive.
+                    </p>
+                    <ul class="space-y-4 text-gray-800">
+                        <li class="flex items-start"><span class="text-blue-500 mr-3 mt-1">&#10003;</span><span>**Expressive Routing:** Dynamic parameters and middleware, right where you need them.</span></li>
+                        <li class="flex items-start"><span class="text-blue-500 mr-3 mt-1">&#10003;</span><span>**Automatic Dependency Injection:** Write clean, testable code as the container handles the rest.</span></li>
+                        <li class="flex items-start"><span class="text-blue-500 mr-3 mt-1">&#10003;</span><span>**API-Ready:** Built-in helpers for creating robust JSON APIs for your front-end.</span></li>
+                    </ul>
+                </div>
+                <div class="bg-gray-900 rounded-lg shadow-2xl overflow-hidden">
+                     <pre class="language-php p-6 text-sm"><code class="text-white">
+use App\Controllers\UserController;
+use App\Models\User;
+use Core\Router;
+
+// Define a protected route
+Router::get('/users/{id}', [UserController::class, 'show'])
+      ->middleware('auth');
+
+// Your controller with automatic dependency injection
+class UserController extends BaseController
+{
+    public function __construct(protected User $userModel) {}
+
+    public function show(Request $request, string $id)
+    {
+        $user = $this->userModel->findById($id);
+
+        return $this->view('users/show.twig', ['user' => $user]);
+    }
+}
+</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Who is it for? Section -->
+    <section class="py-20 md:py-28 bg-gray-900">
+        <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+            <div>
+                <span class="text-indigo-400 font-semibold">For Studios and Freelancers</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mt-2 mb-4">Stop reaching for a hammer to crack a nut.</h2>
+                <p class="text-gray-300 text-lg">
+                    You know the value of choosing the right tool for the job. For client sites, startup MVPs, and fast APIs, Rhapsody provides the productivity you need without the heavy overhead. It's the framework that gets out of your way so you can focus on building.
+                </p>
+            </div>
+             <div>
+                <span class="text-pink-400 font-semibold">For the Pragmatic Developer</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mt-2 mb-4">Learn how frameworks *actually* work.</h2>
+                <p class="text-gray-300 text-lg">
+                   Frameworks can feel like magic. Rhapsody is different. Its core is so transparent and well-documented that you can finally understand essential concepts like the Service Container, Middleware, and the Request Lifecycle. It's the perfect way to level up your PHP skills.
+                </p>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block content %}
+    <!-- Final CTA -->
+    <section class="bg-gray-900 py-20">
+        <div class="container mx-auto text-center px-6">
+            <h2 class="text-4xl font-bold text-white mb-4">Start Your Symphony Today</h2>
+            <p class="text-lg text-gray-400 mb-8 max-w-2xl mx-auto">Join the growing number of developers choosing simplicity and elegance. Install Rhapsody and begin composing your next web application in minutes.</p>
+            <a href="/docs/installation">
+                <button class="shiny-cta">Install Rhapsody Now</button>
+            </a>
+        </div>
+    </section>
+    <script src="{{ base_url }}/public/js/prism.js"></script>
+{% endblock %}

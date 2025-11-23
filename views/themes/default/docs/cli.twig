@@ -1,0 +1,67 @@
+{% extends "docs/_layout.twig" %}
+
+{% block doc_content %}
+    <h1>The Rhapsody Console (CLI)</h1>
+    <p>
+        Rhapsody includes a powerful command-line interface built on the Symfony Console component. It is the primary tool for interacting with your application outside of the web browser, allowing you to automate tasks, generate boilerplate code, and manage your application's state.
+    </p>
+    <p>The CLI is accessed via the <code>rhapsody</code> executable file in your project root.</p>
+
+    <h2>Listing Commands</h2>
+    <p>To see a list of all available commands, simply run the application without any arguments. This will display a list of commands along with their descriptions.</p>
+    <pre class="command-line"><code class="language-bash">php rhapsody</code></pre>
+
+    <hr>
+
+    <h2>Code Generation (`make:*`)</h2>
+    <p>The console includes a suite of generator commands to quickly create new classes for your application. These commands create "stub" files in the correct directories, complete with the correct namespaces, base classes, and essential methods.</p>
+    
+    <h3>Creating a Controller</h3>
+    <p>This command creates a new controller file in the <code>app/Controllers</code> directory.</p>
+    <pre class="command-line"><code class="language-bash">php rhapsody make:controller OrderController</code></pre>
+    <p>This will generate <code>app/Controllers/OrderController.php</code>.</p>
+
+    <h3>Creating a Model</h3>
+    <p>This command creates a new model file in the <code>app/Models</code> directory.</p>
+    <pre class="command-line"><code class="language-bash">php rhapsody make:model Order</code></pre>
+    <p>This will generate <code>app/Models/Order.php</code>.</p>
+
+    <h3>Creating Middleware</h3>
+    <p>This command creates a new middleware file in the <code>app/Middleware</code> directory.</p>
+    <pre class="command-line"><code class="language-bash">php rhapsody make:middleware CheckSubscriptionStatus</code></pre>
+    <p>This will generate <code>app/Middleware/CheckSubscriptionStatusMiddleware.php</code>.</p>
+
+    <hr>
+
+    <h2>Database Migrations</h2>
+    <p>Migrations are like version control for your database. Rhapsody uses Phinx, managed through the console, to handle schema changes reliably across all development and production environments.</p>
+    
+    <h3>Creating a Migration</h3>
+    <p>This command will create a new, timestamped migration file in the <code>db/migrations</code> directory. Use a descriptive name that explains what the migration does.</p>
+    <pre class="command-line"><code class="language-bash">php rhapsody make:migration CreateProductsTable</code></pre>
+
+    <h3>Running Migrations</h3>
+    <p>To apply all pending migrations and update your database schema to the latest version, run the <code>migrate</code> command.</p>
+    <pre class="command-line"><code class="language-bash">php rhapsody migrate</code></pre>
+
+    <hr>
+
+    <h2>Caching</h2>
+    <p>Rhapsody provides caching mechanisms to improve your application's performance in production. The console provides commands to manage these caches.</p>
+    
+    <h3>Route Caching</h3>
+    <p>For a significant performance boost, you can compile all of your application's route definitions into a single, cached file.</p>
+    <pre class="command-line"><code># Generate the route cache file
+php rhapsody route:cache
+
+# Remove the route cache file (necessary after changing routes)
+php rhapsody route:clear</code></pre>
+    <p><strong>Important:</strong> You must clear and re-cache your routes whenever you make a change to your <code>routes/web.php</code> or <code>routes/api.php</code> files.</p>
+
+    <h3>Application Cache</h3>
+    <p>This command will flush the entire application data cache, which is used by the <code>Core\Cache</code> service.</p>
+    <pre class="command-line"><code class="language-bash">php rhapsody cache:clear</code></pre>
+    <p>This is useful during development when you've changed the underlying data that an expensive, cached operation depends on.</p>
+
+{% endblock %}
+

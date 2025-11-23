@@ -1,0 +1,50 @@
+{% extends "docs/_layout.twig" %}
+
+{% block doc_content %}
+    <h1>Updating The Framework</h1>
+    <p>
+        Rhapsody includes a powerful set of console commands to make updating your application simple, safe, and automatic.
+    </p>
+
+    <div class="bg-pink-700 text-white text-lg p-4 mb-6">
+        <h4 class="text-bold text-xl font-bold">Notice</h4> <br>
+        We are currently working on a few issues with the updater not completing the update process correctly. Please DO NOT use the Rhapsody CLI to perform auto updates until these issues are resolved. We will post here when it is ready for production again.<br>
+        In the meantime, you can still check for updates by running: <br><samp class="bg-gray-900 text-white">php rhapsody app:check</samp><br>then <a href="https://github.com/arout77/Rhapsody-Framework" target="_blank">downloading a ZIP package</a> and perform the update manually.
+    </div>
+    <hr>
+
+    <h2>Automated Update Command</h2>
+    <p>
+        The recommended way to update your application is by using the <code>app:update</code> command. It orchestrates the entire update workflow to ensure a smooth deployment.
+    </p>
+    <pre class="command-line"><code class="language-bash">php rhapsody app:update</code></pre>
+    
+    <h3>Update Workflow</h3>
+    <p>The command performs the following steps in sequence:</p>
+    <ol>
+        <li><strong>Enters Maintenance Mode:</strong> Puts the site into maintenance mode to prevent access during the update.</li>
+        <li><strong>Fetches Latest Code:</strong> Forcefully resets your local branch to match the remote repository, ensuring all new files (like <code>.env.example</code>) are downloaded.</li>
+        <li><strong>Updates Dependencies:</strong> Runs <code>composer install</code>.</li>
+        <li><strong>Syncs Environment File:</strong> Safely appends any new variables from <code>.env.example</code> to your <code>.env</code> file without overwriting your settings.</li>
+        <li><strong>Runs Database Migrations:</strong> Applies any pending schema changes.</li>
+        <li><strong>Clears Caches:</strong> Flushes all route and application caches.</li>
+        <li><strong>Updates Version:</strong> Updates the <code>app_version</code> in your <code>config.php</code> file.</li>
+        <li><strong>Exits Maintenance Mode:</strong> Brings your application back online.</li>
+    </ol>
+
+    <hr>
+    
+    <h2>Automatic Version Checking</h2>
+    <p>
+        The framework can automatically check for new releases and notify you. This is handled by the <code>app:check-version</code> command, which is designed to be run as a scheduled task (e.g., a cron job).
+    </p>
+    <pre class="command-line"><code class="language-bash"># Run this command hourly via a cron job
+php rhapsody app:check-version
+</code></pre>
+    <h3>Notification Methods</h3>
+    <ul>
+        <li><strong>Development:</strong> If <code>APP_ENV=development</code>, a non-intrusive notification banner will be injected at the bottom of your web pages. Clicking it opens a modal with the latest release notes.</li>
+        <li><strong>Production:</strong> If <code>APP_ENV=production</code>, the command will send a notification email to the address specified in the <code>MAIL_ADMIN_EMAIL</code> variable in your <code>.env</code> file.</li>
+    </ul>
+    <p>The system is designed to only send one notification per new version to avoid spam.</p>
+{% endblock %}

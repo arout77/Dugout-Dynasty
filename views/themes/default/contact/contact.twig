@@ -1,0 +1,27 @@
+{% extends "layouts/main.twig" %}
+
+{% block content %}
+    <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-6">Contact Us</h2>
+    <p class="text-gray-600 dark:text-gray-400 mb-6">Please fill out the form below.</p>
+
+    <form action="{{ base_url }}/contact" method="POST" class="max-w-lg">
+        {{ csrf_field() }}
+        <div class="mb-4">
+            <label for="name" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Name:</label>
+            <input type="text" id="name" name="name" required class="shadow appearance-none border dark:border-gray-600 rounded w-full py-2 px-3 text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+        <div class="mb-4">
+            <label for="email" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Email:</label>
+            <input type="email" id="email" name="email" required class="shadow appearance-none border dark:border-gray-600 rounded w-full py-2 px-3 text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+        <div class="mb-6">
+            <label for="message" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Message:</label>
+            <textarea id="message" name="message" rows="5" required class="shadow appearance-none border dark:border-gray-600 rounded w-full py-2 px-3 text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
+        </div>
+        <div>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                Send Message
+            </button>
+        </div>
+    </form>
+{% endblock %}

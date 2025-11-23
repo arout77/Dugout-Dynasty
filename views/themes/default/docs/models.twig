@@ -1,0 +1,75 @@
+{% extends "docs/_layout.twig" %}
+
+{% block doc_content %}
+    <h1>Models & Database</h1>
+    <p>
+        The Model layer is responsible for all interaction with your database. It abstracts the data source so that your controllers
+        don't need to know the specifics of your database schema or write raw SQL queries. In Rhapsody, all models are placed in the
+        <code>app/Models</code> directory and should extend the <code>Core\BaseModel</code>.
+    </p>
+    
+    <h2>Database Connection</h2>
+    <p>
+        The framework uses PDO (PHP Data Objects) for database communication, which provides a secure and consistent interface.
+        The database connection is managed by the <code>Core\Database</code> class, which uses a Singleton pattern. This means
+        the application only ever makes one single database connection per request, which is very efficient.
+    </p>
+    <p>
+        By extending <code>BaseModel</code>, your model automatically gets access to the database connection via <code>$this->db</code>.
+    </p>
+
+    <h2>Creating a Model</h2>
+    <p>A model typically represents one database table. For example, a <code>User</code> model would handle all operations for the <code>users</code> table.</p>
+    <pre><code>&lt;?php
+
+namespace App\Models;
+
+use Core\BaseModel;
+use PDO;
+
+class User extends BaseModel
+{
+    /**
+     * Fetches a single user from the database by their ID.
+     */
+    public function findById(string $id): array|false
+    {
+        // Use prepare() for security against SQL injection
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE user_id = :id");
+        
+        // Bind the parameter
+        $stmt->bindParam(':id', $id, PDO::PARAM_STR);
+        
+        // Execute and fetch the result
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
+    /**
+     * Fetches all users.
+     */
+    public function findAll(): array
+    {
+        $stmt = $this->db->query("SELECT user_id, name, email FROM users ORDER BY name");
+        return $stmt->fetchAll();
+    }
+}</code></pre>
+
+    <h2>Security with Prepared Statements</h2>
+    <p>
+        <strong>This is critical.</strong> Whenever you are using user-provided data (like a route parameter or form input) in a query,
+        you <strong>must</strong> use prepared statements to prevent SQL injection.
+    </p>
+    <p>
+        The correct workflow is to use <code>prepare()</code>, then <code>bindParam()</code> or pass an array to <code>execute()</code>.
+        Never concatenate variables directly into a SQL string.
+    </p>
+    <pre><code>// GOOD: Secure and correct
+$stmt = $this->db->prepare("SELECT * FROM users WHERE email = :email");
+$stmt->execute([':email' => $email]);
+$user = $stmt->fetch();
+
+// BAD: Insecure and will lead to vulnerabilities
+$user = $this->db->query("SELECT * FROM users WHERE email = '$email'");</code></pre>
+
+{% endblock %}

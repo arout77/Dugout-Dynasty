@@ -1,0 +1,74 @@
+{% extends "docs/_layout.twig" %}
+
+{% block doc_content %}
+    <h1>Performance & Caching</h1>
+    <p>
+        Rhapsody includes several caching layers designed to significantly improve your application's speed and responsiveness, especially in a production environment. Understanding and utilizing these features is key to building a high-performance application. Caching is primarily managed through the Rhapsody Console.
+    </p>
+
+    <h2>Cache Drivers</h2>
+    <p>
+        The framework supports multiple cache backends, or "drivers." You can switch between them with a single configuration change in your <code>.env</code> file.
+    </p>
+    <pre><code class="language-bash">
+# Use the local filesystem for caching
+CACHE_DRIVER=file
+
+# Use a Redis server for caching
+CACHE_DRIVER=redis
+</code></pre>
+
+    <hr>
+
+    <h2>Using the Cache</h2>
+    <p>
+        The cache is managed by the <code>Core\Cache</code> class, which is available via the service container. You should inject it into your controller's constructor. The most common way to interact with the cache is the <code>remember()</code> method.
+    </p>
+
+    <h3>The `remember()` Method</h3>
+    <p>This method simplifies the process of getting and setting cache items:</p>
+    <ol>
+        <li>It checks if a value exists in the cache for a given key.</li>
+        <li>If it exists and is not expired, it returns the cached value.</li>
+        <li>If it does not exist, it executes the provided function, saves its return value to the cache for a specified number of minutes, and then returns that value.</li>
+    </ol>
+    <pre><code class="language-php">
+use Core\Cache;
+use App\Models\Post;
+
+class PostController extends BaseController
+{
+    // 1. Inject the Cache service in the constructor
+    public function __construct(
+        protected Post $postModel,
+        protected Cache $cache,
+        //... other dependencies
+    ) {
+        //...
+    }
+    
+    public function index()
+    {
+        // 2. Use the injected instance to call remember()
+        $posts = $this->cache->remember('posts.all', 60, function () {
+            // This expensive query only runs when the cache is empty or expired
+            return $this->postModel->findAll();
+        });
+
+        return $this->view('posts/index.twig', ['posts' => $posts]);
+    }
+}
+</code></pre>
+    <p>
+        This method works seamlessly regardless of which cache driver is active.
+    </p>
+    
+    <h3>Other Cache Methods</h3>
+    <p>Once injected, you can use other methods on your <code>$this->cache</code> instance:</p>
+    <ul>
+        <li><code>$this->cache->get('key')</code>: Retrieve an item from the cache.</li>
+        <li><code>$this->cache->put('key', $value, $minutes)</code>: Store an item in the cache.</li>
+        <li><code>$this->cache->has('key')</code>: Check if an item exists in the cache.</li>
+        <li><code>$this->cache->forget('key')</code>: Remove an item from the cache.</li>
+    </ul>
+{% endblock %}

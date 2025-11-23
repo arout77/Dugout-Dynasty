@@ -1,0 +1,66 @@
+{% extends "docs/_layout.twig" %}
+
+{% block doc_content %}
+    <h1>The Request Object</h1>
+    <p>
+        The <code>Core\Request</code> class provides an object-oriented way to interact with the current HTTP request. It encapsulates all the information about the request, such as GET and POST data, server variables, and uploaded files, making your application more secure and easier to work with.
+    </p>
+    <p>
+        An instance of the <code>Request</code> object is automatically created and passed as the first argument to every controller method by the router.
+    </p>
+
+    <hr>
+
+    <h2>Accessing Request Information</h2>
+    <p>Here are some of the most common methods available on the <code>Request</code> object.</p>
+
+    <h3>Get the Request Path & Method</h3>
+    <pre><code class="language-php">// In a controller method
+public function updateUser(Request $request, string $id): Response
+{
+    // Get the request method (e.g., 'get', 'post')
+    $method = $request->getMethod(); // "post"
+
+    // Get the clean URI path (e.g., '/users/1')
+    $path = $request->getPath(); // "/users/1"
+    
+    // ...
+}</code></pre>
+
+    <h3>Retrieving Input</h3>
+    <p>The <code>getBody()</code> method intelligently retrieves all input from the request, whether it's from a standard form submission or a JSON payload from an API call.</p>
+    <pre><code class="language-php">public function handleForm(Request $request): Response
+{
+    // For form data (application/x-www-form-urlencoded) or JSON
+    $allInput = $request->getBody();
+    
+    // You can also get a specific key from the body
+    $email = $allInput['email'] ?? null;
+    
+    // ...
+}</code></pre>
+
+    <h3>Retrieving Query Parameters</h3>
+    <p>To get a value from the URL's query string (e.g., <code>/users?page=2</code>), use the <code>getQueryParam()</code> method. It includes a second argument to specify a default value if the parameter is not present.</p>
+    <pre><code class="language-php">public function showUsers(Request $request): Response
+{
+    // Get the 'page' parameter, or default to 1
+    $currentPage = (int) $request->getQueryParam('page', 1);
+
+    // ...
+}</code></pre>
+
+    <h3>Retrieving Uploaded Files</h3>
+    <p>You can access information about uploaded files using the <code>getFiles()</code> method, which returns the contents of the <code>$_FILES</code> superglobal.</p>
+    <pre><code class="language-php">public function handleUpload(Request $request): Response
+{
+    $files = $request->getFiles();
+    $avatar = $files['avatar'] ?? null;
+    
+    if ($avatar && $avatar['error'] === UPLOAD_ERR_OK) {
+        // Process the uploaded file
+    }
+    
+    // ...
+}</code></pre>
+{% endblock %}

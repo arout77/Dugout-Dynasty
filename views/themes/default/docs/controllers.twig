@@ -1,0 +1,74 @@
+{% extends "docs/_layout.twig" %}
+
+{% block doc_content %}
+    <h1>Controllers</h1>
+    <p>
+        Controllers are the central traffic cops of your application. Their primary responsibility is to handle incoming requests,
+        interact with the necessary models to retrieve data, and then pass that data to the appropriate view to be rendered.
+        This keeps your application logic separate from your presentation logic.
+    </p>
+    <p>
+        All controllers should be placed in the <code>app/Controllers</code> directory and should extend the <code>Core\BaseController</code>.
+    </p>
+
+    <h2>Creating a Controller</h2>
+    <p>Here is a basic example of a controller class.</p>
+    <pre><code>&lt;?php
+
+namespace App\Controllers;
+
+use Core\BaseController;
+use Core\Request;
+use Core\Response;
+use App\Models\User;
+
+class PageController extends BaseController
+{
+    public function index(): Response
+    {
+        // ... logic for the home page
+    }
+
+    public function showUsers(Request $request): Response
+    {
+        // ... logic to show a list of users
+    }
+}</code></pre>
+    <p>By extending <code>BaseController</code>, your controller automatically gets access to helper methods like <code>view()</code> and <code>json()</code>.</p>
+
+    <h2>Controller Methods & Responses</h2>
+    <p>Each public method in a controller is an "action" that can be mapped to a route. Controller actions should always return an instance of a <code>Core\Response</code> object.</p>
+
+    <h3>Returning a View</h3>
+    <p>The most common action is to return a rendered Twig template. The <code>view()</code> helper method handles this.</p>
+    <pre><code>public function index(): Response
+{
+    $userModel = new User();
+    $users = $userModel->findAll();
+
+    // The first argument is the path to the template.
+    // The second argument is an array of data to pass to the view.
+    return $this->view('home/users.twig', [
+        'users' => $users
+    ]);
+}</code></pre>
+
+    <h3>Accessing the Request</h3>
+    <p>
+        The router automatically injects an instance of the <code>Core\Request</code> object as the first parameter to every controller action.
+        This object is a wrapper around superglobals like <code>$_GET</code>, <code>$_POST</code>, and <code>$_FILES</code> and provides helpful methods for inspecting the incoming request.
+    </p>
+    <pre><code>public function handleContact(Request $request): Response
+{
+    // Get the request method (e.g., 'post')
+    $method = $request->getMethod();
+
+    // Get sanitized POST data
+    $data = $request->getBody();
+
+    // Get a specific query parameter from the URL
+    $page = $request->getQueryParam('page', 1); // 1 is the default value
+
+    // ...
+}</code></pre>
+{% endblock %}

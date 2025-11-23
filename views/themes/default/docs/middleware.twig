@@ -1,0 +1,72 @@
+{% extends "docs/_layout.twig" %}
+
+{% block doc_content %}
+    <h1>Middleware & Authentication</h1>
+    <p>
+        Middleware provides a convenient mechanism for filtering HTTP requests entering your application. For example, Rhapsody includes
+        middleware that verifies if a user is authenticated. If the user is not authenticated, the middleware will redirect the user to the login screen.
+        If the user is authenticated, the middleware will allow the request to proceed further.
+    </p>
+
+    <h2>Assigning Middleware to Routes</h2>
+    <p>
+        You can assign middleware to a route by chaining the <code>middleware()</code> method onto your route definition in
+        <code>routes/web.php</code>.
+    </p>
+    <pre><code>// This route can only be accessed by authenticated users.
+Router::get('/dashboard', [PageController::class, 'dashboard'])->middleware('auth');
+
+// This route can only be accessed by guests (unauthenticated users).
+Router::get('/login', [AuthController::class, 'showLoginForm'])->middleware('guest');</code></pre>
+
+    <h2>Included Middleware</h2>
+    <p>Rhapsody comes with two essential middleware out of the box:</p>
+    <ul>
+        <li>
+            <strong><code>auth</code></strong>: This middleware checks if a user is logged into the session. If not, it redirects them to the <code>/login</code> page.
+            It's used to protect routes that require a user to be logged in, like a user dashboard or settings page.
+        </li>
+        <li>
+            <strong><code>guest</code></strong>: This middleware does the opposite of <code>auth</code>. It checks if a user is already logged in. If they are, it redirects them
+            away from the current page (usually to <code>/dashboard</code>). This is useful for pages like login and registration forms, which authenticated users
+            don't need to see.
+        </li>
+    </ul>
+
+    <h2>Creating Custom Middleware</h2>
+    <p>
+        You can easily create your own middleware for other tasks, like role checking or logging.
+    </p>
+    <ol>
+        <li>Create a new class in the <code>app/Middleware</code> directory that extends <code>App\Middleware\Middleware</code>.</li>
+        <li>Implement the <code>handle(Request $request)</code> method with your custom logic.</li>
+        <li>Register a short key for your middleware in the <code>$middlewareMap</code> array in <code>core/Router.php</code>.</li>
+    </ol>
+    <pre><code>// Example: A new AdminMiddleware
+namespace App\Middleware;
+// ...
+class AdminMiddleware extends Middleware
+{
+    public function handle(Request $request): void
+    {
+        // Assuming you store user role in the session
+        if (Session::get('user_role') !== 'admin') {
+            // Redirect non-admins away
+            header('Location: /');
+            exit();
+        }
+    }
+}
+
+// In core/Router.php
+protected static array $middlewareMap = [
+    'auth' => AuthMiddleware::class,
+    'guest' => GuestMiddleware::class,
+    'admin' => AdminMiddleware::class, // Register your new middleware
+];
+
+// In routes/web.php
+Router::get('/admin/panel', [AdminController::class, 'index'])->middleware('admin');
+</code></pre>
+
+{% endblock %}

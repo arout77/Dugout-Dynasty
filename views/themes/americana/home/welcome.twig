@@ -1,0 +1,46 @@
+{% extends "layouts/main.twig" %}
+
+{% block content %}
+<div class="text-center py-12">
+    <svg class="h-20 w-20 text-blue-500 mx-auto mb-4" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="height: auto; width: 150px;"><path d="M30 85C20 75 22.5 57.5 35 50C47.5 42.5 60 50 60 50M60 50L75 25M60 50C60 60 50 72.5 40 75" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><path d="M75 25C77.5 22.5 80 25 77.5 27.5L62.5 42.5" stroke="#EC4899" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+
+    <h1 class="text-5xl font-bold text-gray-800 dark:text-white tracking-tight" style="font-size: 48px;">Welcome to Rhapsody!</h1>
+    <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-600 dark:text-gray-400">
+        Your symphony is ready to be composed.
+    </p>
+</div>
+
+<div class="mt-8 border-t dark:border-gray-700 pt-12">
+    <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-10">Your Next Steps</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="bg-gray-50 dark:bg-gray-700/50 p-8 rounded-lg border dark:border-gray-700 hover:shadow-lg transition-shadow duration-300">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">1. Read the Documentation</h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-4">
+                Get a complete overview of the framework's features, from routing and controllers to the powerful console commands.
+            </p>
+            <a href="{{ base_url }}/docs" class="font-semibold text-blue-500 hover:text-blue-700 dark:hover:text-blue-400">
+                Explore the Docs &rarr;
+            </a>
+        </div>
+
+        <div class="bg-gray-50 dark:bg-gray-700/50 p-8 rounded-lg border dark:border-gray-700 hover:shadow-lg transition-shadow duration-300">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">2. Create a Controller</h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-4">
+                Use the Rhapsody console to generate your first controller. This is the starting point for building any new page or feature.
+            </p>
+            <pre class="bg-gray-200 dark:bg-gray-800 p-3 rounded-md text-sm"><code class="language-bash">php rhapsody make:controller MyPageController</code></pre>
+        </div>
+
+        <div class="bg-gray-50 dark:bg-gray-700/50 p-8 rounded-lg border dark:border-gray-700 hover:shadow-lg transition-shadow duration-300">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">3. Define a Route</h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-4">
+                Once you have a controller, open <code>routes/web.php</code> and map a URL to your new controller method to see it in the browser.
+            </p>
+            <a href="{{ base_url }}/docs/routing" class="font-semibold text-blue-500 hover:text-blue-700 dark:hover:text-blue-400">
+                Learn about Routing &rarr;
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

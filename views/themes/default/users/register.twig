@@ -1,0 +1,108 @@
+{% extends "layouts/main.twig" %}
+
+{% block content %}
+    <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-6">Create an Account</h2>
+
+    {# IMPORTANT: enctype is required for file uploads #}
+    <form action="{{ base_url }}/register" method="POST" enctype="multipart/form-data" class="max-w-lg space-y-4">
+        
+        {# Username #}
+        <div>
+            <label for="username" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Username</label>
+            <input type="text" name="username" value="{{ old.username|e }}" class="input {{ errors.username ? 'input-error' : '' }}">
+            {% if errors.username %}<div class="error-message">{{ errors.username|first }}</div>{% endif %}
+        </div>
+
+        {# Email #}
+        <div>
+            <label for="email" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Email</label>
+            <input type="email" name="email" value="{{ old.email|e }}" class="input {{ errors.email ? 'input-error' : '' }}">
+            {% if errors.email %}<div class="error-message">{{ errors.email|first }}</div>{% endif %}
+        </div>
+        
+        {# Password #}
+        <div>
+            <label for="password" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Password</label>
+            <input type="password" name="password" class="input {{ errors.password ? 'input-error' : '' }}">
+            {% if errors.password %}<div class="error-message">{{ errors.password|first }}</div>{% endif %}
+        </div>
+        
+        {# Password Confirmation #}
+        <div>
+            <label for="password_confirmation" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Confirm Password</label>
+            <input type="password" name="password_confirmation" class="input">
+        </div>
+
+        {# Website (URL) #}
+        <div>
+            <label for="website" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Website (Optional)</label>
+            <input type="url" name="website" value="{{ old.website|e }}" placeholder="https://example.com" class="input {{ errors.website ? 'input-error' : '' }}">
+            {% if errors.website %}<div class="error-message">{{ errors.website|first }}</div>{% endif %}
+        </div>
+        
+        {# Birth Date (Date Format) #}
+        <div>
+            <label for="birth_date" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Birth Date</label>
+            <input type="date" name="birth_date" value="{{ old.birth_date|e }}" class="input {{ errors.birth_date ? 'input-error' : '' }}">
+            {% if errors.birth_date %}<div class="error-message">{{ errors.birth_date|first }}</div>{% endif %}
+        </div>
+
+        {# Role (In list) #}
+        <div>
+            <label for="role" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Role</label>
+            <select name="role" class="input {{ errors.role ? 'input-error' : '' }}">
+                <option value="">Select a role</option>
+                <option value="user" {{ old.role == 'user' ? 'selected' }}>User</option>
+                <option value="editor" {{ old.role == 'editor' ? 'selected' }}>Editor</option>
+            </select>
+            {% if errors.role %}<div class="error-message">{{ errors.role|first }}</div>{% endif %}
+        </div>
+        
+        {# Avatar (Image & Mimes) #}
+        <div>
+            <label for="avatar" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Avatar (PNG or JPG)</label>
+            <input type="file" name="avatar" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 {{ errors.avatar ? 'border border-red-500 rounded-lg p-1' : '' }}">
+            {% if errors.avatar %}<div class="error-message">{{ errors.avatar|first }}</div>{% endif %}
+        </div>
+
+        <div>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                Register
+            </button>
+        </div>
+    </form>
+    
+    {# Some helper styles for the inputs and errors #}
+    <style>
+        .input {
+            --tw-ring-color: transparent;
+            box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            appearance: none;
+            border-radius: 0.375rem;
+            border-width: 1px;
+            border-color: #D1D5DB;
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            line-height: 1.5rem;
+        }
+        .dark .input {
+            border-color: #4B5563;
+            background-color: #374151;
+            color: #E5E7EB;
+        }
+        .input:focus {
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+            --tw-ring-color: #60A5FA;
+            border-color: #60A5FA;
+        }
+        .input-error {
+            border-color: #EF4444;
+        }
+        .error-message {
+            color: #EF4444;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+    </style>
+{% endblock %}

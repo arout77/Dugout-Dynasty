@@ -1,0 +1,72 @@
+{% extends "docs/_layout.twig" %}
+
+{% block doc_content %}
+    <h1>Validation</h1>
+    <p>
+        The <code>Core\Validator</code> class provides a simple and powerful way to validate incoming data from forms and API requests.
+        It helps ensure data integrity and provides a clean way to handle errors and user feedback.
+    </p>
+
+    <h2>Basic Usage</h2>
+    <p>
+        In your controller, you can instantiate the validator, define your rules, and then check if the data passes.
+        If validation fails, you can easily get the error messages and pass them back to the view.
+    </p>
+    <pre><code>// In a controller method, e.g., handleContact()
+use Core\Validator;
+
+$data = $request->getBody();
+$validator = new Validator();
+
+$rules = [
+    'name' => 'required|min:2|max:50',
+    'email' => 'required|email',
+    'password' => 'required|min:8|confirmed',
+    'avatar' => 'required|image|mimes:jpeg,png'
+];
+
+if ($validator->validate($data, $rules)) {
+    // Data is valid, proceed with your logic...
+} else {
+    // Data is invalid, re-render the form with errors.
+    return $this->view('your_form.twig', [
+        'errors' => $validator->getErrors(),
+        'old' => $data // Pass back the old input
+    ]);
+}</code></pre>
+
+    <h2>Displaying Errors in Views</h2>
+    <p>
+        When validation fails, the controller passes an <code>errors</code> object and an <code>old</code> object back to the view.
+        You can use these to repopulate the form and display error messages next to the relevant fields.
+    </p>
+    <pre><code>&lt;!-- In your Twig template --&gt;
+&lt;label for="email"&gt;Email&lt;/label&gt;
+&lt;input type="email" name="email" value="{{ old.email|e }}"
+       class="{{ errors.email ? 'border-red-500' : '' }}"&gt;
+
+{% if errors.email %}
+    &lt;div class="text-red-500 text-sm mt-1"&gt;
+        {{ errors.email|first }}
+    &lt;/div&gt;
+{% endif %}</code></pre>
+
+    <h2>Available Validation Rules</h2>
+    <ul>
+        <li><code>required</code>: The field must not be empty.</li>
+        <li><code>email</code>: The field must be a valid email address.</li>
+        <li><code>url</code>: The field must be a valid URL.</li>
+        <li><code>min:X</code>: The string must be at least X characters long.</li>
+        <li><code>max:X</code>: The string must not exceed X characters.</li>
+        <li><code>confirmed</code>: The field must have a matching field named <code>{field}_confirmation</code> (e.g., <code>password</code> and <code>password_confirmation</code>).</li>
+        <li><code>numeric</code>: The field must be a numeric value.</li>
+        <li><code>alpha</code>: The field must consist entirely of letters.</li>
+        <li><code>alpha_num</code>: The field must consist entirely of letters and numbers.</li>
+        <li><code>date_format:Y-m-d</code>: The field must be a valid date matching the given format.</li>
+        <li><code>in:foo,bar,...</code>: The field's value must be in the given list.</li>
+        <li><code>not_in:foo,bar,...</code>: The field's value must not be in the given list.</li>
+        <li><code>image</code>: The uploaded file must be a valid image (jpg, png, gif, webp).</li>
+        <li><code>mimes:jpeg,png,...</code>: The uploaded file must have one of the given MIME types/extensions.</li>
+    </ul>
+
+{% endblock %}

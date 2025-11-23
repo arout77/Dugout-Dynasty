@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Events;
+
+use Core\Events\Event;
+
+class {{ classname }} extends Event
+{
+    /**
+     * Create a new event instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        //
+    }
+}

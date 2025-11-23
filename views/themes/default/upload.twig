@@ -1,0 +1,113 @@
+{% extends "layouts/main.twig" %}
+
+{% block content %}
+<h2 class="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-6">File Uploader</h2>
+<p class="text-gray-600 dark:text-gray-400 mb-6">Select multiple files to see the real-time upload progress.</p>
+
+<form id="uploadForm" class="max-w-xl">
+    <div>
+        <label for="documents" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Documents (JPG, PNG, PDF - Max 5MB each)</label>
+        <input type="file" name="documents" id="documents" multiple required 
+               class="block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 dark:file:bg-blue-900 file:text-blue-700 dark:file:text-blue-300 hover:file:bg-blue-100 dark:hover:file:bg-blue-800 cursor-pointer">
+    </div>
+    <div class="mt-6">
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            Upload Files
+        </button>
+    </div>
+</form>
+
+<div id="progress-container" class="mt-8 space-y-4">
+    <!-- Progress bars will be added here by JavaScript -->
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('uploadForm');
+    const fileInput = document.getElementById('documents');
+    const progressContainer = document.getElementById('progress-container');
+    const uploadUrl = '{{ base_url }}/upload';
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        progressContainer.innerHTML = ''; // Clear previous progress bars
+        
+        const files = fileInput.files;
+        if (files.length === 0) {
+            alert('Please select at least one file.');
+            return;
+        }
+
+        Array.from(files).forEach((file, index) => {
+            uploadFile(file, index);
+        });
+    });
+
+    function uploadFile(file, index) {
+        const formData = new FormData();
+        // The key 'documents[]' is important for PHP to receive multiple files
+        formData.append('documents[]', file); 
+
+        const progressWrapper = document.createElement('div');
+        const fileName = document.createElement('div');
+        fileName.textContent = file.name;
+        fileName.className = 'text-sm font-medium text-gray-700 dark:text-gray-300';
+        
+        const progressBar = document.createElement('div');
+        progressBar.className = 'w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mt-1';
+        const progressBarInner = document.createElement('div');
+        progressBarInner.className = 'bg-blue-600 h-2.5 rounded-full transition-all duration-300';
+        progressBarInner.style.width = '0%';
+        progressBar.appendChild(progressBarInner);
+
+        const statusText = document.createElement('div');
+        statusText.className = 'text-xs text-gray-500 dark:text-gray-400 mt-1';
+        statusText.textContent = 'Waiting...';
+
+        progressWrapper.appendChild(fileName);
+        progressWrapper.appendChild(progressBar);
+        progressWrapper.appendChild(statusText);
+        progressContainer.appendChild(progressWrapper);
+
+        // We use XMLHttpRequest because it has built-in upload progress events,
+        // which Fetch API does not have natively.
+        const xhr = new XMLHttpRequest();
+
+        xhr.upload.addEventListener('progress', (e) => {
+            if (e.lengthComputable) {
+                const percentComplete = (e.loaded / e.total) * 100;
+                progressBarInner.style.width = percentComplete.toFixed(2) + '%';
+                statusText.textContent = `Uploading... ${Math.round(percentComplete)}%`;
+            }
+        });
+
+        xhr.addEventListener('load', () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                progressBarInner.classList.remove('bg-blue-600');
+                progressBarInner.classList.add('bg-green-600');
+                statusText.textContent = 'Upload successful!';
+            } else {
+                progressBarInner.classList.remove('bg-blue-600');
+                progressBarInner.classList.add('bg-red-600');
+                try {
+                    const response = JSON.parse(xhr.responseText);
+                    const errorMessage = response.errors[file.name] ? response.errors[file.name][0] : 'An unknown error occurred.';
+                    statusText.textContent = `Error: ${errorMessage}`;
+                } catch {
+                    statusText.textContent = `Error: Server returned status ${xhr.status}.`;
+                }
+            }
+        });
+
+        xhr.addEventListener('error', () => {
+            progressBarInner.classList.remove('bg-blue-600');
+            progressBarInner.classList.add('bg-red-600');
+            statusText.textContent = 'Upload failed. A network error occurred.';
+        });
+
+        xhr.open('POST', uploadUrl, true);
+        xhr.send(formData);
+    }
+});
+</script>
+{% endblock %}

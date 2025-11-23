@@ -1,0 +1,95 @@
+{% extends "docs/_layout.twig" %}
+
+{% block doc_content %}
+    <h1>Events & Listeners</h1>
+    <p>
+        Rhapsody includes a simple but powerful event dispatcher system that allows you to decouple various aspects of your application. By dispatching events, you can allow other parts of your application, or "listeners," to react to an action without the original code needing to know about them. This is a great way to handle side effects, like sending a notification email after a user registers.
+    </p>
+    <p>
+        This approach follows the <a href="https://en.wikipedia.org/wiki/Observer_pattern" target="_blank">Observer design pattern</a> and leads to a more modular and maintainable codebase.
+    </p>
+
+    <h2>The Workflow at a Glance</h2>
+    <ol>
+        <li>An action occurs in your application (e.g., a user registers).</li>
+        <li>Your controller creates and **dispatches** an `Event` object containing data about what happened.</li>
+        <li>The `EventDispatcher` receives the event and finds all registered **Listeners** for it.</li>
+        <li>The dispatcher executes the `handle()` method on each listener, passing them the event object.</li>
+    </ol>
+    <hr>
+    
+    <h2>1. Creating Events and Listeners</h2>
+    <p>The Rhapsody console includes generator commands to quickly create new event and listener classes for your application.</p>
+    
+    <h3>Creating an Event</h3>
+    <p>This command will create a new event class in the `app/Events` directory. Events are simple data objects that hold information about the event.</p>
+    <pre class="command-line"><code class="language-bash">php rhapsody make:event UserRegistered</code></pre>
+    <p>You can then edit the generated `UserRegistered.php` file to accept data in its constructor, like the user object.</p>
+    
+    <h3>Creating a Listener</h3>
+    <p>This command creates a new listener class in the `app/Listeners` directory. Listeners contain the logic to handle an event.</p>
+    <pre class="command-line"><code class="language-bash">php rhapsody make:listener SendWelcomeEmail</code></pre>
+    <p>You will then implement the logic for sending the email inside the `handle()` method of the generated `SendWelcomeEmail.php` file.</p>
+
+    <hr>
+
+    <h2>2. Registering Listeners</h2>
+    <p>
+        Once you have created your event and listener classes, you need to tell the framework that the listener should be executed when the event is dispatched. This is done in the `app/Providers/EventServiceProvider.php` file.
+    </p>
+    <p>
+        The `$listen` property is an array where the keys are the event classes and the values are arrays of listener classes that should handle them.
+    </p>
+    <pre><code class="language-php">
+// in app/Providers/EventServiceProvider.php
+use App\Events\UserRegistered;
+use App\Listeners\SendWelcomeEmail;
+
+class EventServiceProvider
+{
+    protected array $listen = [
+        // When the UserRegistered event is dispatched...
+        UserRegistered::class => [
+            // ...execute the SendWelcomeEmail listener.
+            SendWelcomeEmail::class,
+        ],
+    ];
+    // ...
+}
+</code></pre>
+
+    <hr>
+
+    <h2>3. Dispatching Events</h2>
+    <p>
+        The final step is to dispatch the event from your controller (or any other class). You can do this by injecting the `Core\Events\EventDispatcher` into your controller's constructor and calling its `dispatch()` method.
+    </p>
+    <pre><code class="language-php">
+// in app/Controllers/AuthController.php
+use App\Events\UserRegistered;
+use Core\Events\EventDispatcher;
+
+class AuthController extends BaseController
+{
+    public function __construct(
+        protected EventDispatcher $dispatcher,
+        // ... other dependencies
+    ) {
+        // ...
+    }
+    
+    public function register(Request $request): Response
+    {
+        // ... validation and user creation logic ...
+
+        // After the user is saved, dispatch the event
+        $this->dispatcher->dispatch(new UserRegistered($user));
+        
+        // ... redirect the user ...
+    }
+}
+</code></pre>
+    <p>
+        Now, your controller's only responsibility is to handle the registration. It no longer knows anything about sending emails. You can easily add more listeners (e.g., `LogUserRegistration`, `UpdateUserStats`) to the `EventServiceProvider` in the future without ever having to change your `AuthController` again.
+    </p>
+{% endblock %}

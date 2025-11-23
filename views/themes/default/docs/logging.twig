@@ -1,0 +1,72 @@
+{% extends "docs/_layout.twig" %}
+
+{% block doc_content %}
+    <h1>Logging</h1>
+    <p>
+        Rhapsody includes a simple but effective file-based logger, managed by the <code>Core\Logger</code> class. It provides a standardized way to write messages to log files for debugging, tracking errors, or recording important events in your application.
+    </p>
+
+    <hr>
+
+    <h2>Configuration</h2>
+    <p>
+        To use the logger, you first need to tell the framework where your log files are located. This is done in the <code>config.php</code> file within the <code>logging</code> array. You can define paths for different log types, such as PHP and Apache errors.
+    </p>
+    <pre><code class="language-php">// in config.php
+'logging' => [
+    // Example for MAMP on macOS
+    'php_error_log_path' => '/Applications/MAMP/logs/php_error.log',
+    'apache_error_log_path' => '/Applications/MAMP/logs/apache_error.log',
+    // You can also define a custom log path
+    'application_log_path' => dirname(__DIR__) . '/storage/logs/app.log',
+],
+</code></pre>
+    <p>The logger will automatically create the directory if it does not exist when you write to it.</p>
+
+    <hr>
+
+    <h2>Basic Usage</h2>
+    <p>
+        To use the logger, you create a new instance of the <code>Core\Logger</code> class, passing the path to the desired log file in its constructor.
+    </p>
+
+    <h3>Writing to a Log</h3>
+    <p>
+        The <code>log()</code> method is used to write messages. It automatically adds a timestamp and a log level to each entry.
+    </p>
+    <pre><code class="language-php">use Core\Logger;
+
+// Get the path from your config
+$logPath = $config['logging']['application_log_path'];
+$logger = new Logger($logPath);
+
+// Write an informational message
+$logger->log('User successfully updated their profile.', 'INFO');
+
+// Write an error message
+try {
+    // ... some operation that might fail ...
+} catch (\Exception $e) {
+    $logger->log('Failed to process payment: ' . $e->getMessage(), 'ERROR');
+}
+</code></pre>
+    <p>This will produce entries in your <code>storage/logs/app.log</code> file like this:</p>
+    <pre><code class="language-bash">[2025-10-02 22:30:00] INFO: User successfully updated their profile.
+[2025-10-02 22:30:01] ERROR: Failed to process payment: Connection timed out.
+</code></pre>
+
+    <h3>Reading from a Log</h3>
+    <p>
+        The <code>read()</code> method allows you to retrieve the last N lines of a log file. This is particularly useful for displaying recent activity or errors, as seen in the developer toolbar.
+    </p>
+    <pre><code class="language-php">use Core\Logger;
+
+$phpErrorLog = new Logger($config['logging']['php_error_log_path']);
+
+// Read the last 50 lines of the PHP error log
+$recentErrors = $phpErrorLog->read(50);
+
+echo "&lt;pre&gt;{$recentErrors}&lt;/pre&gt;";
+</code></pre>
+
+{% endblock %}

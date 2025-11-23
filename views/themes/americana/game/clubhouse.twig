@@ -1,0 +1,130 @@
+{% extends "layouts/main.twig" %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 py-8">
+    <div class="container mx-auto px-4">
+        
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-extrabold text-blue-900">Clubhouse</h1>
+                <p class="text-gray-600">Set your Rotation and Batting Order</p>
+            </div>
+            <button onclick="saveChanges()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-bold shadow transition transform hover:scale-105">
+                Save Changes
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- PITCHING ROTATION -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2">
+                    Starting Rotation
+                </h2>
+                <div class="space-y-4" id="rotation-container">
+                    {% for i in 1..5 %}
+                        {% set saved = null %}
+                        {% for s in saved_rotation %}
+                            {% if s.slot == i %}{% set saved = s %}{% endif %}
+                        {% endfor %}
+
+                        <div class="flex items-center gap-4">
+                            <span class="font-bold text-gray-400 w-8">SP{{ i }}</span>
+                            <select class="rotation-select w-full p-2 border rounded bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:bg-white transition" data-slot="{{ i }}">
+                                <option value="">-- Select Pitcher --</option>
+                                {% for p in roster %}
+                                    {% if p.position == 'SP' or p.position == 'P' %}
+                                        <option value="{{ p.player_id }}" {% if saved and saved.player_id == p.player_id %}selected{% endif %}>
+                                            {{ p.player_name }} ({{ p.season_year }})
+                                        </option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- BATTING ORDER -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2">
+                    Lineup (vs RHP)
+                </h2>
+                <div class="space-y-3" id="lineup-container">
+                    {% for i in 1..9 %}
+                        {% set saved = null %}
+                        {% for s in saved_lineup %}
+                            {% if s.slot == i %}{% set saved = s %}{% endif %}
+                        {% endfor %}
+
+                        <div class="flex items-center gap-4">
+                            <span class="font-bold text-gray-400 w-4">{{ i }}</span>
+                            <select class="lineup-select w-full p-2 border rounded bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:bg-white transition" data-slot="{{ i }}">
+                                <option value="">-- Select Batter --</option>
+                                {% for p in roster %}
+                                    {% if p.position != 'SP' and p.position != 'RP' %}
+                                        <option value="{{ p.player_id }}" {% if saved and saved.player_id == p.player_id %}selected{% endif %}>
+                                            {{ p.player_name }} ({{ p.position }})
+                                        </option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            <!-- Position Select -->
+                            <select class="pos-select w-24 p-2 border rounded bg-gray-50 text-sm" data-slot="{{ i }}">
+                                {% for pos in ['DH', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF'] %}
+                                    <option value="{{ pos }}" {% if saved and saved.position == pos %}selected{% endif %}>{{ pos }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    let BASE_URL = "{{ base_url }}";
+    if (BASE_URL.includes("\{\{")) BASE_URL = "";
+    if (BASE_URL.endsWith('/')) BASE_URL = BASE_URL.slice(0, -1);
+
+    async function saveChanges() {
+        const rotation = [];
+        document.querySelectorAll('.rotation-select').forEach(el => {
+            if(el.value) rotation.push({ slot: el.dataset.slot, player_id: el.value });
+        });
+
+        const lineup = [];
+        document.querySelectorAll('.lineup-select').forEach((el, idx) => {
+            const posSelect = document.querySelectorAll('.pos-select')[idx];
+            if(el.value) {
+                lineup.push({ 
+                    slot: el.dataset.slot, 
+                    player_id: el.value,
+                    pos: posSelect.value
+                });
+            }
+        });
+
+        try {
+            const res = await fetch(`${BASE_URL}/api/clubhouse/save`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ rotation, lineup })
+            });
+            const data = await res.json();
+            if(data.success) {
+                alert("Lineup saved successfully!");
+                // No redirect, stay here to verify save
+                // window.location.href = `${BASE_URL}/pregame`;
+            } else {
+                alert("Failed to save.");
+            }
+        } catch(e) {
+            console.error(e);
+            alert("Error saving data.");
+        }
+    }
+</script>
+{% endblock %}

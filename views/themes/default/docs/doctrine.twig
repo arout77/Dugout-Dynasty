@@ -1,0 +1,88 @@
+{% extends "docs/_layout.twig" %}
+
+{% block doc_content %}
+    <h1>Database: Doctrine ORM</h1>
+    <p>
+        For developers who prefer a powerful Object-Relational Mapper (ORM), Rhapsody comes fully integrated with Doctrine. This allows you to work with your database using objects and entities, abstracting away raw SQL for more complex applications. This feature is available alongside the original PDO-based <a href="{{ base_url }}/docs/models">BaseModel</a>, giving you the freedom to choose the right tool for your needs.
+    </p>
+
+    <h2>What are Entities?</h2>
+    <p>
+        In Doctrine, an "Entity" is a PHP class that maps directly to a database table. Each property in the class corresponds to a column in that table. All entity files should be placed in the <code>app/Entities/</code> directory.
+    </p>
+    <p>
+        You define the mapping using PHP Attributes, which makes the configuration clean and readable.
+    </p>
+
+    <h3>Example: User Entity</h3>
+    <pre><code class="language-php">
+&lt;?php
+namespace App\Entities;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity]
+#[ORM\Table(name: 'users')]
+class User
+{
+    #[ORM\Id]
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $user_id;
+
+    #[ORM\Column(type: 'string', length: 50)]
+    private string $name;
+
+    // ... other properties
+}
+</code></pre>
+
+    <hr>
+
+    <h2>The Entity Manager</h2>
+    <p>
+        All interactions with the database in Doctrine are handled by the <code>EntityManager</code>. Rhapsody's service container is already configured to automatically build and inject the `EntityManager` into your controllers' constructors whenever you type-hint it.
+    </p>
+    <pre><code class="language-php">
+use App\Entities\User;
+use Doctrine\ORM\EntityManager; // Import the EntityManager
+
+class AuthController extends BaseController
+{
+    public function __construct(
+        protected EntityManager $em, // The container injects it here
+        protected Validator $validator,
+        Environment $twig
+    ) {
+        parent::__construct($twig);
+    }
+}
+</code></pre>
+
+    <h2>Fetching & Saving Data</h2>
+    <p>Once the `EntityManager` is available in your controller (e.g., as <code>$this->em</code>), you can perform database operations.</p>
+    
+    <h3>Fetching Data</h3>
+    <p>You can retrieve entities from the database using repositories.</p>
+    <pre><code class="language-php">
+// Find a single user by their email address
+$user = $this->em->getRepository(User::class)->findOneBy(['email' => $email]);
+
+// Find a user by their primary key
+$user = $this->em->find(User::class, $userId);
+</code></pre>
+
+    <h3>Saving Data (Persisting)</h3>
+    <p>To save a new entity or update an existing one, you use the <code>persist()</code> and <code>flush()</code> methods.</p>
+    <pre><code class="language-php">
+// Create a new User entity
+$user = new User();
+$user->setName('New User');
+$user->setEmail('new@example.com');
+$user->setPassword('a-secure-password');
+
+// 1. Tell Doctrine to "manage" this new object
+$this->em->persist($user);
+
+// 2. Execute the INSERT query to save it to the database
+$this->em->flush();
+</code></pre>
+{% endblock %}

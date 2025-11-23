@@ -1,0 +1,54 @@
+{% extends "docs/_layout.twig" %}
+
+{% block doc_content %}
+    <h1>Installation & Setup</h1>
+    <p>
+        Getting started with Rhapsody is designed to be a quick and straightforward process.
+        Follow these steps to get your local development environment up and running.
+    </p>
+
+    <h2>1. Server Requirements</h2>
+    <p>Rhapsody is built with modern PHP. Please ensure your environment meets the following requirements:</p>
+    <ul>
+        <li>PHP 8.2 or higher</li>
+        <li>Composer installed</li>
+        <li>A local server environment like MAMP, WAMP, or Laravel Herd</li>
+        <li>A MySQL-compatible database</li>
+    </ul>
+
+    <h2>2. Installation</h2>
+    <p>Clone the repository and install the Composer dependencies.</p>
+    <p>In your terminal:</p>
+    
+<pre class="command-line"><code class="language-bash">git clone https://github.com/arout77/Rhapsody-Framework your-site-name
+cd your-site-name
+composer install
+cp .env.example .env
+Set up your DB connection in the newly created .env file</code></pre>
+
+    <h2>3. Environment Configuration</h2>
+    <p>Rhapsody uses a <code>.env</code> file to manage environment-specific variables like database credentials. This keeps your secrets out of version control.</p>
+    <p>First, copy the example file:</p>
+    <pre><code>cp .env.example .env</code></pre>
+    <p>Next, open the newly created <code>.env</code> file and configure it for your local machine. The most important variables are for the database connection:</p>
+    
+<pre class="command-line"><code class="language-bash">APP_BASE_URL="/your-site-name"
+DB_HOST="127.0.0.1"
+DB_PORT="3306"
+DB_NAME="database_name"
+DB_USER="username"
+DB_PASS="password"</code></pre>
+
+    <h2>4. Database Setup</h2>
+    <p>You will need to create a database with the name you specified in your <code>.env</code> file.</p>
+    <p>If you wish to receive email notifications regarding software updates and other relevant news, put your email address in the <code>MAIL_ADMIN_EMAIL</code> variable.</p>
+    {# <p>Once created, you can run the provided schema to create the initial <code>users</code> table:</p>
+    <pre><code># Using a command-line client
+mysql -u your_user -p your_database_name < database_schema.sql</code></pre>
+    <p>Alternatively, you can copy the contents of <code>database_schema.sql</code> and run it in a GUI client like TablePlus or Sequel Ace.</p> #}
+    
+    <h2>5. Web Server Configuration</h2>
+    <p>Your web server must be configured to direct all incoming requests to the front controller (<code>index.php</code>) in your document root. The repository includes a <code>.htaccess</code> file that handles this for Apache servers.</p> 
+    <p>You should now be able to visit your project in the browser and see the Rhapsody welcome page!</p>
+
+{% endblock %}

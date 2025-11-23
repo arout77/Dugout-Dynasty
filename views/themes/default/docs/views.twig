@@ -1,0 +1,67 @@
+{% extends "docs/_layout.twig" %}
+
+{% block doc_content %}
+    <h1>Views & Templating</h1>
+    <p>
+        The View layer is responsible for presenting data to the user. Rhapsody uses the powerful <a href="https://twig.symfony.com/" target="_blank">Twig</a>
+        templating engine to keep your presentation logic separate from your PHP code. This makes your HTML cleaner, more secure, and easier to manage.
+    </p>
+    <p>All view files are located in the <code>views/</code> directory and use the <code>.twig</code> extension.</p>
+
+    <h2>Layouts and Inheritance</h2>
+    <p>
+        One of Twig's most powerful features is template inheritance. Instead of repeating your site's header and footer in every file, you can create
+        a base layout and have other templates "extend" it.
+    </p>
+    <p>Our framework uses <code>views/layouts/main.twig</code> as the main site template. It contains all the common HTML, including the header, navigation, and footer.</p>
+    <pre><code>&lt;!-- views/layouts/main.twig --&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;body&gt;
+        &lt;header&gt;...&lt;/header&gt;
+        
+        &lt;main&gt;
+            &lcub;% block content %}&lcub;% endblock %}
+        &lt;/main&gt;
+
+        &lt;footer&gt;...&lt;/footer&gt;
+    &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+    <p>A specific page template then extends this layout and provides content only for the <code>content</code> block.</p>
+    <pre><code>{# views/home/index.twig #}
+&lcub;% extends "layouts/main.twig" %&rcub;
+
+&lcub;% block content %}
+    &lt;h1&gt;Welcome to the Home Page!&lt;/h1&gt;
+    &lt;p&gt;This is the content for our home page.&lt;/p&gt;
+&lcub;% endblock %&rcub;</code></pre>
+
+    <h2>Displaying Data</h2>
+    <p>You can print data passed from your controller using double curly braces: <code>&lcub;{ ... }&rcub;</code>. Twig automatically escapes this output to prevent XSS attacks, making it secure by default.</p>
+    <pre><code>// In your controller
+return $this->view('profile.twig', ['username' => 'Alice']);
+
+{# In profile.twig #}
+&lt;h1&gt;Welcome, &lcub;{ username }&rcub;!&lt;/h1&gt;</code></pre>
+
+    <h2>Global Variables</h2>
+    <p>The framework makes a few variables globally available in all Twig templates:</p>
+    <ul>
+        <li><code>&lcub;{ base_url }&rcub;</code>: The base path of your application. Always use this for creating links.</li>
+        <li><code>&lcub;{ auth.check }&rcub;</code>: A boolean that is <code>true</code> if a user is logged in, <code>false</code> otherwise.</li>
+        <li><code>&lcub;{ auth.user }&rcub;</code>: An object containing the logged-in user's data (e.g., <code>auth.user.name</code>). It is <code>null</code> if no user is logged in.</li>
+    </ul>
+
+    <h2>Displaying Flash Messages</h2>
+        <p>After a redirect, you can display flash messages set in your controller. The main layout file is already set up to display <code>success</code> and <code>error</code> messages automatically.</p>
+        <pre><code class="language-twig">&lcub;% raw %}&lcub;% if flash.success %}
+        <div class="alert-success">&lcub;&lcub; flash.success }}</div>
+    &lcub;% endif %}&lcub;% endraw %}</code></pre>
+
+    <h2>Styling with Tailwind CSS</h2>
+    <p>
+        The main layout includes the Tailwind CSS CDN script, so you can use any of Tailwind's utility classes in your views for rapid and responsive styling.
+        The framework also includes a theme switcher with light/dark/system modes.
+    </p>
+
+{% endblock %}

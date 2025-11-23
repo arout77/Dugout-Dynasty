@@ -1,0 +1,50 @@
+{% extends "docs/_layout.twig" %}
+
+{% block doc_content %}
+    <h1>Sending Mail</h1>
+    <p>Rhapsody provides a simple, powerful mailer service built on top of the robust <code>symfony/mailer</code> component. This allows you to easily send emails for notifications, confirmations, and more.</p>
+
+    <h2>Configuration</h2>
+    <p>All mailer configuration is handled in your <code>.env</code> file. You can configure your SMTP host, port, username, and password. For local development, a service like <a href="https://mailtrap.io" target="_blank">Mailtrap</a> is highly recommended to safely test your emails in a "fake" inbox.</p>
+    <pre><code># .env
+MAIL_TRANSPORT="smtp"
+MAIL_HOST="sandbox.smtp.mailtrap.io"
+MAIL_PORT="2525"
+MAIL_USERNAME="your-username"
+MAIL_PASSWORD="your-password"
+MAIL_FROM_ADDRESS="no-reply@rhapsody.test"
+MAIL_FROM_NAME="Rhapsody Framework"</code></pre>
+
+    <h2>Sending an Email</h2>
+    <p>The easiest way to send mail is to inject the <code>Core\Mailer</code> service into your controller's constructor via dependency injection. Then, you can call the <code>send()</code> method.</p>
+    <pre><code>use Core\Mailer;
+use Core\Request;
+
+class ContactController extends BaseController
+{
+    public function __construct(
+        protected Mailer $mailer,
+        // ... other dependencies
+    ) {
+        // ...
+    }
+
+    public function submit(Request $request)
+    {
+        // ... validation logic ...
+
+        $to = 'admin@example.com';
+        $subject = 'New Contact Form Submission';
+        $htmlBody = '&lt;p&gt;You have a new message!&lt;/p&gt;';
+
+        try {
+            $this->mailer->send($to, $subject, $htmlBody);
+            return redirect('/contact')->with('success', 'Message sent!');
+        } catch (\Exception $e) {
+            // Log the error
+            return redirect('/contact')->with('error', 'Could not send message.');
+        }
+    }
+}</code></pre>
+
+{% endblock %}

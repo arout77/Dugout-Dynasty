@@ -1,0 +1,23 @@
+<?php
+
+namespace App\Middleware;
+
+use Core\Request;
+
+class {{ classname }} extends Middleware
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function handle(Request $request): void
+    {
+        // Your middleware logic here.
+        // For example, to check for an admin role:
+        // if (\Core\Session::get('user_role') !== 'admin') {
+        //     redirect('/')->with('error', 'Access Denied.');
+        // }
+    }
+}

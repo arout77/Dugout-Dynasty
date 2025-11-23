@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rhapsody - The Pragmatic PHP Framework for Modern Web Applications</title>
+    <meta name="description" content="Rhapsody is a modern PHP framework for developers who find full-stack frameworks too heavy and micro-frameworks too bare-bones. It offers the perfect balance of power and simplicity.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .bg-grid {
+            background-image:
+                linear-gradient(to right, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+            background-size: 3rem 3rem;
+        }
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        .glow-effect {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.3) 0%, rgba(99, 102, 241, 0) 60%);
+            z-index: -1;
+            pointer-events: none;
+        }
+        .btn-primary {
+            @apply px-8 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-75 transition-transform transform hover:scale-105;
+        }
+        .btn-secondary {
+            @apply px-8 py-3 bg-gray-700 text-gray-300 font-semibold rounded-lg shadow-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-75 transition-transform transform hover:scale-105;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200">
+
+    <!-- Header -->
+    <header class="sticky top-0 bg-gray-900/80 backdrop-blur-lg z-50 border-b border-gray-800">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-white flex items-center">
+                <svg class="h-8 w-8 text-indigo-400 mr-2" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M30 85C20 75 22.5 57.5 35 50C47.5 42.5 60 50 60 50M60 50L75 25M60 50C60 60 50 72.5 40 75" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><path d="M75 25C77.5 22.5 80 25 77.5 27.5L62.5 42.5" stroke="#EC4899" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Rhapsody
+            </a>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#features" class="hover:text-indigo-400 transition-colors">Features</a>
+                <a href="#sweet-spot" class="hover:text-indigo-400 transition-colors">Why Rhapsody?</a>
+                <a href="/docs" class="hover:text-indigo-400 transition-colors">Docs</a>
+            </div>
+            <a href="/docs/installation" class="btn-primary hidden md:inline-block">Get Started</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <main>
+        <section class="relative py-24 md:py-32 text-center overflow-hidden bg-grid">
+            <div class="glow-effect top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+            <div class="container mx-auto px-6 relative">
+                <h1 class="text-5xl md:text-7xl font-extrabold text-white leading-tight tracking-tight mb-4">
+                    Compose your masterpiece.
+                </h1>
+                <p class="max-w-3xl mx-auto text-lg md:text-xl text-gray-400 mb-8">
+                    The pragmatic PHP framework for developers who love modern tooling but crave simplicity. Rhapsody hits the sweet spot between heavy full-stack frameworks and bare-bones micro-frameworks.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+                    <a href="/docs/installation" class="btn-primary w-full sm:w-auto">
+                        Install Rhapsody Now
+                    </a>
+                    <a href="#sweet-spot" class="btn-secondary w-full sm:w-auto">
+                        Why Rhapsody?
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sweet Spot Section -->
+        <section id="sweet-spot" class="py-20 md:py-28 bg-gray-800/50">
+            <div class="container mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-white">Find Your Perfect Balance</h2>
+                    <p class="mt-4 text-lg text-gray-400">Stop choosing between too much complexity and not enough features. Rhapsody is designed to be *just right*.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                    <!-- Too Heavy -->
+                    <div class="bg-gray-900 p-8 rounded-xl border border-gray-700">
+                        <h3 class="text-2xl font-bold text-red-400 mb-4">Too Heavy</h3>
+                        <p class="text-gray-400 mb-6">Full-stack frameworks like Laravel are powerful, but their large ecosystem and steep learning curve can be overkill for many projects.</p>
+                        <span class="text-5xl">🐘</span>
+                    </div>
+                    <!-- Just Right -->
+                    <div class="bg-indigo-900/30 p-8 rounded-xl border-2 border-indigo-500 transform scale-105 shadow-2xl shadow-indigo-500/20">
+                        <h3 class="text-2xl font-bold text-green-400 mb-4">Just Right: Rhapsody</h3>
+                        <p class="text-gray-300 mb-6">Rhapsody provides the modern tooling you love—DI, ORM, CLI—in a lightweight, transparent package. It's productive out-of-the-box without the bloat.</p>
+                        <span class="text-5xl">🎯</span>
+                    </div>
+                    <!-- Too Bare -->
+                    <div class="bg-gray-900 p-8 rounded-xl border border-gray-700">
+                        <h3 class="text-2xl font-bold text-yellow-400 mb-4">Too Bare</h3>
+                        <p class="text-gray-400 mb-6">Micro-frameworks like Slim are fast, but require you to build your own toolkit, spending time on configuration instead of creation.</p>
+                        <span class="text-5xl">🦴</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Features Section -->
+        <section id="features" class="py-20 md:py-28">
+            <div class="container mx-auto px-6">
+                 <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-white">A Curated, Modern Toolset</h2>
+                    <p class="mt-4 text-lg text-gray-400">Everything you need. Nothing you don't.</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Feature Cards -->
+                    <div class="feature-card bg-gray-800 p-6 rounded-lg border border-gray-700 transition-all duration-300">
+                        <h3 class="text-xl font-bold text-white mb-2">Modern Architecture</h3>
+                        <p class="text-gray-400">Leverage a powerful Service Container and Dependency Injection to build clean, maintainable, and testable applications from the ground up.</p>
+                    </div>
+                    <div class="feature-card bg-gray-800 p-6 rounded-lg border border-gray-700 transition-all duration-300">
+                        <h3 class="text-xl font-bold text-white mb-2">Dual Database Layers</h3>
+                        <p class="text-gray-400">Choose your tool. Use the simplicity of raw PDO, or leverage the power of the fully integrated Doctrine ORM for complex applications.</p>
+                    </div>
+                    <div class="feature-card bg-gray-800 p-6 rounded-lg border border-gray-700 transition-all duration-300">
+                        <h3 class="text-xl font-bold text-white mb-2">The Rhapsody Console</h3>
+                        <p class="text-gray-400">Speed up development with a powerful CLI. Generate controllers, models, and middleware. Manage migrations, caches, and more.</p>
+                    </div>
+                    <div class="feature-card bg-gray-800 p-6 rounded-lg border border-gray-700 transition-all duration-300">
+                        <h3 class="text-xl font-bold text-white mb-2">High-Performance Caching</h3>
+                        <p class="text-gray-400">Built for speed with a multi-driver cache system. Use file-based caching out of the box, or switch to Redis with a single config change.</p>
+                    </div>
+                    <div class="feature-card bg-gray-800 p-6 rounded-lg border border-gray-700 transition-all duration-300">
+                        <h3 class="text-xl font-bold text-white mb-2">Event-Driven & Decoupled</h3>
+                        <p class="text-gray-400">Use the built-in Event Dispatcher to build a clean, modular architecture where components can react to application events without tight coupling.</p>
+                    </div>
+                     <div class="feature-card bg-gray-800 p-6 rounded-lg border border-gray-700 transition-all duration-300">
+                        <h3 class="text-xl font-bold text-white mb-2">Secure by Default</h3>
+                        <p class="text-gray-400">Comes with built-in authentication, a middleware pipeline, and automatic CSRF protection on POST routes to keep your application safe.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Code Example Section -->
+        <section class="py-20 md:py-28 bg-gray-800/50">
+            <div class="container mx-auto px-6">
+                <div class="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
+                    <div class="mb-12 lg:mb-0">
+                        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Code That Sparks Joy</h2>
+                        <p class="text-gray-400 text-lg mb-6">
+                            Rhapsody's syntax is intuitive and expressive. Define routes, create controllers with auto-wired dependencies, and build your application with a workflow that feels natural and un-obstructive.
+                        </p>
+                        <ul class="space-y-4 text-gray-300">
+                            <li class="flex items-start"><span class="text-indigo-400 mr-3 mt-1">✓</span><span>**Expressive Routing:** Dynamic parameters and middleware, right where you need them.</span></li>
+                            <li class="flex items-start"><span class="text-indigo-400 mr-3 mt-1">✓</span><span>**Automatic Dependency Injection:** Write clean, testable code as the container handles the rest.</span></li>
+                            <li class="flex items-start"><span class="text-indigo-400 mr-3 mt-1">✓</span><span>**API-Ready:** Built-in helpers for creating robust JSON APIs for your front-end.</span></li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-900 rounded-lg shadow-2xl overflow-hidden border border-gray-700">
+                         <pre class="language-php p-6 text-sm"><code class="text-white bg-transparent">
+// Define a protected route in routes/web.php
+Router::get('/users/{id}', [UserController::class, 'show'])
+      ->middleware('auth');
+
+// Your controller with automatic dependency injection
+class UserController extends BaseController
+{
+    // Rhapsody's container automatically injects this for you
+    public function __construct(protected User $userModel) {}
+
+    public function show(Request $request, string $id): Response
+    {
+        $user = $this->userModel->findById($id);
+
+        return $this->view('users/show.twig', ['user' => $user]);
+    }
+}
+</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Who is it for? Section -->
+        <section class="py-20 md:py-28">
+            <div class="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <span class="text-indigo-400 font-semibold">For the Pragmatic Developer</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mt-2 mb-4">Stop reaching for a sledgehammer to crack a nut.</h2>
+                    <p class="text-gray-400 text-lg">
+                        You know the value of choosing the right tool for the job. For client sites, startup MVPs, and fast APIs, Rhapsody provides the productivity you need without the heavy overhead. It's the framework that gets out of your way so you can focus on building.
+                    </p>
+                </div>
+                 <div>
+                    <span class="text-pink-400 font-semibold">For the Modern Learner</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mt-2 mb-4">Learn how frameworks *actually* work.</h2>
+                    <p class="text-gray-400 text-lg">
+                       Frameworks can feel like magic. Rhapsody is different. Its core is so transparent and well-documented that you can finally understand essential concepts like the Service Container, Middleware, and the Request Lifecycle. It's the perfect way to level up your PHP skills.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA -->
+        <section class="bg-gray-800/50 py-20">
+            <div class="container mx-auto text-center px-6">
+                <h2 class="text-4xl font-bold text-white mb-4">Start Your Symphony Today</h2>
+                <p class="text-lg text-gray-400 mb-8 max-w-2xl mx-auto">Join the growing number of developers choosing simplicity and elegance. Install Rhapsody and begin composing your next web application in minutes.</p>
+                <a href="/docs/installation" class="btn-primary text-lg">
+                    Install Rhapsody Now
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-800">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-500">
+            <p>&copy; 2025 Rhapsody Framework. Built with ❤️ by a passionate developer.</p>
+            <p class="mt-2">Released under the MIT License.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
