@@ -1,0 +1,243 @@
+{% extends "layouts/main.twig" %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-900 text-white font-sans overflow-hidden flex flex-col" id="game-interface">
+    
+    <!-- --- SCOREBOARD HEADER --- -->
+    <div class="bg-gray-800 border-b border-gray-700 p-2 shadow-lg z-50">
+        <div class="container mx-auto max-w-6xl flex justify-between items-center">
+            
+            <!-- Score -->
+            <div class="flex items-center gap-4 bg-black rounded px-4 py-1 border border-gray-600">
+                <div class="text-center w-16">
+                    <div class="text-[10px] text-gray-400 font-bold uppercase truncate">{{ state.teams.away.name }}</div>
+                    <div class="text-3xl font-mono font-bold text-yellow-400" id="score-away">{{ state.score.away }}</div>
+                </div>
+                <div class="text-gray-600 text-xl font-thin">-</div>
+                <div class="text-center w-16">
+                    <div class="text-[10px] text-gray-400 font-bold uppercase truncate">{{ state.teams.home.name }}</div>
+                    <div class="text-3xl font-mono font-bold text-yellow-400" id="score-home">{{ state.score.home }}</div>
+                </div>
+            </div>
+
+            <!-- Inning/Outs -->
+            <div class="flex items-center gap-6">
+                <div class="flex flex-col items-center w-16">
+                    <div class="text-[10px] text-gray-400 uppercase">Inn</div>
+                    <div class="flex items-center gap-1 text-xl font-bold">
+                        <span id="inning-arrow" class="text-yellow-500 text-sm">
+                            {% if state.half == 'top' %}▲{% else %}▼{% endif %}
+                        </span>
+                        <span id="inning-num">{{ state.inning }}</span>
+                    </div>
+                </div>
+                
+                <!-- Count Lights -->
+                <div class="grid grid-cols-3 gap-x-4 gap-y-1">
+                    <div class="text-[9px] text-gray-500 uppercase text-right">B</div>
+                    <div class="col-span-2 flex gap-1 items-center">
+                        <div class="w-2.5 h-2.5 rounded-full bg-gray-700" id="ball-1"></div>
+                        <div class="w-2.5 h-2.5 rounded-full bg-gray-700" id="ball-2"></div>
+                        <div class="w-2.5 h-2.5 rounded-full bg-gray-700" id="ball-3"></div>
+                    </div>
+                    
+                    <div class="text-[9px] text-gray-500 uppercase text-right">S</div>
+                    <div class="col-span-2 flex gap-1 items-center">
+                        <div class="w-2.5 h-2.5 rounded-full bg-gray-700" id="strike-1"></div>
+                        <div class="w-2.5 h-2.5 rounded-full bg-gray-700" id="strike-2"></div>
+                    </div>
+                    
+                    <div class="text-[9px] text-gray-500 uppercase text-right">O</div>
+                    <div class="col-span-2 flex gap-1 items-center">
+                        <div class="w-2.5 h-2.5 rounded-full bg-gray-700" id="out-1"></div>
+                        <div class="w-2.5 h-2.5 rounded-full bg-gray-700" id="out-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- --- MAIN GAME AREA --- -->
+    <div class="container mx-auto max-w-7xl p-4 grid grid-cols-1 lg:grid-cols-12 gap-4 flex-grow">
+        
+        <!-- LEFT: Field (8 cols) -->
+        <!-- FIX: Added min-h and explicit width to force rendering -->
+        <div class="lg:col-span-8 relative bg-black rounded-xl shadow-2xl overflow-hidden border-4 border-gray-700 flex items-center justify-center h-[400px] lg:h-[600px]" style="height: 700px;">
+            
+            <!-- FIELD CONTAINER -->
+            <div class="relative w-full h-full max-w-[600px] max-h-[600px] aspect-square">
+                
+                <!-- Stadium Image Background -->
+                <!-- Using object-cover to fill the container while maintaining aspect ratio -->
+                <img src="{{ base_url }}/public/img/stadium.jpg" alt="Stadium" class="absolute inset-0 w-full h-full object-cover opacity-80">
+                
+                <!-- Overlay Gradient for readability -->
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 pointer-events-none"></div>
+
+                <!-- BASES (Adjusted positions to match a typical broadcast camera angle) -->
+                
+                <!-- 2nd Base (Top Center) -->
+                <div id="base-2" class="absolute top-[35%] left-[49%] w-5 h-5 bg-white transform rotate-45 shadow-md z-20 border border-gray-400 transition-colors duration-300 opacity-80"></div>
+                
+                <!-- 1st Base (Right) -->
+                <div id="base-1" class="absolute top-[50%] right-[28%] w-5 h-5 bg-white transform rotate-45 shadow-md z-20 border border-gray-400 transition-colors duration-300 opacity-80"></div>
+                
+                <!-- 3rd Base (Left) -->
+                <div id="base-3" class="absolute top-[50%] left-[28%] w-5 h-5 bg-white transform rotate-45 shadow-md z-20 border border-gray-400 transition-colors duration-300 opacity-80"></div>
+                
+                <!-- Home Plate (Bottom Center) -->
+                <div class="absolute bottom-[15%] left-[49.5%] w-6 h-6 bg-white clip-home-plate z-20 opacity-90"></div>
+
+                <!-- PITCHER LABEL -->
+                <div class="absolute top-[55%] left-[50%] transform -translate-x-1/2 z-30 text-center">
+                    <span class="bg-blue-900/90 text-white text-xs px-3 py-1 rounded-full shadow border border-blue-500 backdrop-blur-sm font-bold">{{ pitcher.player_name }}</span>
+                    <div class="text-[10px] text-yellow-400 mt-0.5 font-mono bg-black/50 rounded px-1 inline-block">{{ pitcher.ERA|number_format(2) }} ERA</div>
+                </div>
+            </div>
+
+            <!-- Batter Box Overlay -->
+            <div class="absolute bottom-4 left-4 right-4 bg-gray-800/90 backdrop-blur p-3 rounded-lg border border-gray-600 flex justify-between items-center z-40 shadow-xl">
+                <div>
+                    <div class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">At Bat</div>
+                    <div class="text-lg font-bold text-white leading-tight" id="batter-name">{{ batter.player_name }}</div>
+                    <div class="text-xs text-gray-400 font-mono mt-0.5">
+                        AVG <span class="text-white font-bold" id="batter-avg">{{ batter.AVG|number_format(3) }}</span> <span class="mx-1">|</span> 
+                        HR <span class="text-white font-bold" id="batter-hr">{{ batter.HR }}</span>
+                    </div>
+                </div>
+                <!-- Current Pitcher Info (Redundant but good for UI balance) -->
+                <div class="text-right">
+                     <div class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Pitching</div>
+                     <div class="text-sm text-white font-bold truncate w-32 text-right">{{ pitcher.player_name }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: Controls & Log -->
+        <div class="lg:col-span-4 flex flex-col gap-4 h-full">
+            
+            <!-- Controls -->
+            <div class="bg-gray-800 p-4 rounded-lg border border-gray-700 grid grid-cols-2 gap-3 shadow-lg">
+                <button onclick="simAction('normal')" class="col-span-2 bg-green-600 hover:bg-green-500 text-white font-bold py-4 px-4 rounded shadow-lg transition transform hover:scale-[1.02] flex items-center justify-center gap-2 text-lg">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                    Swing Away
+                </button>
+                
+                <button onclick="simAction('bunt')" class="bg-gray-700 hover:bg-gray-600 text-gray-200 text-sm font-bold py-3 px-2 rounded border border-gray-600 transition">
+                    Bunt
+                </button>
+                
+                <button onclick="simAction('hit_run')" class="bg-gray-700 hover:bg-gray-600 text-gray-200 text-sm font-bold py-3 px-2 rounded border border-gray-600 transition">
+                    Hit & Run
+                </button>
+
+                <button onclick="simAction('intentional_walk')" class="col-span-2 bg-blue-900 hover:bg-blue-800 text-blue-100 text-xs font-bold py-2 rounded border border-blue-700 mt-1 transition opacity-75 hover:opacity-100">
+                    Issue Intentional Walk
+                </button>
+            </div>
+
+            <!-- Game Log -->
+            <div class="flex-grow bg-black bg-opacity-50 rounded-lg border border-gray-700 overflow-hidden flex flex-col shadow-inner min-h-[300px]">
+                <div class="bg-gray-800 px-4 py-2 text-xs font-bold uppercase text-gray-400 border-b border-gray-700 flex justify-between items-center">
+                    <span>Play-by-Play</span>
+                    <span class="text-[9px] bg-green-900 text-green-100 px-1.5 rounded">LIVE</span>
+                </div>
+                <div id="game-log" class="flex-grow overflow-y-auto p-3 space-y-1.5 text-xs font-mono text-green-400 scroll-smooth max-h-[500px]">
+                    {% for line in state.log %}
+                        <div class="opacity-90 border-b border-gray-800/50 pb-1">{{ line }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    let BASE_URL = "{{ base_url }}";
+    if (BASE_URL.includes("\{\{")) BASE_URL = "";
+    if (BASE_URL.endsWith('/')) BASE_URL = BASE_URL.slice(0, -1);
+
+    async function simAction(type) {
+        try {
+            const res = await fetch(`${BASE_URL}/api/game/sim-at-bat`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: type })
+            });
+            const data = await res.json();
+
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+            updateUI(data);
+        } catch (e) {
+            console.error("Sim error", e);
+        }
+    }
+
+    function updateUI(data) {
+        const state = data.state;
+        
+        // 1. Score & Inning
+        document.getElementById('score-home').innerText = state.score.home;
+        document.getElementById('score-away').innerText = state.score.away;
+        document.getElementById('inning-num').innerText = state.inning;
+        document.getElementById('inning-arrow').innerText = state.half === 'top' ? '▲' : '▼';
+
+        // 2. Outs
+        for (let i = 1; i <= 2; i++) {
+            const el = document.getElementById(`out-${i}`);
+            if (state.outs >= i) {
+                el.classList.remove('bg-gray-700');
+                el.classList.add('bg-red-500', 'shadow-glow-red');
+            } else {
+                el.classList.add('bg-gray-700');
+                el.classList.remove('bg-red-500', 'shadow-glow-red');
+            }
+        }
+
+        // 3. Bases
+        state.bases.forEach((runner, index) => {
+            const baseEl = document.getElementById(`base-${index + 1}`);
+            if (runner) {
+                baseEl.classList.remove('bg-white');
+                baseEl.classList.add('bg-yellow-400', 'shadow-lg', 'scale-125');
+            } else {
+                baseEl.classList.add('bg-white');
+                baseEl.classList.remove('bg-yellow-400', 'shadow-lg', 'scale-125');
+            }
+        });
+
+        // 4. Log
+        const logDiv = document.getElementById('game-log');
+        const newEntry = document.createElement('div');
+        newEntry.className = "border-b border-gray-800/50 pb-1 text-white font-bold animate-fade-in-down";
+        newEntry.innerText = state.log[0];
+        logDiv.prepend(newEntry);
+
+        // 5. Update Cards (Batter AND Pitcher)
+        if (data.next_batter) {
+            document.getElementById('batter-name').innerText = data.next_batter.player_name;
+            let avg = parseFloat(data.next_batter.AVG || 0).toFixed(3).replace(/^0+/, ''); 
+            document.getElementById('batter-avg').innerText = avg;
+            document.getElementById('batter-hr').innerText = data.next_batter.HR || 0;
+        }
+        
+        // FIX: Update Pitcher Card explicitly
+        if (data.next_pitcher) {
+             document.getElementById('pitcher-name').innerText = data.next_pitcher.player_name;
+             // Note: ERA calculation should ideally come from DB, using static ERA for now
+             // document.getElementById('pitcher-era').innerText = ...
+        }
+    }
+</script>
+
+<style>
+    .clip-home-plate { clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); }
+    .shadow-glow-red { box-shadow: 0 0 8px rgba(239, 68, 68, 0.8); }
+    @keyframes fadeInDown { from { opacity:0; transform: translateY(-10px); } to { opacity:1; transform: translateY(0); } }
+    .animate-fade-in-down { animation: fadeInDown 0.3s ease-out; }
+</style>
+{% endblock %}

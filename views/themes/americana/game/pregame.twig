@@ -2,98 +2,101 @@
 
 {% block content %}
 <div class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-5xl mx-auto">
         
-        <div class="text-center mb-12">
-            <h1 class="text-4xl font-extrabold text-blue-900 tracking-tight">It's Game Day!</h1>
-            <p class="mt-2 text-lg text-gray-600">Select your opponent to begin the series.</p>
+        <!-- Header -->
+        <div class="text-center mb-10">
+            <h1 class="text-4xl font-extrabold text-blue-900 tracking-tight">Season Hub</h1>
+            <p class="mt-2 text-lg text-gray-600">{{ userTeam.team_name }}</p>
         </div>
 
-        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
-            <div class="px-4 py-5 sm:px-6 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
-                <div>
-                    <h3 class="text-lg leading-6 font-medium text-gray-900">Your Team</h3>
-                    <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ userTeam.team_name }}</p>
-                </div>
-                <div class="text-right">
-                    <span class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                        Record: 0-0
-                    </span>
-                </div>
+        {% if nextGame %}
+        <!-- NEXT GAME CARD -->
+        <div class="bg-white shadow-xl rounded-lg overflow-hidden mb-12 border-t-4 border-blue-900">
+            <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                <span class="text-sm font-bold text-gray-500 uppercase tracking-wider">Next Game</span>
+                <span class="text-sm text-gray-600 font-medium">{{ nextGame.game_date|date("l, F j, Y") }}</span>
             </div>
-            
-            <div class="p-6">
-                <form action="{{ base_url }}/start-game" method="POST">
-                    {{ csrf_field() }}
+
+            <div class="p-8">
+                <div class="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
                     
-                    <label for="opponent_id" class="block text-sm font-medium text-gray-700 mb-4">Choose Opponent</label>
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {% for team in opponents %}
-                        <label class="relative flex flex-col bg-white border rounded-lg p-4 shadow-sm cursor-pointer hover:border-blue-500 hover:ring-1 hover:ring-blue-500 focus-within:ring-1 focus-within:ring-blue-500">
-                            <input type="radio" name="opponent_id" value="{{ team.team_id }}" class="sr-only peer" required>
-                            <span class="font-bold text-gray-900">{{ team.team_name }}</span>
-                            <span class="text-sm text-gray-500 mt-1">CPU Controlled</span>
-                            
-                            <!-- Selected Indicator -->
-                            <div class="absolute -top-2 -right-2 bg-blue-600 text-white rounded-full p-1 hidden peer-checked:block">
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                            </div>
-                            <!-- Border Highlight on Check -->
-                            <div class="absolute inset-0 border-2 border-transparent peer-checked:border-blue-600 rounded-lg pointer-events-none"></div>
-                        </label>
-                        {% endfor %}
+                    <!-- Home Team -->
+                    <div class="text-center w-1/3">
+                        <div class="text-sm text-indigo-500 uppercase font-bold mb-2">Home</div>
+                        <div class="text-3xl font-black text-gray-900">{{ nextGame.home_team }}</div>
+                        <div class="text-gray-500 mt-1">0-0</div>
                     </div>
 
-                    <div class="mt-8 flex justify-end">
-                        <button type="submit" class="inline-flex justify-center py-3 px-6 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-blue-900 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <!-- VS -->
+                    <div class="text-center">
+                        <span class="text-4xl font-bold text-yellow-600 italic">VS</span>
+                    </div>
+
+                    <!-- Away Team -->
+                    <div class="text-center w-1/3">
+                        <div class="text-sm text-indigo-500 uppercase font-bold mb-2">Away</div>
+                        <div class="text-3xl font-black text-gray-900">{{ nextGame.away_team }}</div>
+                        <div class="text-gray-500 mt-1">0-0</div>
+                    </div>
+
+                </div>
+
+                <div class="mt-10 flex justify-center gap-4">
+                    <form action="{{ base_url }}/start-game" method="POST">
+                        {{ csrf_field() }}
+                        <input type="hidden" name="game_id" value="{{ nextGame.game_id }}">
+                        <button type="submit" class="inline-flex items-center px-8 py-4 border border-transparent text-lg font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition transform hover:scale-105">
+                            <svg class="-ml-1 mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             Play Ball!
                         </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        
-        <!-- Lineup Preview -->
-        <div class="mt-8 bg-white shadow sm:rounded-lg p-6">
-            <h3 class="text-lg font-medium text-gray-900 mb-4">Projected Lineup</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                <div>
-                    <h4 class="font-bold text-gray-500 uppercase text-xs mb-2">Starting Pitcher</h4>
-                    {% set pitcher_found = false %}
-                    {% for p in roster %}
-                        {% if p.position == 'SP' and not pitcher_found %}
-                            <div class="flex justify-between items-center p-2 bg-gray-50 rounded">
-                                <span class="font-medium">{{ p.player_name }}</span>
-                                <span class="text-gray-500">{{ p.season_year }}</span>
-                            </div>
-                            {% set pitcher_found = true %}
-                        {% endif %}
-                    {% endfor %}
+                    </form>
                     
-                    {% if not pitcher_found %}
-                        <p class="text-gray-400 italic">No pitcher set</p>
-                    {% endif %}
-                </div>
-                <div>
-                    <h4 class="font-bold text-gray-500 uppercase text-xs mb-2">Batting Order</h4>
-                    <ol class="list-decimal list-inside space-y-1 text-gray-700">
-                        <!-- Logic: Iterate, filter non-pitchers, stop at 9 -->
-                        {% set count = 0 %}
-                        {% for p in roster %}
-                            {% if p.position != 'SP' and p.position != 'RP' and p.position != 'P' and count < 9 %}
-                                <li class="truncate">{{ p.player_name }} <span class="text-xs text-gray-500">({{ p.position }})</span></li>
-                                {% set count = count + 1 %}
-                            {% endif %}
-                        {% endfor %}
-                        
-                        {% if count == 0 %}
-                            <li class="text-gray-400 italic list-none">No hitters available</li>
-                        {% endif %}
-                    </ol>
+                    <a href="{{ base_url }}/clubhouse" class="inline-flex items-center px-6 py-4 border border-gray-300 text-lg font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Manage Lineup
+                    </a>
                 </div>
             </div>
         </div>
+
+        <!-- UPCOMING SCHEDULE -->
+        <div class="bg-white shadow sm:rounded-lg">
+            <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">Upcoming Schedule</h3>
+            </div>
+            <ul class="divide-y divide-gray-200">
+                {% for game in upcoming %}
+                <li class="px-4 py-4 sm:px-6 hover:bg-gray-50 transition">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="text-sm font-medium text-gray-600 w-24">
+                                {{ game.game_date|date("M j") }}
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm text-gray-900">
+                                    <span class="font-bold">{{ game.away_team }}</span> @ <span class="font-bold">{{ game.home_team }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                Game {{ game.game_number }}
+                            </span>
+                        </div>
+                    </div>
+                </li>
+                {% else %}
+                <li class="px-4 py-4 text-gray-500 text-center italic">No upcoming games found.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        {% else %}
+        <div class="text-center py-12 bg-white rounded-lg shadow">
+            <h3 class="text-xl font-medium text-gray-900">Season Complete!</h3>
+            <p class="mt-2 text-gray-500">No scheduled games remaining.</p>
+        </div>
+        {% endif %}
 
     </div>
 </div>
