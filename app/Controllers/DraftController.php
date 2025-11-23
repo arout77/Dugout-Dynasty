@@ -118,6 +118,7 @@ class DraftController extends BaseController
         $db->exec( "TRUNCATE TABLE rosters" );
         $db->exec( "TRUNCATE TABLE teams" );
         $db->exec( "TRUNCATE TABLE leagues" );
+        $db->exec( "TRUNCATE TABLE games" );
 
         // FIX: Re-enable Foreign Key Checks
         $db->exec( "SET FOREIGN_KEY_CHECKS=1" );

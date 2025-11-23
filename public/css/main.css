@@ -12,10 +12,10 @@
     @apply text-white dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors;
 }
 .mobile-nav-link {
-    @apply text-white dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 block px-3 py-2 rounded-md text-base font-medium transition-colors;
+    @apply text-white dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-pink-500 dark:hover:text-pink-500 block px-3 py-2 rounded-md text-base font-medium transition-colors;
 }
 .dropdown-link {
-    @apply block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 transition-colors;
+    @apply block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-pink-500 transition-colors;
 }
 .dropdown-header {
   font-weight: bold;

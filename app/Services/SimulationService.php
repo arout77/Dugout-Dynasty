@@ -30,94 +30,89 @@ class SimulationService
      */
     public function simulateAtBat( array $batter, array $pitcher ): array
     {
-        // 1. Get Context
         $bYear = (int) ( $batter['YR'] ?? $batter['Year'] ?? 2024 );
         $pYear = (int) ( $pitcher['YR'] ?? $pitcher['Year'] ?? 2024 );
 
         $bLeague = $this->leagueStats->getStatsForYear( $bYear );
         $pLeague = $this->leagueStats->getStatsForYear( $pYear );
 
-        // Baseline Environment (Use modern era approx if we want "neutral" play,
-        // or use the pitcher's era as the "home field" context.
-        // Standard practice: Use the PITCHER'S league as the base environment.)
         $env = $pLeague;
 
-        // 2. Calculate Probabilities for Key Events
-        // We calculate the probability of specific "Three True Outcomes" + Hits
-
-        // --- WALKS (BB) ---
-        // Batter BB% = Batter BB / Batter PA
-        // Pitcher BB% = Pitcher BB / Pitcher Batters Faced (approx IP*4.2 or similar, or use BB9/38)
-        // For simplicity and speed, we use the Rate Stats if we calculated them, or derive them.
-
+        // 1. WALKS (BB)
         $probBB = $this->calcLog5(
             $this->getRate( $batter, 'BB', 'PA' ),
             $this->getRate( $pitcher, 'BB', 'BF' ),
             $env['avg_bb_pa'] ?? 0.08
         );
 
-        // --- STRIKEOUTS (SO) ---
+        // 2. STRIKEOUTS (SO)
         $probSO = $this->calcLog5(
             $this->getRate( $batter, 'SO', 'PA' ),
             $this->getRate( $pitcher, 'SO', 'BF' ),
             $env['avg_so_pa'] ?? 0.20
         );
 
-        // --- HOME RUNS (HR) ---
+        // 3. HOME RUNS (HR)
         $probHR = $this->calcLog5(
             $this->getRate( $batter, 'HR', 'PA' ),
             $this->getRate( $pitcher, 'HR', 'BF' ),
             $env['avg_hr_pa'] ?? 0.03
         );
 
-        // --- HITS (AVG) ---
-        // Note: Log5 for AVG is tricky because AVG excludes BB.
-        // Better to calculate "Ball In Play Hit Probability" or just generic Hit Probability.
-        // We'll use generic AVG for now as a proxy for "Hit Event".
+        // 4. HITS (AVG) - Use Batting Average
+        $bAVG = $this->getStat( $batter, 'BA' ) ?? $this->getStat( $batter, 'AVG' ) ?? .250;
+        // Safety floor: A major leaguer shouldn't have 0 chance to hit
+        if ( $bAVG < 0.05 ) {
+            $bAVG = 0.150;
+        }
+
         $probHit = $this->calcLog5(
-            $batter['AVG'] ?? $batter['BA'] ?? .250,
-            $this->deriveOpponentAVG( $pitcher ), // Pitchers don't always have AVG allowed column
+            $bAVG,
+            $this->deriveOpponentAVG( $pitcher ),
             $env['avg_ba'] ?? .250
         );
 
-        // 3. Normalize Outcomes to 1.0 scale
-        // A simpler approach for game engines: Check distinct events in hierarchical order.
-
+        // Normalize Outcomes
         $roll = mt_rand( 0, 1000 ) / 1000;
 
-        // Check Walk
         if ( $roll < $probBB ) {
             return ['event' => self::RESULT_BB, 'desc' => 'Walk'];
         }
 
         $roll -= $probBB;
 
-        // Check Strikeout
         if ( $roll < $probSO ) {
             return ['event' => self::RESULT_SO, 'desc' => 'Strikeout'];
         }
 
         $roll -= $probSO;
 
-        // Check Home Run
         if ( $roll < $probHR ) {
             return ['event' => self::RESULT_HR, 'desc' => 'Home Run'];
         }
 
         $roll -= $probHR;
 
-        // Check General Hit (Singles/Doubles/Triples)
-        // We use the remaining probability space.
-        // If Prob(Hit) is .250, that means 25% of ALL PAs are hits.
-        // We already accounted for HRs. So remaining Hits = Prob(Hit) - Prob(HR).
-        $probBaseHit = max( 0, $probHit - $probHR );
+        // Hit Check
+        // ProbHit is the probability of getting a hit in an AB (roughly).
+        // We need to scale it because we are in the "Non-Three-True-Outcome" space.
+        // Actually, standard Log5 gives P(Hit). If we subtracted BB/SO/HR already,
+        // we need to see if the remaining roll falls into the Hit bucket.
 
-        if ( $roll < $probBaseHit ) {
-            // It's a non-HR hit. Determine type based on batter's ISO or history.
+        // Simple heuristic for MVP:
+        // If ProbHit is .300, that's 300/1000.
+        // We've used up, say, 300 points on BB/SO/HR. 700 remain.
+        // We need to scale the hit probability to the remaining space? No.
+        // Standard method: Define the ranges absolutely.
+        // 0-BB
+        // BB-(BB+SO)
+        // (BB+SO)-(BB+SO+HR)
+        // (BB+SO+HR)-(BB+SO+HR+Hit) <-- This is the hit range.
+
+        if ( $roll < ( $probHit - $probHR ) ) { // Subtract HR because probHit usually includes HR
             return $this->determineHitType( $batter );
         }
 
-        // If we are here, it's an Out (Ball in Play)
         return ['event' => self::RESULT_OUT, 'desc' => 'Out'];
     }
 
@@ -156,16 +151,21 @@ class SimulationService
      */
     private function getRate( $player, $stat, $denominator )
     {
-        $val = $player[$stat] ?? 0;
-        $den = 1;
+        $val = $this->getStat( $player, $stat );
+        if ( $stat === 'SO' && $val === 0 ) {
+            $val = $this->getStat( $player, 'K' );
+        }
 
+        $den = 1;
         if ( $denominator === 'PA' ) {
-            // Approx PA if not in DB: AB + BB + HBP + SF
-            $den = ( $player['AB'] ?? 1 ) + ( $player['BB'] ?? 0 );
+            $ab  = $this->getStat( $player, 'AB' );
+            $bb  = $this->getStat( $player, 'BB' );
+            $den = ( $ab > 0 ? $ab : 1 ) + $bb;
         } elseif ( $denominator === 'BF' ) {
-            // Approx Batters Faced: IP * 2.9 + H + BB
-            $ip  = $player['IP'] ?? 1;
-            $den = ( $ip * 2.9 ) + ( $player['H'] ?? 0 ) + ( $player['BB'] ?? 0 );
+            $ip  = $this->getStat( $player, 'IP' );
+            $h   = $this->getStat( $player, 'H' );
+            $bb  = $this->getStat( $player, 'BB' );
+            $den = ( $ip > 0 ? $ip * 2.9 : 1 ) + $h + $bb;
         }
 
         if ( $den == 0 ) {
@@ -226,5 +226,27 @@ class SimulationService
         }
 
         return ['event' => self::RESULT_1B, 'desc' => 'Single'];
+    }
+
+    /**
+     * @param $data
+     * @param $key
+     * @return int
+     */
+    private function getStat( $data, $key )
+    {
+        if ( isset( $data[$key] ) ) {
+            return (float) $data[$key];
+        }
+
+        if ( isset( $data[strtoupper( $key )] ) ) {
+            return (float) $data[strtoupper( $key )];
+        }
+
+        if ( isset( $data[strtolower( $key )] ) ) {
+            return (float) $data[strtolower( $key )];
+        }
+
+        return 0;
     }
 }
