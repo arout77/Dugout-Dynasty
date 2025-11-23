@@ -1,0 +1,50 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * Rhapsody Framework
+ * CLI Application Runner
+ */
+
+require_once __DIR__.'/vendor/autoload.php';
+
+// 1. Bootstrap Application
+$rootPath = __DIR__;
+$dotenv = Dotenv\Dotenv::createImmutable($rootPath);
+$dotenv->load();
+$config = require_once $rootPath . '/config.php';
+$container = require_once $rootPath . '/bootstrap.php';
+
+// 2. Create the Console Application
+use Symfony\Component\Console\Application;
+
+$application = new Application('Rhapsody Framework Console', $config['app_version']);
+
+// 3. Define all application commands
+$commands = [
+    App\Commands\MakeControllerCommand::class,
+    App\Commands\MakeModelCommand::class,
+    App\Commands\MakeMiddlewareCommand::class,
+    App\Commands\MakeMigrationCommand::class,
+    App\Commands\MigrateCommand::class,
+    App\Commands\RouteCacheCommand::class,
+    App\Commands\RouteClearCommand::class,
+    App\Commands\CacheClearCommand::class,
+    App\Commands\EnvSyncCommand::class,
+    App\Commands\UpdateCommand::class,
+    App\Commands\CheckVersionCommand::class,
+    App\Commands\MakeEventCommand::class,
+    App\Commands\MakeListenerCommand::class,
+    App\Commands\ImportLeagueStatsCommand::class,
+    App\Commands\ImportHitterStatsCommand::class,
+    App\Commands\SimulateBatterTestCommand::class,
+];
+
+// 4. Use the container to resolve and register each command
+foreach ($commands as $commandClass) {
+    // This ensures every command gets its dependencies injected correctly.
+    $application->add($container->resolve($commandClass));
+}
+
+// 5. Run the application
+$application->run();
