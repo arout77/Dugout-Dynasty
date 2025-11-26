@@ -11,7 +11,7 @@
 
 **Dugout Dynasty** answers the ultimate baseball question: *How would Babe Ruth fare against modern pitching?*
 
-Using a custom **Log5 normalization engine**, the simulation adjusts historical stats to a neutral era, allowing players from the Deadball Era (1900s) to compete fairly against Steroid Era sluggers (1990s) and today's velocity kings.
+Using a custom **simulation engine**, the simulator adjusts historical stats to a neutral era, allowing players from the Deadball Era (1900s) to compete fairly against Steroid Era sluggers (1990s) and today's velocity kings.
 
 ### Key Features
 
