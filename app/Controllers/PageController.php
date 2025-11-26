@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Middleware\AuthMiddleware;
 use App\Middleware\GuestMiddleware;
+use App\Models\Team;
 // use App\Models\User;
 use Core\BaseController;
 use Core\FileUploader;
@@ -13,6 +14,7 @@ use Core\Request;
 use Core\Response;
 use Core\Session;
 use Core\Validator;
+use PDO;
 use Twig\Environment;
 
 class PageController extends BaseController
@@ -23,6 +25,7 @@ class PageController extends BaseController
     public function __construct( Environment $twig )
     {
         parent::__construct( $twig );
+        $this->teamModel = new Team();
     }
 
     /**
@@ -38,11 +41,122 @@ class PageController extends BaseController
     /**
      * @return mixed
      */
-    public function dashboard(): Response
+    public function dashboard()
     {
-        // The AuthMiddleware now handles protection for this route.
-        // The controller's only job is to render the view.
-        return $this->view( 'home/dashboard.twig' );
+        $userId = Session::get( 'user_id' );
+        if ( !$userId ) {
+            return $this->redirect( '/login' );
+        }
+
+        // 1. Get User Team
+        $userTeamId = Session::get( 'user_team_id' );
+        if ( !$userTeamId ) {
+            $db = $this->teamModel->getDb();
+            // FIX: Use 'user_team_id' based on your user schema
+            $stmt = $db->prepare( "SELECT user_team_id FROM users WHERE id = :uid" );
+            $stmt->execute( [':uid' => $userId] );
+            $userTeamId = $stmt->fetchColumn();
+
+            if ( $userTeamId ) {
+                Session::set( 'user_team_id', $userTeamId );
+            } else {
+                return $this->redirect( '/new-game' );
+            }
+        }
+
+        $userTeam = $this->teamModel->findById( $userTeamId );
+        $db       = $this->teamModel->getDb();
+
+        $userLeagueName = $userTeam['league_name'] ?? 'American League';
+
+        // 2. Get Next Game (Fixed Params)
+        $sqlNext = "SELECT g.*, h.team_name as home_name, a.team_name as away_name
+                    FROM games g
+                    JOIN teams h ON g.home_team_id = h.team_id
+                    JOIN teams a ON g.away_team_id = a.team_id
+                    WHERE (g.home_team_id = :uid1 OR g.away_team_id = :uid2)
+                      AND g.status = 'scheduled'
+                    ORDER BY g.game_date ASC, g.game_number ASC LIMIT 1";
+        $stmtNext = $db->prepare( $sqlNext );
+        $stmtNext->execute( [
+            ':uid1' => $userTeamId,
+            ':uid2' => $userTeamId,
+        ] );
+        $nextGame = $stmtNext->fetch( PDO::FETCH_ASSOC );
+
+        // 3. Get Standings (Single League View)
+        $sqlRank = "SELECT team_id, team_name, w, l, (w / NULLIF(w+l, 0)) as pct
+                    FROM teams
+                    WHERE league_name = :lname
+                    ORDER BY w DESC, pct DESC";
+        $stmtRank = $db->prepare( $sqlRank );
+        $stmtRank->execute( [':lname' => $userLeagueName] );
+        $standings = $stmtRank->fetchAll( PDO::FETCH_ASSOC );
+
+        $myRank = '-';
+        foreach ( $standings as $index => $t ) {
+            if ( $t['team_id'] == $userTeamId ) {
+                $myRank = $index + 1;
+                break;
+            }
+        }
+
+        // 4. Get League Leaders (FIXED: JOIN rosters for names)
+        $leaders = [];
+
+        // Helper that joins 'rosters' to get player_name
+        // Note: We join on player_id AND team_id to ensure uniqueness in current season
+        $fetchLeader = function ( $sql ) use ( $db, $userLeagueName ) {
+            $stmt = $db->prepare( $sql );
+            $stmt->execute( [':lname' => $userLeagueName] );
+            return $stmt->fetchAll( PDO::FETCH_ASSOC );
+        };
+
+        $leaders['avg'] = $fetchLeader( "
+            SELECT r.player_name, t.team_name, (p.H / p.AB) as val
+            FROM player_season_stats p
+            JOIN teams t ON p.team_id = t.team_id
+            JOIN rosters r ON p.player_id = r.player_id AND p.team_id = r.team_id
+            WHERE p.AB > 10 AND t.league_name = :lname
+            ORDER BY val DESC LIMIT 5
+        " );
+
+        $leaders['hr'] = $fetchLeader( "
+            SELECT r.player_name, t.team_name, p.HR as val
+            FROM player_season_stats p
+            JOIN teams t ON p.team_id = t.team_id
+            JOIN rosters r ON p.player_id = r.player_id AND p.team_id = r.team_id
+            WHERE t.league_name = :lname
+            ORDER BY val DESC LIMIT 5
+        " );
+
+        $leaders['era'] = $fetchLeader( "
+            SELECT r.player_name, t.team_name, (p.ER * 9 / p.IP) as val
+            FROM pitcher_season_stats p
+            JOIN teams t ON p.team_id = t.team_id
+            JOIN rosters r ON p.player_id = r.player_id AND p.team_id = r.team_id
+            WHERE p.IP > 5 AND t.league_name = :lname
+            ORDER BY val ASC LIMIT 5
+        " );
+
+        $leaders['wins'] = $fetchLeader( "
+            SELECT r.player_name, t.team_name, p.W as val
+            FROM pitcher_season_stats p
+            JOIN teams t ON p.team_id = t.team_id
+            JOIN rosters r ON p.player_id = r.player_id AND p.team_id = r.team_id
+            WHERE t.league_name = :lname
+            ORDER BY val DESC LIMIT 5
+        " );
+
+        return $this->view( 'home/dashboard.twig', [
+            'userTeam'   => $userTeam,
+            'nextGame'   => $nextGame,
+            'rank'       => $myRank,
+            'totalTeams' => count( $standings ),
+            'standings'  => array_slice( $standings, 0, 5 ),
+            'leagueName' => $userLeagueName,
+            'leaders'    => $leaders,
+        ] );
     }
 
     /**

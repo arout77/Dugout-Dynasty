@@ -148,7 +148,15 @@ class DraftController extends BaseController
             'scouting_trait' => 'Analytics',
         ];
         $userTeamId = $this->teamModel->create( $userTeamData );
+
+        $db   = $teamModel->getDb();
+        $stmt = $db->prepare( "UPDATE users SET user_team_id = :tid WHERE id = :uid" );
+        $stmt->execute( [
+            ':tid' => $userTeamId,
+            ':uid' => $userId,
+        ] );
         Session::set( 'user_team_id', $userTeamId );
+        Session::set( 'league_id', $leagueId );
 
         // 4. Create CPU Teams
         // Classic Cities

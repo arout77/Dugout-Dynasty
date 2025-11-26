@@ -43,8 +43,12 @@ class AuthController extends BaseController
         if ( $user && password_verify( $password, $user['password'] ) ) {
             Session::set( 'user_id', $user['user_id'] );
             Session::set( 'user_team_id', $user['user_team_id'] );
-            Session::flash( 'success', 'Welcome back!' );
-            return redirect( '/draft' ); // Redirect to game dashboard
+            // Session::flash( 'success', 'Welcome back!' );
+            // FIX: Ensure we capture the team_id if it exists
+            if ( !empty( $user['user_team_id'] ) ) {
+                Session::set( 'user_team_id', $user['user_team_id'] );
+            }
+            return redirect( '/dashboard' ); // Redirect to game dashboard
         }
 
         Session::flash( 'error', 'Invalid credentials.' );
