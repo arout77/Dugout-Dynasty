@@ -36,8 +36,7 @@ This project demonstrates a full-stack implementation of a complex simulation en
 ## 🧩 Architecture Highlights
 
 ### 1. The Simulation Engine (`App\Services\SimulationService`)
-The heart of the application. It calculates the outcome of every at-bat using a modified **Log5 probability formula**:
-`P = (BatterStats * PitcherStats) / LeagueAverage`
+The heart of the application. It calculates the outcome of every at-bat using a modified **Log5 probability formula**
 
 This ensures that a .400 hitter from 1920 doesn't automatically destroy a modern pitcher, as their stats are weighted against their respective league environments.
 
