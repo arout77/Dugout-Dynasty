@@ -77,6 +77,109 @@
       ]
     }
     </script>
+    <style>
+        :root {
+  --bg-primary: #1a202c;
+  --bg-secondary: #2d3748;
+  --text-color: #e2e8f0;
+  --header-bg: #1a202c;
+  --card-bg: #1a202c; /* Default card background */
+  --card-border: #6809fb;
+  --dropzone-bg: #13182691;
+  --dropzone-border: #8a00bc;
+  --roster-bg: rgb(53 0 76 / 23%); /* Glassmorphism background */
+  --roster-border: rgba(255, 255, 255, 0.2);
+  --matchsetup-border: #0037f1;
+  --modal-bg: #010130;
+  --modal-border: #8a00bc; /* Yellow-500 */
+  --log-bg: #1a202c;
+  --log-text: #e2e8f0;
+  --log-info: #a0aec0; /* gray-400 */
+  --log-action: #90cdf4; /* blue-300 */
+  --log-damage: #fc8181; /* red-400 */
+  --log-result: #ecc94b; /* yellow-400 */
+  --button-primary-bg: #ecc94b; /* yellow-500 */
+  --button-primary-text: #1a202c; /* gray-900 */
+  --button-primary-hover-bg: #f6e05e; /* yellow-400 */
+  --button-secondary-bg: #131826; /* gray-600 */
+  --button-secondary-text: #ffffff;
+  --button-secondary-hover-bg: #68707c; /* gray-500 */
+  --footer-bg: #1a202c;
+  --footer-text: #a0aec0; /* gray-400 */
+  --glow-start: #720697;
+  --glow-end: #002bff;
+  --glow-mid: #ff00c8;
+  /* Scrollbar colors */
+  --scrollbar-thumb: #3958af;
+  --scrollbar-track: #2d004d;
+  --log-scrollbar-thumb: #6890ff;
+  --log-scrollbar-track: #1a002e;
+  --shiny-cta-bg: #000000;
+  --shiny-cta-bg-subtle: #1a1818;
+  --shiny-cta-fg: #ffffff;
+  --shiny-cta-highlight: blue;
+  --shiny-cta-highlight-subtle: #8484ff;
+}
+
+/* Light theme variables */
+body[data-theme=light] {
+  --bg-primary: #f7fafc; /* Light gray */
+  --bg-secondary: #edf2f7; /* Lighter gray */
+  --text-color: #2d3748; /* Darker text */
+  --header-bg: #ffffff;
+  --card-bg: #ffffff;
+  --card-border: #cbd5e0; /* Light border */
+  --dropzone-bg: #e2e8f0;
+  --dropzone-border: #cbd5e0;
+  --roster-bg: rgba(255, 255, 255, 0.8); /* Lighter glassmorphism */
+  --roster-border: rgba(0, 0, 0, 0.1);
+  --matchsetup-border: #4299e1; /* Blue */
+  --modal-bg: #ffffff;
+  --modal-border: #4299e1; /* Blue */
+  --log-bg: #f7fafc;
+  --log-text: #2d3748;
+  --log-info: #131826; /* gray-600 */
+  --log-action: #3182ce; /* blue-600 */
+  --log-damage: #e53e3e; /* red-600 */
+  --log-result: #dd6b20; /* orange-600 */
+  --button-primary-bg: #4299e1; /* blue-500 */
+  --button-primary-text: #ffffff;
+  --button-primary-hover-bg: #3182ce; /* blue-600 */
+  --button-secondary-bg: #a0aec0; /* gray-400 */
+  --button-secondary-text: #2d3748;
+  --button-secondary-hover-bg: #cbd5e0; /* gray-300 */
+  --footer-bg: #edf2f7;
+  --footer-text: #718096; /* gray-500 */
+  --glow-start: #667eea;
+  --glow-end: #805ad5;
+  --glow-mid: #d53f8c;
+}
+
+/* Shiny CTA */
+@property --gradient-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@property --gradient-angle-offset {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@property --gradient-percent {
+  syntax: "<percentage>";
+  initial-value: 5%;
+  inherits: false;
+}
+
+@property --gradient-shine {
+  syntax: "<color>";
+  initial-value: white;
+  inherits: false;
+}
+    </style>
 </head>
 <body class="bg-gray-200 dark:bg-gray-900 text-gray-800 dark:text-gray-200 font-sans transition-colors duration-700">
     

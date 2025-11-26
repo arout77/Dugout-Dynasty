@@ -21,3 +21,4 @@ Router::get( '/api/draft/roster-count', function () {
 
 // --- GAMEPLAY API ---
 Router::post( '/api/game/sim-at-bat', [GameController::class, 'simAtBat'] )->middleware( 'auth' );
+Router::post( '/api/game/substitute', [GameController::class, 'substitute'] );

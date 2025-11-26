@@ -27,6 +27,7 @@ Router::get( '/pregame', [GameController::class, 'pregame'] )->middleware( 'auth
 Router::post( '/start-game', [GameController::class, 'startGame'] )->middleware( 'auth' );
 Router::get( '/play-ball', [GameController::class, 'playBall'] )->middleware( 'auth' );
 Router::post( '/api/game/sim-at-bat', [GameController::class, 'simAtBat'] )->middleware( 'auth' );
+Router::get( '/game/boxscore/{id}', [GameController::class, 'showBoxScore'] )->middleware( 'auth' );
 
 // --- The routes below can be viewed by visitors and logged in users
 // --- DOCUMENTATION ROUTES ---
