@@ -1,0 +1,566 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* Your custom imports and styles should go after these */
+
+@import './colormap.css';
+
+.logo, h1, h2, h3, h4, h5, h6 { font-family: Montserrat, Poppins; }
+.logo img { height: 40px !important; width: auto; }
+
+.nav-link {
+    @apply text-white dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors;
+}
+.mobile-nav-link {
+    @apply text-white dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-pink-500 dark:hover:text-pink-500 block px-3 py-2 rounded-md text-base font-medium transition-colors;
+}
+.dropdown-link {
+    @apply block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-pink-500 transition-colors;
+}
+.dropdown-header {
+  font-weight: bold;
+}
+.dropdown-divider {
+    opacity: 0;
+    margin-top: 8px;
+}
+
+.theme-active {
+    background-color: #9CA3AF; /* gray-400 */
+}
+.dark .theme-active {
+    background-color: #4B5563; /* gray-600 */
+}
+
+.bg-blue-500\/30 {
+  background-color: rgb(59 130 246 / 0.3);
+}
+
+.bg-gray-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(195 195 195 / var(--tw-bg-opacity, 1));
+}
+
+.hero-pill {
+  background-color: rgb(59 130 246 / 0);
+  color: #f472b6;
+}
+
+
+@property --gradient-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@property --gradient-angle-offset {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@property --gradient-percent {
+  syntax: "<percentage>";
+  initial-value: 5%;
+  inherits: false;
+}
+@property --gradient-shine {
+  syntax: "<color>";
+  initial-value: white;
+  inherits: false;
+}
+.shiny-frame {
+  --animation: gradient-angle linear infinite;
+  --duration: 3s;
+  --shadow-size: 2px;
+  isolation: isolate;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  outline-offset: 4px;
+  /* padding: 1.25rem 2.5rem; */
+  font-family: inherit;
+  font-size: 1.125rem;
+  line-height: 1.2;
+  border: 1px solid transparent;
+  border-radius: 360px;
+  color: var(--shiny-cta-fg);
+  background: linear-gradient(var(--shiny-cta-bg), var(--shiny-cta-bg)) padding-box, conic-gradient(from calc(var(--gradient-angle) - var(--gradient-angle-offset)), transparent, var(--shiny-cta-highlight) var(--gradient-percent), var(--gradient-shine) calc(var(--gradient-percent) * 2), var(--shiny-cta-highlight) calc(var(--gradient-percent) * 3), transparent calc(var(--gradient-percent) * 4)) border-box;
+  box-shadow: inset 0 0 0 1px var(--shiny-cta-bg-subtle);
+}
+
+.shiny-cta {
+  --animation: gradient-angle linear infinite;
+  --duration: 3s;
+  --shadow-size: 2px;
+  isolation: isolate;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  outline-offset: 4px;
+  padding: 1.25rem 2.5rem;
+  font-family: inherit;
+  font-size: 1.125rem;
+  line-height: 1.2;
+  border: 1px solid transparent;
+  border-radius: 360px;
+  color: var(--shiny-cta-fg);
+  background: linear-gradient(var(--shiny-cta-bg), var(--shiny-cta-bg)) padding-box, conic-gradient(from calc(var(--gradient-angle) - var(--gradient-angle-offset)), transparent, var(--shiny-cta-highlight) var(--gradient-percent), var(--gradient-shine) calc(var(--gradient-percent) * 2), var(--shiny-cta-highlight) calc(var(--gradient-percent) * 3), transparent calc(var(--gradient-percent) * 4)) border-box;
+  box-shadow: inset 0 0 0 1px var(--shiny-cta-bg-subtle);
+}
+
+.shiny-cta::before, .shiny-cta::after,
+.shiny-cta span::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset-inline-start: 50%;
+  inset-block-start: 50%;
+  translate: -50% -50%;
+  z-index: -1;
+}
+
+.shiny-cta:active {
+  translate: 0 1px;
+}
+
+/* Dots pattern */
+.shiny-cta::before {
+  --size: calc(100% - var(--shadow-size) * 3);
+  --position: 2px;
+  --space: calc(var(--position) * 2);
+  width: var(--size);
+  height: var(--size);
+  background: radial-gradient(circle at var(--position) var(--position), white calc(var(--position) / 4), transparent 0) padding-box;
+  background-size: var(--space) var(--space);
+  background-repeat: space;
+  mask-image: conic-gradient(from calc(var(--gradient-angle) + 45deg), black, transparent 10% 90%, black);
+  border-radius: inherit;
+  opacity: 0.4;
+  z-index: -1;
+}
+
+/* Inner shimmer */
+.shiny-cta::after {
+  --animation: shimmer linear infinite;
+  width: 100%;
+  aspect-ratio: 1;
+  background: linear-gradient(-50deg, transparent, var(--shiny-cta-highlight), transparent);
+  mask-image: radial-gradient(circle at bottom, transparent 40%, black);
+  opacity: 0.6;
+}
+
+.shiny-cta span {
+  z-index: 1;
+}
+
+.shiny-cta span::before {
+  --size: calc(100% + 1rem);
+  width: var(--size);
+  height: var(--size);
+  box-shadow: inset 0 -1ex 2rem 4px var(--shiny-cta-highlight);
+  opacity: 0;
+}
+
+/* Animate */
+.shiny-cta {
+  --transition: 800ms cubic-bezier(0.25, 1, 0.5, 1);
+  transition: var(--transition);
+  transition-property: --gradient-angle-offset, --gradient-percent, --gradient-shine;
+}
+
+.shiny-cta, .shiny-cta::before, .shiny-cta::after {
+  animation: var(--animation) var(--duration), var(--animation) calc(var(--duration) / 0.4) reverse paused;
+  animation-composition: add;
+}
+
+.shiny-cta span::before {
+  transition: opacity var(--transition);
+  animation: calc(var(--duration) * 1.5) breathe linear infinite;
+}
+
+.shiny-cta:is(:hover, :focus-visible) {
+  --gradient-percent: 20%;
+  --gradient-angle-offset: 95deg;
+  --gradient-shine: var(--shiny-cta-highlight-subtle);
+}
+
+.shiny-cta:is(:hover, :focus-visible), .shiny-cta:is(:hover, :focus-visible)::before, .shiny-cta:is(:hover, :focus-visible)::after {
+  animation-play-state: running;
+}
+
+.shiny-cta:is(:hover, :focus-visible) span::before {
+  opacity: 1;
+}
+
+@keyframes gradient-angle {
+  to {
+    --gradient-angle: 360deg;
+  }
+}
+@keyframes shimmer {
+  to {
+    rotate: 360deg;
+  }
+}
+@keyframes breathe {
+  from, to {
+    scale: 1;
+  }
+  50% {
+    scale: 1.2;
+  }
+}
+/* Keyframes for floating and fading animation */
+@keyframes float-and-fade {
+  0% {
+    transform: translate(var(--x-start), var(--y-start)) scale(var(--scale-start));
+    opacity: 0.2;
+  }
+  50% {
+    transform: translate(var(--x-mid), var(--y-mid)) scale(var(--scale-mid));
+    opacity: 0.4;
+  }
+  100% {
+    transform: translate(var(--x-end), var(--y-end)) scale(var(--scale-end));
+    opacity: 0.2;
+  }
+}
+/* RGB effect */
+.glow-on-hover {
+  cursor: pointer;
+  position: relative;
+  z-index: 0;
+}
+
+.glow-on-hover:before {
+  content: "";
+  background: linear-gradient(45deg, red, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, red);
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  background-size: 400%;
+  z-index: -1;
+  filter: blur(5px);
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  animation: glowing 20s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.glow-on-hover:active:after {
+  background: transparent;
+}
+
+.glow-on-hover:hover:before {
+  opacity: 1;
+}
+
+.glow-on-hover:after {
+  z-index: -1;
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+
+@keyframes glowing {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 400% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+/* Glassmorphism effect */
+.glass {
+  background-color: rgb(53 0 76 / 23%);
+  backdrop-filter: blur(10px); /* Frosted glass effect */
+  -webkit-backdrop-filter: blur(10px); /* Safari support */
+  border: 1px solid var(--roster-border); /* Subtle light border */
+  box-shadow: inset -3px 9px 32px 20px rgba(0, 0, 0, 0.37); /* Shadow for depth */
+  width: -webkit-fill-available;
+}
+
+/* Animated Background Elements */
+.animated-blob {
+  position: absolute;
+  background: radial-gradient(circle, var(--color-start), var(--color-end));
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.3;
+  animation: float-and-fade var(--duration) ease-in-out infinite alternate var(--delay);
+  z-index: -100;
+  pointer-events: none;
+}
+
+/* Rainbow glow - STARTS */
+.rainbowGlow::before,
+.rainbowGlow::after {
+  content: "";
+  position: absolute;
+  left: -5px;
+  top: -5px;
+  background: linear-gradient(45deg, #ff0000, #ff8700, #ffff00, #25ff00, #00ffe9, #0032ff, #9800ff, #f200ff, #ff0000, #ff8700, #ffff00, #25ff00, #00ffe9, #0032ff);
+  background-size: 400%;
+  width: calc(100% + 10px);
+  height: calc(100% + 10px);
+  z-index: -1;
+  animation: animateBorder 3s linear infinite;
+}
+
+@keyframes animateBorder {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 89% 50%;
+  }
+}
+.rainbowGlow::before {
+  box-shadow: 0 0 5px black;
+}
+
+.rainbowGlow::after {
+  filter: blur(40px);
+  z-index: -2;
+  /*   opacity: 0.5; */
+}
+
+/* Rainbow glow - ENDS */
+/* White glow - STARTS */
+:root {
+  --white08: rgba(255, 255, 255, 0.8);
+  --white05: rgba(255, 255, 255, 0.5);
+  --white009: rgba(255, 255, 255, 0.09);
+  --white001: rgba(255, 255, 255, 0.01);
+  --borderSize: 10px;
+}
+
+.whiteGlow {
+  border: black 1px solid;
+  box-shadow: 0 0 0 calc(var(--borderSize) / 2) rgba(255, 255, 255, 0.05);
+}
+
+.whiteGlow::before,
+.whiteGlow::after {
+  content: "";
+  position: absolute;
+  left: calc(var(--borderSize) / 2 * -1);
+  top: calc(var(--borderSize) / 2 * -1);
+  background: linear-gradient(45deg, var(--white001), var(--white001), var(--white001), var(--white001), var(--white001), var(--white001), var(--white001), var(--white001), var(--white001), var(--white001), var(--white001), var(--white001), var(--white001), var(--white009), var(--white05), var(--white08), var(--white05), var(--white009), var(--white001), var(--white001), var(--white001), var(--white001), var(--white001), var(--white001), var(--white001), var(--white001), var(--white001), var(--white001), var(--white001), var(--white001), var(--white001));
+  background-size: 300%;
+  width: calc(100% + var(--borderSize));
+  height: calc(100% + var(--borderSize));
+  animation: whitePulsatingBorder 1.7s ease-in-out infinite;
+}
+
+.whiteGlow::before {
+  z-index: -1;
+  box-shadow: 0 0 0 1 black;
+}
+
+.whiteGlow::after {
+  filter: blur(40px);
+  z-index: -2;
+  /*   opacity: 0.5; */
+}
+
+@keyframes whitePulsatingBorder {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 150% 50%;
+  }
+}
+/* White glow - ENDS */
+/* Conical Pulse - STARTS */
+.conicalPulse {
+  overflow: hidden;
+  background: transparent;
+  border: rgba(255, 255, 255, 0.09) 1px solid;
+}
+
+.conicalPulse::before,
+.conicalPulse::after {
+  z-index: -1;
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 600%;
+  height: 600%;
+  transform: translate(-50%, -50%);
+}
+
+.conicalPulse::before {
+  animation: rotate 2s linear forwards infinite;
+  background: conic-gradient(transparent, #fff 70deg, transparent 71deg);
+}
+
+.conicalPulse::after {
+  background: linear-gradient(0deg, #000, #333);
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  border: rgba(255, 255, 255, 0.01) 1px solid;
+}
+
+@keyframes rotate {
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+/* Conical Pulse - ENDS */
+/* Conical Rainbow - STARTS */
+.conicalRainbow {
+  overflow: hidden;
+}
+
+.conicalRainbow::before {
+  content: "";
+  position: absolute;
+  height: 500%;
+  width: 500%;
+  background: conic-gradient(#fd004c, #fe9000, #fff020, #3edf4b, #3363ff, #b102b7, #fd004c);
+  left: -200%;
+  top: -200%;
+  animation: rainbowRotate 1.5s linear forwards infinite;
+}
+
+@keyframes rainbowRotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.conicalRainbow::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  background: linear-gradient(0deg, rgb(31, 15, 89), rgb(19, 0, 56));
+}
+
+/* Conical Rainbow - ENDS */
+/* Conical Rainbow Pulse - STARTS */
+.conicalRainbowPulse {
+  overflow: hidden;
+}
+
+.conicalRainbowPulse::before {
+  content: "";
+  position: absolute;
+  height: 500%;
+  width: 500%;
+  background: conic-gradient(transparent, #fd004c 51deg, #fd004c 52deg, transparent 52deg, #fe9000 102deg, #fe9000 103deg, transparent 103deg, #fff020 153deg, #fff020 154deg, transparent 154deg, #3edf4b 204deg, #3edf4b 205deg, transparent 205deg, #7192ff 255deg, #3363ff 256deg, transparent 256deg, #b102b7 306deg, #85048a 307deg, transparent 307deg, #bb0707 359deg, #bb0707 360deg, transparent 360deg);
+  left: -200%;
+  top: -200%;
+  animation: rainbowRotate 4s linear forwards infinite;
+}
+
+@keyframes rainbowRotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.conicalRainbowPulse::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  background: linear-gradient(0deg, #000, #333);
+}
+
+/* Conical Rainbow Pulse - ENDS */
+/* Conical Repeating Pulse - STARTS */
+.conicalRepeatingPulse {
+  background: repeating-conic-gradient(from var(--angle), rgb(255, 0, 0) 0%, rgb(255, 0, 0) 5%, transparent 5%, transparent 40%, rgb(255, 0, 0) 50%);
+  animation: neonLightsRotate 4s linear forwards infinite;
+  border: 1px solid #171717;
+}
+
+.conicalRepeatingPulse::before,
+.conicalRepeatingPulse::after,
+.cardContent {
+  position: absolute;
+}
+
+.conicalRepeatingPulse::before,
+.conicalRepeatingPulse::after {
+  content: "";
+}
+
+.conicalRepeatingPulse::before {
+  width: 100%;
+  height: 100%;
+  background: repeating-conic-gradient(from var(--angle), rgb(0, 0, 255) 0%, rgb(0, 0, 255) 5%, transparent 5%, transparent 40%, rgb(0, 0, 255) 50%);
+  animation: neonLightsRotate 4s linear forwards infinite;
+  /*   filter: drop-shadow(0 0 15px rgb(0, 0, 255)); */
+  animation-delay: -1s;
+}
+
+.conicalRepeatingPulse::after {
+  inset: 4px;
+  background: linear-gradient(0deg, #000, #333);
+}
+
+.conicalRepeatingPulse::after,
+.cardContent {
+  inset: 4px;
+}
+
+.cardContent {
+  z-index: 1;
+  border: #171717 1px solid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes neonLightsRotate {
+  from {
+    --angle: 0deg;
+  }
+  to {
+    --angle: 360deg;
+  }
+}
+/* Conical Repeating Pulse - ENDS */
+/* Conical Glass - STARTS */
+/* Reference: https://codepen.io/michellebarker/pen/gOMBPQj */
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 90deg;
+  inherits: true;
+}
+:root {
+  --angle: 90deg;
+  --c1: rgba(255, 255, 255, 0.75);
+  --c2: rgba(0, 0, 0, 0.75);
+}
+
+.conicalRepeatingPulse small,
+.conicalGlass small {
+  color: #888;
+  font-size: x-small;
+  letter-spacing: 2px;
+}
+
+.conicalGlass {
+  flex-direction: column;
+  border: 2px solid;
+  border-image: conic-gradient(from var(--angle), var(--c2), var(--c1) 0.1turn, var(--c1) 0.15turn, var(--c2) 0.25turn) 30;
+  animation: borderRotate 2.5s linear infinite forwards;
+  box-shadow: inset 0 0 0 1px black;
+}
+
+@keyframes borderRotate {
+  100% {
+    --angle: 420deg;
+  }
+}
+/* Conical Glass - ENDS */
