@@ -46,6 +46,18 @@
                                 Play Ball!
                             </button>
                         </form>
+
+                        {% if nextGame %}                            
+                            <div class="mt-3 pt-3 border-t border-gray-700/50">
+                                <form action="{{ base_url }}/league/simulate-day" method="POST">
+                                    {{ csrf_field() }}
+                                    <button type="submit" class="w-full bg-gray-700 hover:bg-gray-600 text-gray-300 font-bold py-2 rounded text-xs uppercase tracking-wider transition">
+                                        Simulate Rest of League
+                                    </button>
+                                </form>
+                            </div>
+                        {% endif %}
+                        
                     {% else %}
                         <div class="text-center py-8 text-gray-500">
                             Season Complete! Check standings for playoff seed.
@@ -56,7 +68,7 @@
 
             <!-- STANDINGS: AMERICAN LEAGUE -->
             <div class="bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-700">
-                <h3 class="text-red-400 text-xs font-bold uppercase tracking-wider mb-4">American League</h3>
+                <h3 class="text-red-500 text-xs font-bold uppercase tracking-wider mb-4">American League</h3>
                 <table class="w-full text-sm text-left">
                     <thead>
                         <tr class="text-gray-500 border-b border-gray-700">
@@ -191,6 +203,31 @@
             </div>
         </div>
 
+    </div>
+
+    <!-- LEAGUE NEWS -->
+    <div class="bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-700 max-w-7xl my-8 mx-auto">
+        <h3 class="text-blue-400 text-xs font-bold uppercase tracking-wider mb-4">League News</h3>
+        <table class="w-full text-sm text-left">
+            <thead>
+                <tr class="text-gray-500 border-b border-gray-700">
+                    <th class="pb-2">Team</th>
+                    <th class="pb-2 text-right">W</th>
+                    <th class="pb-2 text-right">L</th>
+                    <th class="pb-2 text-right">PCT</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-700/50">
+                {% for team in standingsNL %}
+                <tr class="{{ team.team_id == userTeam.team_id ? 'bg-white/5 font-bold' : '' }}">
+                    <td class="py-2 text-white">{{ team.team_name }}</td>
+                    <td class="py-2 text-right text-gray-300">{{ team.w }}</td>
+                    <td class="py-2 text-right text-gray-300">{{ team.l }}</td>
+                    <td class="py-2 text-right text-gray-400 font-mono">{{ team.pct|number_format(3) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 {% endblock %}

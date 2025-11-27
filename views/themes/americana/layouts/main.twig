@@ -44,9 +44,9 @@
     {
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
-      "name": "Rhapsody Framework",
-      "description": "Rhapsody is a lightweight, modern PHP framework for building elegant and maintainable web applications. It provides a solid foundation with powerful features like a flexible router, a secure authentication system, a robust validation engine, and an efficient templating system powered by Twig.",
-      "applicationCategory": "DeveloperApplication",
+      "name": "Dugout Dynasty",
+      "description": "Dugout Dynasty is a sophisticated, historical baseball simulation game built on the Rhapsody PHP Framework. It allows users to draft legendary players from 1871 to the present, manage franchises, and simulate games using a custom physics engine that normalizes statistics across eras for fair competition.",
+      "applicationCategory": "GameApplication",
       "operatingSystem": "Web",
       "softwareVersion": "{{ config.app_version }}",
       "url": "{{ app_url }}",
@@ -56,129 +56,136 @@
       },
       "programmingLanguage": {
         "@type": "ComputerLanguage",
-        "name": "PHP"
+        "name": "PHP",
+        "version": "8.2+"
       },
-      "image": "{{ app_url }}/public/img/logo.png",
+      "image": "{{ app_url }}/public/img/logo.webp",
+      "genre": ["Simulation", "Sports", "Strategy"],
+      "gamePlatform": ["Web Browser"],
       "offers": {
         "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
+        "price": "9.99",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
       },
       "featureList": [
-        "Service Container & Dependency Injection",
-        "Expressive Routing",
-        "Middleware Pipeline & Authentication",
-        "The Rhapsody Console (CLI)",
-        "Database Migrations",
-        "Robust Validation Engine",
-        "Twig Templating",
-        "Performance Caching (Routes & Application)",
-        "Tailwind CSS Integration"
+        "Era-Normalized Physics Engine (Log5 Algorithm)",
+        "Historical Player Draft (1871-2025 Database)",
+        "Live Pitch-by-Pitch Game Simulation",
+        "Custom Franchise Management & Salary Cap",
+        "AI Opponents with Dynamic Strategy Archetypes",
+        "Interactive SVG Ballpark & Real-time Scoreboard",
+        "Full Season Scheduling & Playoffs",
+        "League Leaders & Statistical Tracking",
+        "Responsive React-Powered Gameplay Interface"
+      ],
+      "screenshot": [
+        "{{ app_url }}/public/img/stadium.jpg"
       ]
     }
     </script>
     <style>
         :root {
-  --bg-primary: #1a202c;
-  --bg-secondary: #2d3748;
-  --text-color: #e2e8f0;
-  --header-bg: #1a202c;
-  --card-bg: #1a202c; /* Default card background */
-  --card-border: #6809fb;
-  --dropzone-bg: #13182691;
-  --dropzone-border: #8a00bc;
-  --roster-bg: rgb(53 0 76 / 23%); /* Glassmorphism background */
-  --roster-border: rgba(255, 255, 255, 0.2);
-  --matchsetup-border: #0037f1;
-  --modal-bg: #010130;
-  --modal-border: #8a00bc; /* Yellow-500 */
-  --log-bg: #1a202c;
-  --log-text: #e2e8f0;
-  --log-info: #a0aec0; /* gray-400 */
-  --log-action: #90cdf4; /* blue-300 */
-  --log-damage: #fc8181; /* red-400 */
-  --log-result: #ecc94b; /* yellow-400 */
-  --button-primary-bg: #ecc94b; /* yellow-500 */
-  --button-primary-text: #1a202c; /* gray-900 */
-  --button-primary-hover-bg: #f6e05e; /* yellow-400 */
-  --button-secondary-bg: #131826; /* gray-600 */
-  --button-secondary-text: #ffffff;
-  --button-secondary-hover-bg: #68707c; /* gray-500 */
-  --footer-bg: #1a202c;
-  --footer-text: #a0aec0; /* gray-400 */
-  --glow-start: #720697;
-  --glow-end: #002bff;
-  --glow-mid: #ff00c8;
-  /* Scrollbar colors */
-  --scrollbar-thumb: #3958af;
-  --scrollbar-track: #2d004d;
-  --log-scrollbar-thumb: #6890ff;
-  --log-scrollbar-track: #1a002e;
-  --shiny-cta-bg: #000000;
-  --shiny-cta-bg-subtle: #1a1818;
-  --shiny-cta-fg: #ffffff;
-  --shiny-cta-highlight: blue;
-  --shiny-cta-highlight-subtle: #8484ff;
-}
+          --bg-primary: #1a202c;
+          --bg-secondary: #2d3748;
+          --text-color: #e2e8f0;
+          --header-bg: #1a202c;
+          --card-bg: #1a202c; /* Default card background */
+          --card-border: #6809fb;
+          --dropzone-bg: #13182691;
+          --dropzone-border: #8a00bc;
+          --roster-bg: rgb(53 0 76 / 23%); /* Glassmorphism background */
+          --roster-border: rgba(255, 255, 255, 0.2);
+          --matchsetup-border: #0037f1;
+          --modal-bg: #010130;
+          --modal-border: #8a00bc; /* Yellow-500 */
+          --log-bg: #1a202c;
+          --log-text: #e2e8f0;
+          --log-info: #a0aec0; /* gray-400 */
+          --log-action: #90cdf4; /* blue-300 */
+          --log-damage: #fc8181; /* red-400 */
+          --log-result: #ecc94b; /* yellow-400 */
+          --button-primary-bg: #ecc94b; /* yellow-500 */
+          --button-primary-text: #1a202c; /* gray-900 */
+          --button-primary-hover-bg: #f6e05e; /* yellow-400 */
+          --button-secondary-bg: #131826; /* gray-600 */
+          --button-secondary-text: #ffffff;
+          --button-secondary-hover-bg: #68707c; /* gray-500 */
+          --footer-bg: #1a202c;
+          --footer-text: #a0aec0; /* gray-400 */
+          --glow-start: #720697;
+          --glow-end: #002bff;
+          --glow-mid: #ff00c8;
+          /* Scrollbar colors */
+          --scrollbar-thumb: #3958af;
+          --scrollbar-track: #2d004d;
+          --log-scrollbar-thumb: #6890ff;
+          --log-scrollbar-track: #1a002e;
+          --shiny-cta-bg: #000000;
+          --shiny-cta-bg-subtle: #1a1818;
+          --shiny-cta-fg: #ffffff;
+          --shiny-cta-highlight: blue;
+          --shiny-cta-highlight-subtle: #8484ff;
+        }
 
-/* Light theme variables */
-body[data-theme=light] {
-  --bg-primary: #f7fafc; /* Light gray */
-  --bg-secondary: #edf2f7; /* Lighter gray */
-  --text-color: #2d3748; /* Darker text */
-  --header-bg: #ffffff;
-  --card-bg: #ffffff;
-  --card-border: #cbd5e0; /* Light border */
-  --dropzone-bg: #e2e8f0;
-  --dropzone-border: #cbd5e0;
-  --roster-bg: rgba(255, 255, 255, 0.8); /* Lighter glassmorphism */
-  --roster-border: rgba(0, 0, 0, 0.1);
-  --matchsetup-border: #4299e1; /* Blue */
-  --modal-bg: #ffffff;
-  --modal-border: #4299e1; /* Blue */
-  --log-bg: #f7fafc;
-  --log-text: #2d3748;
-  --log-info: #131826; /* gray-600 */
-  --log-action: #3182ce; /* blue-600 */
-  --log-damage: #e53e3e; /* red-600 */
-  --log-result: #dd6b20; /* orange-600 */
-  --button-primary-bg: #4299e1; /* blue-500 */
-  --button-primary-text: #ffffff;
-  --button-primary-hover-bg: #3182ce; /* blue-600 */
-  --button-secondary-bg: #a0aec0; /* gray-400 */
-  --button-secondary-text: #2d3748;
-  --button-secondary-hover-bg: #cbd5e0; /* gray-300 */
-  --footer-bg: #edf2f7;
-  --footer-text: #718096; /* gray-500 */
-  --glow-start: #667eea;
-  --glow-end: #805ad5;
-  --glow-mid: #d53f8c;
-}
+        /* Light theme variables */
+        body[data-theme=light] {
+          --bg-primary: #f7fafc; /* Light gray */
+          --bg-secondary: #edf2f7; /* Lighter gray */
+          --text-color: #2d3748; /* Darker text */
+          --header-bg: #ffffff;
+          --card-bg: #ffffff;
+          --card-border: #cbd5e0; /* Light border */
+          --dropzone-bg: #e2e8f0;
+          --dropzone-border: #cbd5e0;
+          --roster-bg: rgba(255, 255, 255, 0.8); /* Lighter glassmorphism */
+          --roster-border: rgba(0, 0, 0, 0.1);
+          --matchsetup-border: #4299e1; /* Blue */
+          --modal-bg: #ffffff;
+          --modal-border: #4299e1; /* Blue */
+          --log-bg: #f7fafc;
+          --log-text: #2d3748;
+          --log-info: #131826; /* gray-600 */
+          --log-action: #3182ce; /* blue-600 */
+          --log-damage: #e53e3e; /* red-600 */
+          --log-result: #dd6b20; /* orange-600 */
+          --button-primary-bg: #4299e1; /* blue-500 */
+          --button-primary-text: #ffffff;
+          --button-primary-hover-bg: #3182ce; /* blue-600 */
+          --button-secondary-bg: #a0aec0; /* gray-400 */
+          --button-secondary-text: #2d3748;
+          --button-secondary-hover-bg: #cbd5e0; /* gray-300 */
+          --footer-bg: #edf2f7;
+          --footer-text: #718096; /* gray-500 */
+          --glow-start: #667eea;
+          --glow-end: #805ad5;
+          --glow-mid: #d53f8c;
+        }
 
-/* Shiny CTA */
-@property --gradient-angle {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
-}
+        /* Shiny CTA */
+        @property --gradient-angle {
+          syntax: "<angle>";
+          initial-value: 0deg;
+          inherits: false;
+        }
 
-@property --gradient-angle-offset {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
-}
+        @property --gradient-angle-offset {
+          syntax: "<angle>";
+          initial-value: 0deg;
+          inherits: false;
+        }
 
-@property --gradient-percent {
-  syntax: "<percentage>";
-  initial-value: 5%;
-  inherits: false;
-}
+        @property --gradient-percent {
+          syntax: "<percentage>";
+          initial-value: 5%;
+          inherits: false;
+        }
 
-@property --gradient-shine {
-  syntax: "<color>";
-  initial-value: white;
-  inherits: false;
-}
+        @property --gradient-shine {
+          syntax: "<color>";
+          initial-value: white;
+          inherits: false;
+        }
     </style>
 </head>
 <body class="bg-gray-200 dark:bg-gray-900 text-gray-800 dark:text-gray-200 font-sans transition-colors duration-700">
