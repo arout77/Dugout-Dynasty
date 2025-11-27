@@ -13,6 +13,9 @@ use Core\Router;
 
 // Define your application routes using the static Router methods.
 
+// --- LEAGUE ROUTES ---
+Router::post( '/league/simulate-day', [\App\Controllers\LeagueController::class, 'simulateDay'] )->middleware( 'auth' );
+
 // --- CLUBHOUSE ROUTES ---
 Router::get( '/clubhouse', [ClubhouseController::class, 'index'] )->middleware( 'auth' );
 Router::post( '/api/clubhouse/save', [ClubhouseController::class, 'saveStrategy'] )->middleware( 'auth' );
@@ -28,6 +31,10 @@ Router::post( '/start-game', [GameController::class, 'startGame'] )->middleware(
 Router::get( '/play-ball', [GameController::class, 'playBall'] )->middleware( 'auth' );
 Router::post( '/api/game/sim-at-bat', [GameController::class, 'simAtBat'] )->middleware( 'auth' );
 Router::get( '/game/boxscore/{id}', [GameController::class, 'showBoxScore'] )->middleware( 'auth' );
+
+// Free Agency
+Router::get( '/free-agency', [\App\Controllers\FreeAgencyController::class, 'index'] )->middleware( 'auth' );
+Router::post( '/free-agency/sign', [\App\Controllers\FreeAgencyController::class, 'signPlayer'] )->middleware( 'auth' );
 
 // --- The routes below can be viewed by visitors and logged in users
 // --- DOCUMENTATION ROUTES ---
