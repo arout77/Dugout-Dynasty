@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Command: sim:batter-test
+ * Purpose: Runs a simulation test for a specific batter.
+ * Usage: php rhapsody sim:batter-test [batter_id]
+ */
+
 namespace App\Commands;
 
 use App\Models\Hitter;

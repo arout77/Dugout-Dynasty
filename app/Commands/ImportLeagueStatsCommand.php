@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Command: import:league-stats
+ * Purpose: Imports historical league statistics for era normalization.
+ * Usage: php rhapsody import:league-stats [file_path]
+ */
+
 namespace App\Commands;
 
 use Core\Database;

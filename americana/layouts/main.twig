@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en" class="antialiased">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ meta.title }}</title>
+    <meta name="description" content="{{ meta.description|e('html_attr') }}">
+    
+    {# Assumes the full URL is needed for canonical and OG tags #}
+    {% set current_url = app_url ~ app.request.uri %}
+    <link rel="canonical" href="{{ current_url }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ current_url }}">
+    <meta property="og:title" content="{{ meta.title }}">
+    <meta property="og:description" content="{{ meta.description|e('html_attr') }}">
+    <meta property="og:image" content="{{ base_url }}/public/img/logo.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ current_url }}">
+    <meta property="twitter:title" content="{{ meta.title }}">
+    <meta property="twitter:description" content="{{ meta.description|e('html_attr') }}">
+    <meta property="twitter:image" content="{{ base_url }}/public/img/logo.png">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="{{ base_url }}/public/css/style.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script>
+        // This script runs before the rest of the page to prevent "flashing"
+        // It sets the theme based on the user's saved preference or OS setting.
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+    <!-- JSON-LD Schema Markup for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Dugout Dynasty",
+      "description": "Dugout Dynasty is a sophisticated, historical baseball simulation game built on the Rhapsody PHP Framework. It allows users to draft legendary players from 1871 to the present, manage franchises, and simulate games using a custom physics engine that normalizes statistics across eras for fair competition.",
+      "applicationCategory": "GameApplication",
+      "operatingSystem": "Web",
+      "softwareVersion": "{{ config.app_version }}",
+      "url": "{{ app_url }}",
+      "author": {
+        "@type": "Person",
+        "name": "Andrew Rout"
+      },
+      "programmingLanguage": {
+        "@type": "ComputerLanguage",
+        "name": "PHP",
+        "version": "8.2+"
+      },
+      "image": "{{ app_url }}/public/img/logo.webp",
+      "genre": ["Simulation", "Sports", "Strategy"],
+      "gamePlatform": ["Web Browser"],
+      "offers": {
+        "@type": "Offer",
+        "price": "9.99",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      },
+      "featureList": [
+        "Era-Normalized Physics Engine (Log5 Algorithm)",
+        "Historical Player Draft (1871-2025 Database)",
+        "Live Pitch-by-Pitch Game Simulation",
+        "Custom Franchise Management & Salary Cap",
+        "AI Opponents with Dynamic Strategy Archetypes",
+        "Interactive SVG Ballpark & Real-time Scoreboard",
+        "Full Season Scheduling & Playoffs",
+        "League Leaders & Statistical Tracking",
+        "Responsive React-Powered Gameplay Interface"
+      ],
+      "screenshot": [
+        "{{ app_url }}/public/img/stadium.jpg"
+      ]
+    }
+    </script>
+    <style>
+        :root {
+          --bg-primary: #1a202c;
+          --bg-secondary: #2d3748;
+          --text-color: #e2e8f0;
+          --header-bg: #1a202c;
+          --card-bg: #1a202c; /* Default card background */
+          --card-border: #6809fb;
+          --dropzone-bg: #13182691;
+          --dropzone-border: #8a00bc;
+          --roster-bg: rgb(53 0 76 / 23%); /* Glassmorphism background */
+          --roster-border: rgba(255, 255, 255, 0.2);
+          --matchsetup-border: #0037f1;
+          --modal-bg: #010130;
+          --modal-border: #8a00bc; /* Yellow-500 */
+          --log-bg: #1a202c;
+          --log-text: #e2e8f0;
+          --log-info: #a0aec0; /* gray-400 */
+          --log-action: #90cdf4; /* blue-300 */
+          --log-damage: #fc8181; /* red-400 */
+          --log-result: #ecc94b; /* yellow-400 */
+          --button-primary-bg: #ecc94b; /* yellow-500 */
+          --button-primary-text: #1a202c; /* gray-900 */
+          --button-primary-hover-bg: #f6e05e; /* yellow-400 */
+          --button-secondary-bg: #131826; /* gray-600 */
+          --button-secondary-text: #ffffff;
+          --button-secondary-hover-bg: #68707c; /* gray-500 */
+          --footer-bg: #1a202c;
+          --footer-text: #a0aec0; /* gray-400 */
+          --glow-start: #720697;
+          --glow-end: #002bff;
+          --glow-mid: #ff00c8;
+          /* Scrollbar colors */
+          --scrollbar-thumb: #3958af;
+          --scrollbar-track: #2d004d;
+          --log-scrollbar-thumb: #6890ff;
+          --log-scrollbar-track: #1a002e;
+          --shiny-cta-bg: #000000;
+          --shiny-cta-bg-subtle: #1a1818;
+          --shiny-cta-fg: #ffffff;
+          --shiny-cta-highlight: blue;
+          --shiny-cta-highlight-subtle: #8484ff;
+        }
+
+        /* Light theme variables */
+        body[data-theme=light] {
+          --bg-primary: #f7fafc; /* Light gray */
+          --bg-secondary: #edf2f7; /* Lighter gray */
+          --text-color: #2d3748; /* Darker text */
+          --header-bg: #ffffff;
+          --card-bg: #ffffff;
+          --card-border: #cbd5e0; /* Light border */
+          --dropzone-bg: #e2e8f0;
+          --dropzone-border: #cbd5e0;
+          --roster-bg: rgba(255, 255, 255, 0.8); /* Lighter glassmorphism */
+          --roster-border: rgba(0, 0, 0, 0.1);
+          --matchsetup-border: #4299e1; /* Blue */
+          --modal-bg: #ffffff;
+          --modal-border: #4299e1; /* Blue */
+          --log-bg: #f7fafc;
+          --log-text: #2d3748;
+          --log-info: #131826; /* gray-600 */
+          --log-action: #3182ce; /* blue-600 */
+          --log-damage: #e53e3e; /* red-600 */
+          --log-result: #dd6b20; /* orange-600 */
+          --button-primary-bg: #4299e1; /* blue-500 */
+          --button-primary-text: #ffffff;
+          --button-primary-hover-bg: #3182ce; /* blue-600 */
+          --button-secondary-bg: #a0aec0; /* gray-400 */
+          --button-secondary-text: #2d3748;
+          --button-secondary-hover-bg: #cbd5e0; /* gray-300 */
+          --footer-bg: #edf2f7;
+          --footer-text: #718096; /* gray-500 */
+          --glow-start: #667eea;
+          --glow-end: #805ad5;
+          --glow-mid: #d53f8c;
+        }
+
+        /* Shiny CTA */
+        @property --gradient-angle {
+          syntax: "<angle>";
+          initial-value: 0deg;
+          inherits: false;
+        }
+
+        @property --gradient-angle-offset {
+          syntax: "<angle>";
+          initial-value: 0deg;
+          inherits: false;
+        }
+
+        @property --gradient-percent {
+          syntax: "<percentage>";
+          initial-value: 5%;
+          inherits: false;
+        }
+
+        @property --gradient-shine {
+          syntax: "<color>";
+          initial-value: white;
+          inherits: false;
+        }
+    </style>
+</head>
+<body class="bg-gray-200 dark:bg-gray-900 text-gray-800 dark:text-gray-200 font-sans transition-colors duration-700">
+    
+    {% include('nav.twig') %}
+
+    {% block full_width_content %}{% endblock %}
+    
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <main class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            {% if flash.success %}
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg relative mb-6" role="alert">
+                    <strong class="font-bold">Success!</strong>
+                    <span class="block sm:inline">{{ flash.success }}</span>
+                </div>
+            {% endif %}
+            {% if flash.error %}
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative mb-6" role="alert">
+                    <strong class="font-bold">Error!</strong>
+                    <span class="block sm:inline">{{ flash.error }}</span>
+                </div>
+            {% endif %}
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <div id="update-modal" class="absolute inset-0 z-50 hidden flex items-center justify-center p-4 bg-black bg-opacity-75" style="background-color: #000000cf;">
+        <div id="update-modal-content" class="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+            <div class="flex justify-between bg-pink-700 items-center p-4 border-b dark:border-gray-700">
+                <h3 class="text-2xl font-bold text-white">Update Available</h3>
+                <button id="close-update-modal" class="text-gray-200 hover:text-gray-700 dark:hover:text-white text-3xl leading-none">&times;</button>
+            </div>
+            <div class="p-6 overflow-y-auto">
+                <h4 id="update-version-tag" class="text-xl font-bold mb-4"></h4>
+                <div class="prose dark:prose-invert max-w-none">
+                    <p>The following updates are available. It is recommended to run the update command from your terminal.</p>
+                    <pre class="command-line"><code class="language-bash">php rhapsody app:update</code></pre>
+                    <hr><br>
+                    <h4>Release Notes:</h4>
+                    <div id="update-release-notes" class="text-sm p-4 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 rounded-md">
+                        <p>Loading...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-end items-center p-4 bg-gray-50 dark:bg-gray-900 border-t dark:border-gray-700">
+                <button id="close-update-modal-footer" class="bg-pink-700  hover:bg-gray-400 text-white font-bold py-2 px-4 rounded">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- MOBILE MENU LOGIC ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            // --- THEME CYCLER LOGIC ---
+            const themeBtn = document.getElementById('theme-btn');
+            const themes = ['dark', 'light', 'system'];
+            const icons = {
+                dark: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" style="color: yellow;"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" /></svg>`,
+                light: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" style="color: orange;"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z"/></svg>`,
+                system: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0113 18H7a1 1 0 01-.707-1.707l.804-.804L7.22 15H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z" clip-rule="evenodd" /></svg>`
+            };
+            const titles = {
+                dark: 'Switch to Light Mode',
+                light: 'Switch to System Preference',
+                system: 'Switch to Dark Mode'
+            };
+
+            let currentThemeIndex = 0;
+
+            const applyTheme = (theme) => {
+                if (theme === 'system') {
+                    localStorage.removeItem('theme');
+                    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                    if (systemTheme === 'dark') {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                } else {
+                    localStorage.setItem('theme', theme);
+                    if (theme === 'dark') {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                }
+                updateButtonUI(theme);
+            };
+
+            const updateButtonUI = (theme) => {
+                themeBtn.innerHTML = icons[theme];
+                themeBtn.title = titles[theme];
+                currentThemeIndex = themes.indexOf(theme);
+            };
+
+            themeBtn.addEventListener('click', () => {
+                currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+                const nextTheme = themes[currentThemeIndex];
+                applyTheme(nextTheme);
+            });
+
+            // Set initial state on page load
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme && themes.includes(savedTheme)) {
+                applyTheme(savedTheme);
+            } else {
+                applyTheme('system'); // Default to system
+            }
+
+            // --- UPDATE MODAL LOGIC ---
+            const updateLink = document.getElementById('update-notification-link');
+            const updateModal = document.getElementById('update-modal');
+            
+            if (updateLink && updateModal) {
+                const closeButtons = document.querySelectorAll('#close-update-modal, #close-update-modal-footer');
+                const versionTagEl = document.getElementById('update-version-tag');
+                const releaseNotesEl = document.getElementById('update-release-notes');
+
+                updateLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const newVersion = updateLink.dataset.version;
+                    versionTagEl.textContent = `New Version: ${newVersion}`;
+                    releaseNotesEl.innerHTML = '<p>Loading release notes...</p>';
+                    updateModal.classList.remove('hidden');
+
+                    fetch('https://api.github.com/repos/arout77/rhapsody/releases/latest')
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.body) {
+                                releaseNotesEl.innerHTML = `<pre class="whitespace-pre-wrap text-sm">${data.body}</pre>`;
+                            } else {
+                                releaseNotesEl.textContent = 'No release notes were provided for this version.';
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching release notes:', error);
+                            releaseNotesEl.textContent = 'Could not load release notes.';
+                        });
+                });
+
+                const closeModal = () => {
+                    updateModal.classList.add('hidden');
+                };
+
+                closeButtons.forEach(btn => btn.addEventListener('click', closeModal));
+                
+                updateModal.addEventListener('click', (e) => {
+                    if (e.target === updateModal) {
+                        closeModal();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

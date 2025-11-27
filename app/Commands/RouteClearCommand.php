@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Command: route:clear
+ * Purpose: Clears the route cache.
+ * Usage: php rhapsody route:clear
+ */
+
 namespace App\Commands;
 
 use Symfony\Component\Console\Command\Command;
@@ -26,13 +32,10 @@ class RouteClearCommand extends Command
     {
         $cachePath = dirname( __DIR__, 2 ) . '/storage/cache/routes/routes.php';
 
-        if ( file_exists( $cachePath ) )
-        {
+        if ( file_exists( $cachePath ) ) {
             unlink( $cachePath );
             $output->writeln( '<info>Route cache cleared!</info>' );
-        }
-        else
-        {
+        } else {
             $output->writeln( '<comment>Route cache was already empty.</comment>' );
         }
 

@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Command: make:middleware
+ * Purpose: Creates a new middleware class.
+ * Usage: php rhapsody make:middleware [Name]
+ */
+
 namespace App\Commands;
 
 use Symfony\Component\Console\Command\Command;
@@ -34,8 +40,7 @@ class MakeMiddlewareCommand extends Command
         $directory = dirname( __DIR__ ) . '/Middleware';
         $filepath  = $directory . '/' . $middlewareName . '.php';
 
-        if ( file_exists( $filepath ) )
-        {
+        if ( file_exists( $filepath ) ) {
             $output->writeln( "<error>Middleware '{$middlewareName}' already exists!</error>" );
             return Command::FAILURE;
         }
@@ -43,8 +48,7 @@ class MakeMiddlewareCommand extends Command
         $stub = file_get_contents( dirname( __DIR__, 2 ) . '/stubs/middleware.stub' );
         $stub = str_replace( '{{ classname }}', $middlewareName, $stub );
 
-        if ( file_put_contents( $filepath, $stub ) === false )
-        {
+        if ( file_put_contents( $filepath, $stub ) === false ) {
             $output->writeln( "<error>Failed to create middleware file.</error>" );
             return Command::FAILURE;
         }

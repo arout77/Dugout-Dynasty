@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Command: app:update
+ * Purpose: Updates the application (runs migrations, clears cache, etc.).
+ * Usage: php rhapsody app:update
+ */
+
 namespace App\Commands;
 
 use Symfony\Component\Console\Command\Command;

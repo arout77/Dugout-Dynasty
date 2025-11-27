@@ -1,0 +1,24 @@
+{% extends "layouts/main.twig" %}
+
+{% block content %}
+    <div id="react-root"></div>
+
+    <script>
+        window.BASE_URL = "{{ base_url }}";
+        if (window.BASE_URL.includes("\{\{")) window.BASE_URL = "";
+        if (window.BASE_URL.endsWith('/')) window.BASE_URL = window.BASE_URL.slice(0, -1);
+
+        window.USER_TEAM_ID = {{ userTeamId|json_encode|raw }};
+        
+        // Hydrate Initial State
+        window.GAME_DATA = {
+            state: {{ state|json_encode|raw }},
+            batter: {{ batter|json_encode|raw }},
+            pitcher: {{ pitcher|json_encode|raw }}
+        };
+    </script>
+
+    {# In production, you would dynamically link to the hashed file. For now, we assume a standard output name or use Vite's manifest #}
+    <script type="module" src="{{ base_url }}/public/build/assets/game.js"></script>
+    {# Note: You might need to check the actual filename in public/build/assets/ #}
+{% endblock %}

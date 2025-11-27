@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Command: route:cache
+ * Purpose: Caches the application routes for better performance.
+ * Usage: php rhapsody route:cache
+ */
+
 namespace App\Commands;
 
 use Core\Router;
@@ -38,8 +44,7 @@ class RouteCacheCommand extends Command
         $cachePath = $rootPath . '/storage/cache/routes/routes.php';
         $content   = '<?php return ' . var_export( $routes, true ) . ';';
 
-        if ( file_put_contents( $cachePath, $content ) === false )
-        {
+        if ( file_put_contents( $cachePath, $content ) === false ) {
             $output->writeln( '<error>Failed to write route cache file.</error>' );
             return Command::FAILURE;
         }

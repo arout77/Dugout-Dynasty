@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Command: make:migration
+ * Purpose: Creates a new database migration file.
+ * Usage: php rhapsody make:migration [Name]
+ */
+
 namespace App\Commands;
 
 use Symfony\Component\Console\Command\Command;
@@ -35,8 +41,7 @@ class MakeMigrationCommand extends Command
         $process = new Process( [PHP_BINARY, $phinxPath, 'create', $name] );
         $process->run();
 
-        if ( !$process->isSuccessful() )
-        {
+        if ( !$process->isSuccessful() ) {
             $output->writeln( '<error>Failed to create migration.</error>' );
             $output->writeln( $process->getErrorOutput() );
             return Command::FAILURE;

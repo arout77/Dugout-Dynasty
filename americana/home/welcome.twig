@@ -1,0 +1,271 @@
+{% extends "layouts/main.twig" %}
+
+{% block full_width_content %}
+
+<style>
+    .animate-pulse-slow {
+        animation: pulseSlow 8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    @keyframes pulseSlow {
+        0%, 100% { opacity: 0.5; }
+        50% { opacity: 0.7; }
+    }
+</style>
+
+<!-- --- HERO SECTION --- -->
+<div class="relative h-screen flex items-center justify-center overflow-hidden">
+    <!-- Dynamic Background -->
+    <div class="absolute inset-0 z-0 bg-gray-800">
+         <!-- Parallax-style scaling effect -->
+         <img src="{{ base_url }}/public/img/stadium.jpg" alt="Stadium at Night" class="w-full h-full object-cover opacity-100 scale-105 animate-pulse-slow">
+         <!-- Gradient Overlay for readability -->
+         <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-gray-900/20 to-gray-900"></div>
+    </div>
+
+    <!-- Hero Content -->
+    <div class="relative z-10 text-center px-4 max-w-5xl mx-auto space-y-6">
+        <div class="inline-block px-4 py-1 rounded-full border-2 border-yellow-500 bg-yellow-200 bg-opacity-30 backdrop-blur-md text-yellow-300 text-md font-bold tracking-widest uppercase mb-4 shadow-[0_0_15px_rgba(234,179,8,0.3)]">
+            The Ultimate Historical Sim
+        </div>
+        
+        <h1 class="text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter mb-2 leading-none">
+            <img src="{{ base_url }}/public/img/logo.webp" class="w-full">
+        </h1>
+
+        <p class="text-lg md:text-2xl text-gray-300 font-light max-w-2xl mx-auto leading-relaxed">
+            Draft <strong class="text-white">Babe Ruth</strong>. Pitch against <strong class="text-white">Ohtani</strong>. 
+            Build a franchise across 150 years of baseball history in a realistic, physics-driven simulation.
+        </p>
+
+        <div class="flex flex-col md:flex-row gap-4 justify-center pt-8">
+            {% if auth.check %}
+                <a href="{{ base_url }}/dashboard" class="group relative px-8 py-4 overflow-hidden">
+                    <button class="z-10 shiny-cta">Enter Clubhouse</button>
+                    <div class="absolute inset-0 bg-gradient-to-r from-orange-600 to-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </a>
+            {% else %}
+                <a href="{{ base_url }}/register" class="group relative px-10 py-4 bg-white text-gray-900 font-bold rounded text-lg transition-all transform hover:-translate-y-1 shadow-[0_10px_20px_rgba(255,255,255,0.2)]">
+                    Start Your Career
+                </a>
+                <a href="{{ base_url }}/login" class="px-10 py-4 bg-transparent hover:bg-white/5 text-white font-bold rounded text-lg transition border border-white/30 backdrop-blur-sm">
+                    Login
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce text-gray-500">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+    </div>
+</div>
+
+<div class="py-24 relative overflow-hidden bg-gray-800">
+        <!-- Background Elements -->
+        <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-gray-800/20 to-transparent pointer-events-none"></div>
+
+        <div class="container mx-auto px-6 space-y-32 relative z-10">
+            
+            <!-- 1. GM MODE -->
+            <div class="flex flex-col md:flex-row items-center gap-16">
+                <div class="flex-1 space-y-6">
+                    <div class="inline-block px-3 py-1 bg-blue-900/50 text-blue-400 rounded-full text-xs font-bold tracking-widest uppercase border border-blue-800 shadow-[0_0_10px_rgba(59,130,246,0.2)]">
+                        Front Office
+                    </div>
+                    <h2 class="text-4xl md:text-6xl font-black uppercase tracking-tight italic">
+                        Be the <span class="text-blue-500">GM</span>
+                    </h2>
+                    <p class="text-xl text-gray-300 leading-relaxed">
+                        It’s not just about the stats; it’s about the payroll. Manage an <strong class="text-white">$80M salary cap</strong> while trying to field a championship roster.
+                    </p>
+                    <div class="space-y-4 pt-2">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-blue-900/30 p-2 rounded text-blue-400 mt-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
+                            <div>
+                                <h4 class="font-bold text-white text-lg">Manage the Cap</h4>
+                                <p class="text-sm text-gray-400">Balance superstars with budget finds. Can you afford Ruth AND Williams?</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="bg-blue-900/30 p-2 rounded text-blue-400 mt-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg></div>
+                            <div>
+                                <h4 class="font-bold text-white text-lg">Draft & Trade</h4>
+                                <p class="text-sm text-gray-400">Live snake drafts against AI personalities. Wheel and deal to build a dynasty.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Abstract UI Visual -->
+                <div class="flex-1 w-full">
+                    <div class="relative group">
+                        <div class="absolute inset-0 bg-blue-600 rounded-2xl blur-xl opacity-20 group-hover:opacity-30 transition duration-500"></div>
+                        <div class="relative bg-gray-800 border border-gray-700 p-8 rounded-2xl shadow-2xl transform group-hover:-translate-y-2 transition duration-500">
+                             <!-- Mock Cap Space UI -->
+                             <div class="space-y-6 font-mono">
+                                <div class="flex justify-between items-center border-b border-gray-700 pb-4">
+                                    <span class="text-gray-500 text-sm">TOTAL PAYROLL</span>
+                                    <span class="text-red-400 text-xl font-bold">$78,450,000</span>
+                                </div>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between items-center bg-gray-900/50 p-3 rounded border border-gray-700/50">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded bg-gray-700 flex items-center justify-center text-xs">RF</div>
+                                            <span class="text-white">B. Ruth</span>
+                                        </div>
+                                        <span class="text-green-400">$8,500,000</span>
+                                    </div>
+                                    <div class="flex justify-between items-center bg-gray-900/50 p-3 rounded border border-gray-700/50">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded bg-gray-700 flex items-center justify-center text-xs">SP</div>
+                                            <span class="text-white">S. Koufax</span>
+                                        </div>
+                                        <span class="text-green-400">$6,200,000</span>
+                                    </div>
+                                    <div class="flex justify-between items-center bg-gray-900/50 p-3 rounded border border-gray-700/50 opacity-50">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded bg-gray-700 flex items-center justify-center text-xs">C</div>
+                                            <span class="text-white">...</span>
+                                        </div>
+                                        <span class="text-gray-500">Draft Pending</span>
+                                    </div>
+                                </div>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. MANAGER MODE -->
+            <div class="flex flex-col md:flex-row-reverse items-center gap-16">
+                <div class="flex-1 space-y-6 text-left">
+                    <div class="inline-block px-3 py-1 bg-green-900/50 text-green-400 rounded-full text-xs font-bold tracking-widest uppercase border border-green-800 shadow-[0_0_10px_rgba(34,197,94,0.2)]">
+                        The Dugout
+                    </div>
+                    <h2 class="text-4xl md:text-6xl font-black uppercase tracking-tight italic">
+                        Be the <span class="text-green-500">Manager</span>
+                    </h2>
+                    <p class="text-xl text-gray-300 leading-relaxed">
+                        The game is won in the details. Set your daily lineups, manage a 5-man rotation, and make the tough calls in the 9th inning.
+                    </p>
+                    <div class="space-y-4 pt-2">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-green-900/30 p-2 rounded text-green-400 mt-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg></div>
+                            <div>
+                                <h4 class="font-bold text-white text-lg">Lineups & Rotations</h4>
+                                <p class="text-sm text-gray-400">Optimize your batting order. Rest your ace. Play the percentages.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="bg-green-900/30 p-2 rounded text-green-400 mt-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></div>
+                            <div>
+                                <h4 class="font-bold text-white text-lg">In-Game Strategy</h4>
+                                <p class="text-sm text-gray-400">Steal bases, hit & run, or bring in a lefty specialist to close the game.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Abstract UI Visual -->
+                 <div class="flex-1 w-full">
+                    <div class="relative group">
+                        <div class="absolute inset-0 bg-green-600 rounded-2xl blur-xl opacity-20 group-hover:opacity-30 transition duration-500"></div>
+                        <div class="relative bg-gray-800 border border-gray-700 p-8 rounded-2xl shadow-2xl transform group-hover:-translate-y-2 transition duration-500">
+                             <!-- Mock Lineup UI -->
+                             <div class="grid grid-cols-2 gap-4">
+                                <div class="col-span-2 text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Starting Lineup</div>
+                                <div class="bg-gray-900/80 p-3 rounded border-l-4 border-green-500 flex justify-between">
+                                    <span class="text-white font-bold">1. T. Cobb</span>
+                                    <span class="text-gray-500 text-xs">CF</span>
+                                </div>
+                                <div class="bg-gray-900/80 p-3 rounded border-l-4 border-gray-600 flex justify-between">
+                                    <span class="text-white font-bold">2. D. Jeter</span>
+                                    <span class="text-gray-500 text-xs">SS</span>
+                                </div>
+                                <div class="bg-gray-900/80 p-3 rounded border-l-4 border-gray-600 flex justify-between">
+                                    <span class="text-white font-bold">3. T. Williams</span>
+                                    <span class="text-gray-500 text-xs">LF</span>
+                                </div>
+                                <div class="bg-gray-900/80 p-3 rounded border-l-4 border-gray-600 flex justify-between">
+                                    <span class="text-white font-bold">4. L. Gehrig</span>
+                                    <span class="text-gray-500 text-xs">1B</span>
+                                </div>
+                             </div>
+                             <div class="mt-6 pt-4 border-t border-gray-700">
+                                <div class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">On the Mound</div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-green-900/50 flex items-center justify-center text-green-400 font-bold border border-green-700">P</div>
+                                    <div>
+                                        <div class="text-white font-bold">Bob Gibson</div>
+                                        <div class="text-xs text-green-400">1.12 ERA</div>
+                                    </div>
+                                </div>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. ADDITIONAL FEATURES GRID -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-12">
+                <!-- Card 1 -->
+                <div class="bg-gray-800/40 p-8 rounded-xl border border-gray-700 hover:border-orange-500/50 hover:bg-gray-800/60 transition duration-300 group">
+                    <div class="text-orange-500 mb-4 transform group-hover:scale-110 transition duration-300">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">162 Game Season</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Play against the CPU. A full marathon simulation. Manage fatigue, injuries, and hot streaks as you fight for a Wild Card spot or the Pennant.
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-gray-800/40 p-8 rounded-xl border border-gray-700 hover:border-orange-500/50 hover:bg-gray-800/60 transition duration-300 group">
+                    <div class="text-orange-500 mb-4 transform group-hover:scale-110 transition duration-300">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">Private Leagues</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Create an invite-only league for your friends. Draft against each other, talk trash, and prove who knows ball best.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-gray-800/40 p-8 rounded-xl border border-gray-700 hover:border-orange-500/50 hover:bg-gray-800/60 transition duration-300 group">
+                    <div class="text-orange-500 mb-4 transform group-hover:scale-110 transition duration-300">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">History vs. Now</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Play with All-Time Greats or the latest roster updates. Our simulation engine normalizes stats so every era competes fairly.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- --- BIG CTA --- -->
+    <div class="py-20 relative overflow-hidden">
+        <div class="absolute inset-0 bg-orange-900 opacity-20"></div>
+        <div class="relative z-10 container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-6 text-white">Ready to take the field?</h2>
+            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                Join the league today. The 1927 Yankees are waiting for a challenge.
+            </p>
+            <a href="{{ base_url }}/register" class="inline-block px-12 py-5 bg-white text-gray-900 font-black uppercase tracking-widest text-sm rounded hover:bg-gray-100 transition shadow-xl transform hover:-translate-y-1">
+                Create Account
+            </a>
+        </div>
+    </div>
+
+    <!-- --- FOOTER --- -->
+    <footer class="bg-black py-12 border-t border-gray-800">
+        <div class="container mx-auto px-4 text-center text-gray-500">
+            <div class="mb-4">
+                <span class="text-2xl font-black text-white uppercase tracking-tighter">Dugout Dynasty</span>
+            </div>
+            <p class="text-sm">&copy; {{ "now"|date("Y") }} Dugout Dynasty Sim. All stats historical & simulated.</p>
+        </div>
+    </footer>
+{% endblock %}

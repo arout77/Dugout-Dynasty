@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Command: make:controller
+ * Purpose: Creates a new controller class.
+ * Usage: php rhapsody make:controller [Name]
+ */
+
 namespace App\Commands;
 
 use Symfony\Component\Console\Command\Command;
@@ -36,8 +42,7 @@ class MakeControllerCommand extends Command
         $directory = dirname( __DIR__ ) . '/Controllers';
         $filepath  = $directory . '/' . $controllerName . '.php';
 
-        if ( file_exists( $filepath ) )
-        {
+        if ( file_exists( $filepath ) ) {
             $output->writeln( "<error>Controller '{$controllerName}' already exists!</error>" );
             return Command::FAILURE;
         }
@@ -45,8 +50,7 @@ class MakeControllerCommand extends Command
         $stub = file_get_contents( dirname( __DIR__, 2 ) . '/stubs/controller.stub' );
         $stub = str_replace( '{{ classname }}', $controllerName, $stub );
 
-        if ( file_put_contents( $filepath, $stub ) === false )
-        {
+        if ( file_put_contents( $filepath, $stub ) === false ) {
             $output->writeln( "<error>Failed to create controller file.</error>" );
             return Command::FAILURE;
         }

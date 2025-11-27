@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Command: migrate
+ * Purpose: Runs pending database migrations.
+ * Usage: php rhapsody migrate
+ */
+
 namespace App\Commands;
 
 use Symfony\Component\Console\Command\Command;
@@ -27,13 +33,11 @@ class MigrateCommand extends Command
     {
         $phinxPath = 'vendor/bin/phinx';
         $process   = new Process( [PHP_BINARY, $phinxPath, 'migrate'] );
-        $process->run( function ( $type, $buffer ) use ( $output )
-        {
+        $process->run( function ( $type, $buffer ) use ( $output ) {
             $output->write( $buffer );
         } );
 
-        if ( !$process->isSuccessful() )
-        {
+        if ( !$process->isSuccessful() ) {
             $output->writeln( '<error>Migration failed.</error>' );
             return Command::FAILURE;
         }

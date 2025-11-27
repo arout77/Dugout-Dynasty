@@ -1,0 +1,233 @@
+{% extends "layouts/main.twig" %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-900 text-white font-sans p-6">
+    
+    <!-- Header / Welcome -->
+    <div class="max-w-7xl mx-auto mb-8 flex justify-between items-end border-b border-gray-700 pb-4">
+        <div>
+            <div class="text-gray-400 text-sm uppercase tracking-widest font-bold mb-1">Clubhouse</div>
+            <h1 class="text-4xl font-black text-white italic uppercase">{{ userTeam.team_name }}</h1>
+        </div>
+        <div class="text-right">
+            <div class="text-3xl font-mono font-bold text-yellow-400">{{ userTeam.w }} - {{ userTeam.l }}</div>
+            <div class="text-sm text-gray-400">Rank: <span class="text-white font-bold">#{{ rank }}</span> of {{ totalTeams }}</div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- LEFT COL: Next Game & Schedule & Standings -->
+        <div class="space-y-8">
+            
+            <!-- NEXT GAME CARD -->
+            <div class="bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-700 relative group">
+                <div class="absolute top-0 left-0 w-1 h-full bg-orange-500"></div>
+                <div class="p-6">
+                    <h3 class="text-gray-400 text-xs font-bold uppercase tracking-wider mb-4">Next Game</h3>
+                    
+                    {% if nextGame %}
+                        <div class="flex justify-between items-center mb-6">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-white">{{ nextGame.away_name }}</div>
+                                <div class="text-xs text-gray-500">Away</div>
+                            </div>
+                            <div class="text-gray-600 font-thin text-2xl">@</div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-white">{{ nextGame.home_name }}</div>
+                                <div class="text-xs text-gray-500">Home</div>
+                            </div>
+                        </div>
+                        
+                        <form action="{{ base_url }}/start-game" method="POST">
+                            {{ csrf_field() }}
+                            <input type="hidden" name="game_id" value="{{ nextGame.game_id }}">
+                            <button type="submit" class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded shadow-lg transition transform group-hover:scale-[1.02]">
+                                Play Ball!
+                            </button>
+                        </form>
+
+                        {% if nextGame %}                            
+                            <div class="mt-3 pt-3 border-t border-gray-700/50">
+                                <form action="{{ base_url }}/league/simulate-day" method="POST">
+                                    {{ csrf_field() }}
+                                    <button type="submit" class="w-full bg-gray-700 hover:bg-gray-600 text-gray-300 font-bold py-2 rounded text-xs uppercase tracking-wider transition">
+                                        Simulate Rest of League
+                                    </button>
+                                </form>
+                            </div>
+                        {% endif %}
+                        
+                    {% else %}
+                        <div class="text-center py-8 text-gray-500">
+                            Season Complete! Check standings for playoff seed.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- STANDINGS: AMERICAN LEAGUE -->
+            <div class="bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-700">
+                <h3 class="text-red-500 text-xs font-bold uppercase tracking-wider mb-4">American League</h3>
+                <table class="w-full text-sm text-left">
+                    <thead>
+                        <tr class="text-gray-500 border-b border-gray-700">
+                            <th class="pb-2">Team</th>
+                            <th class="pb-2 text-right">W</th>
+                            <th class="pb-2 text-right">L</th>
+                            <th class="pb-2 text-right">PCT</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-700/50">
+                        {% for team in standingsAL %}
+                        <tr class="{{ team.team_id == userTeam.team_id ? 'bg-white/5 font-bold' : '' }}">
+                            <td class="py-2 text-white">{{ team.team_name }}</td>
+                            <td class="py-2 text-right text-gray-300">{{ team.w }}</td>
+                            <td class="py-2 text-right text-gray-300">{{ team.l }}</td>
+                            <td class="py-2 text-right text-gray-400 font-mono">{{ team.pct|number_format(3) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- STANDINGS: NATIONAL LEAGUE -->
+            <div class="bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-700">
+                <h3 class="text-blue-400 text-xs font-bold uppercase tracking-wider mb-4">National League</h3>
+                <table class="w-full text-sm text-left">
+                    <thead>
+                        <tr class="text-gray-500 border-b border-gray-700">
+                            <th class="pb-2">Team</th>
+                            <th class="pb-2 text-right">W</th>
+                            <th class="pb-2 text-right">L</th>
+                            <th class="pb-2 text-right">PCT</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-700/50">
+                        {% for team in standingsNL %}
+                        <tr class="{{ team.team_id == userTeam.team_id ? 'bg-white/5 font-bold' : '' }}">
+                            <td class="py-2 text-white">{{ team.team_name }}</td>
+                            <td class="py-2 text-right text-gray-300">{{ team.w }}</td>
+                            <td class="py-2 text-right text-gray-300">{{ team.l }}</td>
+                            <td class="py-2 text-right text-gray-400 font-mono">{{ team.pct|number_format(3) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <!-- RIGHT COL: League Leaders -->
+        <div class="lg:col-span-2 bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-700 h-fit">
+            <h3 class="text-gray-400 text-xs font-bold uppercase tracking-wider mb-6">{{ leagueName }} Leaders</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <!-- Batting AVG -->
+                <div>
+                    <div class="flex items-center gap-2 mb-3 border-b border-gray-700 pb-2">
+                        <span class="text-yellow-500 font-bold">AVG</span>
+                        <span class="text-xs text-gray-500">Batting Average</span>
+                    </div>
+                    <ul class="space-y-2">
+                        {% for p in leaders.avg %}
+                        <li class="flex justify-between text-sm">
+                            <div>
+                                <span class="text-white font-bold">{{ p.player_name }}</span>
+                                <span class="text-gray-500 text-xs ml-1">({{ p.team_name }})</span>
+                            </div>
+                            <span class="text-yellow-400 font-mono">{{ p.val|number_format(3) }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <!-- Home Runs -->
+                <div>
+                    <div class="flex items-center gap-2 mb-3 border-b border-gray-700 pb-2">
+                        <span class="text-orange-500 font-bold">HR</span>
+                        <span class="text-xs text-gray-500">Home Runs</span>
+                    </div>
+                    <ul class="space-y-2">
+                        {% for p in leaders.hr %}
+                        <li class="flex justify-between text-sm">
+                            <div>
+                                <span class="text-white font-bold">{{ p.player_name }}</span>
+                                <span class="text-gray-500 text-xs ml-1">({{ p.team_name }})</span>
+                            </div>
+                            <span class="text-orange-400 font-mono">{{ p.val }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <!-- ERA -->
+                <div>
+                    <div class="flex items-center gap-2 mb-3 border-b border-gray-700 pb-2">
+                        <span class="text-blue-400 font-bold">ERA</span>
+                        <span class="text-xs text-gray-500">Earned Run Avg</span>
+                    </div>
+                    <ul class="space-y-2">
+                        {% for p in leaders.era %}
+                        <li class="flex justify-between text-sm">
+                            <div>
+                                <span class="text-white font-bold">{{ p.player_name }}</span>
+                                <span class="text-gray-500 text-xs ml-1">({{ p.team_name }})</span>
+                            </div>
+                            <span class="text-blue-300 font-mono">{{ p.val|number_format(2) }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <!-- Wins -->
+                <div>
+                    <div class="flex items-center gap-2 mb-3 border-b border-gray-700 pb-2">
+                        <span class="text-green-500 font-bold">W</span>
+                        <span class="text-xs text-gray-500">Wins</span>
+                    </div>
+                    <ul class="space-y-2">
+                        {% for p in leaders.wins %}
+                        <li class="flex justify-between text-sm">
+                            <div>
+                                <span class="text-white font-bold">{{ p.player_name }}</span>
+                                <span class="text-gray-500 text-xs ml-1">({{ p.team_name }})</span>
+                            </div>
+                            <span class="text-green-400 font-mono">{{ p.val }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- LEAGUE NEWS -->
+    <div class="bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-700 max-w-7xl my-8 mx-auto">
+        <h3 class="text-blue-400 text-xs font-bold uppercase tracking-wider mb-4">League News</h3>
+        <table class="w-full text-sm text-left">
+            <thead>
+                <tr class="text-gray-500 border-b border-gray-700">
+                    <th class="pb-2">Team</th>
+                    <th class="pb-2 text-right">W</th>
+                    <th class="pb-2 text-right">L</th>
+                    <th class="pb-2 text-right">PCT</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-700/50">
+                {% for team in standingsNL %}
+                <tr class="{{ team.team_id == userTeam.team_id ? 'bg-white/5 font-bold' : '' }}">
+                    <td class="py-2 text-white">{{ team.team_name }}</td>
+                    <td class="py-2 text-right text-gray-300">{{ team.w }}</td>
+                    <td class="py-2 text-right text-gray-300">{{ team.l }}</td>
+                    <td class="py-2 text-right text-gray-400 font-mono">{{ team.pct|number_format(3) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

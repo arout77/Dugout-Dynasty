@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Command: make:event
+ * Purpose: Creates a new event class.
+ * Usage: php rhapsody make:event [Name]
+ */
+
 namespace App\Commands;
 
 use Symfony\Component\Console\Command\Command;

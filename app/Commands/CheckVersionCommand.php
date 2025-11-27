@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Command: check:version
+ * Purpose: Checks for updates to the Rhapsody framework.
+ * Usage: php rhapsody check:version
+ */
+
 namespace App\Commands;
 
 use Core\Cache;
@@ -28,8 +34,7 @@ class CheckVersionCommand extends Command
         protected array $config,
         protected Mailer $mailer,
         protected Cache $cache
-    )
-    {
+    ) {
         parent::__construct();
     }
 
@@ -54,8 +59,7 @@ class CheckVersionCommand extends Command
         $output->writeln( "<comment>Checking for latest release at {$repository}...</comment>" );
 
         $data = $this->fetchFromApi( $repository, $output );
-        if ( !$data )
-        {
+        if ( !$data ) {
             $output->writeln( "<error>Could not fetch release information from GitHub. This could be due to a network issue, firewall, or an outdated SSL certificate on the server.</error>" );
             return Command::FAILURE;
         }
@@ -63,8 +67,7 @@ class CheckVersionCommand extends Command
         // The first item in the array is always the most recent release.
         $latestRelease = $data[0] ?? null;
 
-        if ( !$latestRelease || !isset( $latestRelease['tag_name'] ) )
-        {
+        if ( !$latestRelease || !isset( $latestRelease['tag_name'] ) ) {
             $output->writeln( "<error>Could not find any releases in the API response.</error>" );
             return Command::FAILURE;
         }
@@ -72,35 +75,25 @@ class CheckVersionCommand extends Command
         $latestVersion = $latestRelease['tag_name'];
         $output->writeln( "<comment>Latest release found:</comment> {$latestVersion}" );
 
-        if ( version_compare( $latestVersion, $currentVersion, '>' ) )
-        {
+        if ( version_compare( $latestVersion, $currentVersion, '>' ) ) {
             $output->writeln( "<info>A new version ({$latestVersion}) is available!</info>" );
             $notificationCacheKey = 'notified_version_' . str_replace( '.', '_', $latestVersion );
 
-            if ( $this->config['app_env'] === 'development' )
-            {
+            if ( $this->config['app_env'] === 'development' ) {
                 $output->writeln( "Development mode: Caching notification for the navbar." );
                 $this->cache->put( 'update_available', $latestVersion, 1440 );
-            }
-            else
-            {
-                if ( $this->cache->has( $notificationCacheKey ) )
-                {
+            } else {
+                if ( $this->cache->has( $notificationCacheKey ) ) {
                     $output->writeln( "<comment>An email notification for version {$latestVersion} has already been sent. Skipping.</comment>" );
-                }
-                else
-                {
+                } else {
                     $output->writeln( "Production mode: Attempting to send email notification..." );
                     $wasSent = $this->sendEmailNotification( $latestVersion, $latestRelease['html_url'], $output );
-                    if ( $wasSent )
-                    {
+                    if ( $wasSent ) {
                         $this->cache->put( $notificationCacheKey, true, 43200 );
                     }
                 }
             }
-        }
-        else
-        {
+        } else {
             $output->writeln( "Application is up to date. Clearing any update caches." );
             $this->cache->forget( 'update_available' );
         }
@@ -112,13 +105,13 @@ class CheckVersionCommand extends Command
      * @param string $repository
      * @param OutputInterface $output
      */
-    private function fetchFromApi( string $repository, OutputInterface $output ): ?array {
+    private function fetchFromApi( string $repository, OutputInterface $output ): ?array
+    {
         // Use the /releases endpoint to get all releases, including pre-releases
         $apiUrl     = "https://api.github.com/repos/{$repository}/releases";
         $caCertPath = dirname( __DIR__, 2 ) . '/config/cacert.pem';
 
-        if ( !file_exists( $caCertPath ) )
-        {
+        if ( !file_exists( $caCertPath ) ) {
             $output->writeln( "<error>SSL Certificate bundle not found at '{$caCertPath}'. Please download it from curl.se/docs/caextract.html</error>" );
             return null;
         }
@@ -135,8 +128,7 @@ class CheckVersionCommand extends Command
         $response = curl_exec( $ch );
         $httpCode = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
 
-        if ( curl_errno( $ch ) )
-        {
+        if ( curl_errno( $ch ) ) {
             $output->writeln( "<error>cURL Error: " . curl_error( $ch ) . "</error>" );
             curl_close( $ch );
             return null;
@@ -144,8 +136,7 @@ class CheckVersionCommand extends Command
 
         curl_close( $ch );
 
-        if ( $httpCode !== 200 || $response === false )
-        {
+        if ( $httpCode !== 200 || $response === false ) {
             return null;
         }
 
@@ -160,8 +151,7 @@ class CheckVersionCommand extends Command
     private function sendEmailNotification( string $newVersion, string $releaseUrl, OutputInterface $output ): bool
     {
         $to = $_ENV['MAIL_ADMIN_EMAIL'] ?? null;
-        if ( !$to )
-        {
+        if ( !$to ) {
             $output->writeln( "<error>MAIL_ADMIN_EMAIL is not set in your .env file. Cannot send notification.</error>" );
             return false;
         }
@@ -172,9 +162,7 @@ class CheckVersionCommand extends Command
             $this->mailer->send( $to, $subject, $htmlBody );
             $output->writeln( "<info>Email notification sent successfully to {$to}.</info>" );
             return true;
-        }
-        catch ( \Exception $e )
-        {
+        } catch ( \Exception $e ) {
             error_log( "CheckVersionCommand Mailer Error: " . $e->getMessage() );
             $output->writeln( "<error>Failed to send email. Check your server's error log for details.</error>" );
             return false;

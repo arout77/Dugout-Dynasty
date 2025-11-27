@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Command: cache:clear
+ * Purpose: Clears the application cache.
+ * Usage: php rhapsody cache:clear
+ */
+
 namespace App\Commands;
 
 use Core\Cache;

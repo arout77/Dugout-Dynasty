@@ -2,6 +2,12 @@
 
 namespace App\Commands;
 
+/**
+ * Command: import:hitter-stats
+ * Purpose: Imports historical hitter statistics from a source file.
+ * Usage: php rhapsody import:hitter-stats [file_path]
+ */
+
 use Core\Database;
 use PDO;
 use Symfony\Component\Console\Command\Command;

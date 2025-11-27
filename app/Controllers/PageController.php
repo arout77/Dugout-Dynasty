@@ -51,9 +51,8 @@ class PageController extends BaseController
         // 1. Get User Team
         $userTeamId = Session::get( 'user_team_id' );
         if ( !$userTeamId ) {
-            $db = $this->teamModel->getDb();
-            // FIX: Use 'user_team_id' based on your user schema
-            $stmt = $db->prepare( "SELECT user_team_id FROM users WHERE id = :uid" );
+            $db   = $this->teamModel->getDb();
+            $stmt = $db->prepare( "SELECT team_id FROM users WHERE id = :uid" );
             $stmt->execute( [':uid' => $userId] );
             $userTeamId = $stmt->fetchColumn();
 
@@ -67,9 +66,10 @@ class PageController extends BaseController
         $userTeam = $this->teamModel->findById( $userTeamId );
         $db       = $this->teamModel->getDb();
 
+        $userLeagueId   = $userTeam['league_id'];
         $userLeagueName = $userTeam['league_name'] ?? 'American League';
 
-        // 2. Get Next Game (Fixed Params)
+        // 2. Get Next Game
         $sqlNext = "SELECT g.*, h.team_name as home_name, a.team_name as away_name
                     FROM games g
                     JOIN teams h ON g.home_team_id = h.team_id
@@ -84,13 +84,16 @@ class PageController extends BaseController
         ] );
         $nextGame = $stmtNext->fetch( PDO::FETCH_ASSOC );
 
-        // 3. Get Standings (Single League View)
+        // 3. Get Standings (Filtered by Game Instance AND Division)
         $sqlRank = "SELECT team_id, team_name, w, l, (w / NULLIF(w+l, 0)) as pct
                     FROM teams
-                    WHERE league_name = :lname
+                    WHERE league_id = :lid AND league_name = :lname
                     ORDER BY w DESC, pct DESC";
         $stmtRank = $db->prepare( $sqlRank );
-        $stmtRank->execute( [':lname' => $userLeagueName] );
+        $stmtRank->execute( [
+            ':lid'   => $userLeagueId,
+            ':lname' => $userLeagueName,
+        ] );
         $standings = $stmtRank->fetchAll( PDO::FETCH_ASSOC );
 
         $myRank = '-';
@@ -101,14 +104,15 @@ class PageController extends BaseController
             }
         }
 
-        // 4. Get League Leaders (FIXED: JOIN rosters for names)
+        // 4. Get League Leaders
         $leaders = [];
 
-        // Helper that joins 'rosters' to get player_name
-        // Note: We join on player_id AND team_id to ensure uniqueness in current season
-        $fetchLeader = function ( $sql ) use ( $db, $userLeagueName ) {
+        $fetchLeader = function ( $sql ) use ( $db, $userLeagueId, $userLeagueName ) {
             $stmt = $db->prepare( $sql );
-            $stmt->execute( [':lname' => $userLeagueName] );
+            $stmt->execute( [
+                ':lid'   => $userLeagueId,
+                ':lname' => $userLeagueName,
+            ] );
             return $stmt->fetchAll( PDO::FETCH_ASSOC );
         };
 
@@ -117,7 +121,9 @@ class PageController extends BaseController
             FROM player_season_stats p
             JOIN teams t ON p.team_id = t.team_id
             JOIN rosters r ON p.player_id = r.player_id AND p.team_id = r.team_id
-            WHERE p.AB > 10 AND t.league_name = :lname
+            WHERE p.AB > 10
+              AND t.league_id = :lid
+              AND t.league_name = :lname
             ORDER BY val DESC LIMIT 5
         " );
 
@@ -126,7 +132,8 @@ class PageController extends BaseController
             FROM player_season_stats p
             JOIN teams t ON p.team_id = t.team_id
             JOIN rosters r ON p.player_id = r.player_id AND p.team_id = r.team_id
-            WHERE t.league_name = :lname
+            WHERE t.league_id = :lid
+              AND t.league_name = :lname
             ORDER BY val DESC LIMIT 5
         " );
 
@@ -135,7 +142,9 @@ class PageController extends BaseController
             FROM pitcher_season_stats p
             JOIN teams t ON p.team_id = t.team_id
             JOIN rosters r ON p.player_id = r.player_id AND p.team_id = r.team_id
-            WHERE p.IP > 5 AND t.league_name = :lname
+            WHERE p.IP > 5
+              AND t.league_id = :lid
+              AND t.league_name = :lname
             ORDER BY val ASC LIMIT 5
         " );
 
@@ -144,7 +153,8 @@ class PageController extends BaseController
             FROM pitcher_season_stats p
             JOIN teams t ON p.team_id = t.team_id
             JOIN rosters r ON p.player_id = r.player_id AND p.team_id = r.team_id
-            WHERE t.league_name = :lname
+            WHERE t.league_id = :lid
+              AND t.league_name = :lname
             ORDER BY val DESC LIMIT 5
         " );
 
@@ -153,7 +163,7 @@ class PageController extends BaseController
             'nextGame'   => $nextGame,
             'rank'       => $myRank,
             'totalTeams' => count( $standings ),
-            'standings'  => array_slice( $standings, 0, 5 ),
+            'standings'  => array_slice( $standings, 0, 15 ),
             'leagueName' => $userLeagueName,
             'leaders'    => $leaders,
         ] );

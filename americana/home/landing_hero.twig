@@ -1,0 +1,202 @@
+{% extends "layouts/main.twig" %}
+
+{% block full_width_content %}
+<!-- ======================================= -->
+<!-- Hero Section (Above the Fold)           -->
+<!-- ======================================= -->
+<section class="relative bg-gray-900 text-white overflow-hidden">
+    <div class="absolute inset-0 bg-grid-gray-700/[0.3] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_-20%,#000_70%,transparent_110%)]"></div>
+    <div class="relative container mx-auto px-6 py-24 md:py-32 lg:py-40 flex flex-col items-center text-center">
+        
+        <div class="mb-4">
+            <span class="inline-block font-semibold px-4 py-1 border-2 border-pink-600 rounded-full hero-pill">Elegant. Lightweight. Modern.</span>
+        </div>
+
+        <h1 class="text-4xl sm:text-5xl md:text-7xl font-extrabold text-white leading-tight tracking-tight mb-6">
+            Compose Your Code. Effortlessly.
+        </h1>
+        
+        <p class="max-w-3xl mx-auto text-lg md:text-xl text-gray-300 mb-10">
+            Rhapsody is a modern PHP framework designed for developers who value simplicity, performance, and a delightful creative process. Build your next masterpiece, from simple APIs to full-featured web applications.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+            <a href="{{ base_url }}/docs/installation" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white border-2 border-gray-300  font-bold py-3 px-8 rounded-lg text-lg transition duration-300 transform hover:scale-105 shadow-lg">
+                Get Started in 5 Minutes
+            </a>
+            <a href="{{ base_url }}/docs" class="w-full sm:w-auto bg-pink-700  hover:bg-pink-600 border-2 border-gray-300 text-gray-300 font-bold py-3 px-8 rounded-lg text-lg transition duration-300 transform hover:scale-105">
+                Read the Docs
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================= -->
+<!-- Social Proof Section                    -->
+<!-- ======================================= -->
+<section class="bg-pink-700 dark:bg-gray-800 py-12">
+    <div class="container mx-auto px-6 text-center">
+        <h3 class="text-sm font-semibold text-white dark:text-gray-400 uppercase tracking-wider">
+            Powering the next generation of web applications
+        </h3>
+        <div class="flex justify-center items-center space-x-8 md:space-x-12 mt-6 text-gray-300 dark:text-gray-400">
+            <span class="font-bold text-2xl">Project<span class="text-blue-500">Hub</span></span>
+            <span class="font-bold text-2xl italic">InnovateCo</span>
+            <span class="font-bold text-2xl">Data<span class="font-light">Sphere</span></span>
+            <span class="hidden sm:inline-block font-bold text-2xl">Quantum<span class="text-blue-500">Leap</span></span>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<div class="bg-white dark:bg-gray-800 -mx-6 -my-6">
+    <!-- Features Section -->
+    <section class="py-20 bg-gray-50 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center text-gray-800 dark:text-white mb-12">Why Choose Rhapsody?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <!-- Feature 1: MVC Architecture -->
+                <div class="text-center p-6 bg-white dark:bg-gray-700 rounded-lg shadow-lg">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" /></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">MVC Architecture</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Clean separation of concerns with Models, Views, and Controllers for organized, scalable code.</p>
+                </div>
+                <!-- Feature 2: Powerful Routing -->
+                <div class="text-center p-6 bg-white dark:bg-gray-700 rounded-lg shadow-lg">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Expressive Routing</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Simple, powerful routing engine that supports dynamic parameters, GET/POST methods, and Middleware.</p>
+                </div>
+                <!-- Feature 3: Twig Templating -->
+                <div class="text-center p-6 bg-white dark:bg-gray-700 rounded-lg shadow-lg">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Twig Templating</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Secure, fast, and flexible templating with inheritance, caching, and easy data binding.</p>
+                </div>
+                <!-- Feature 4: Auth & Middleware -->
+                <div class="text-center p-6 bg-white dark:bg-gray-700 rounded-lg shadow-lg">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Secure by Default</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Built-in authentication, session management, and a middleware pipeline to protect your routes.</p>
+                </div>
+                <!-- Feature 5: Validation Engine -->
+                <div class="text-center p-6 bg-white dark:bg-gray-700 rounded-lg shadow-lg">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Robust Validation</h3>
+                    <p class="text-gray-600 dark:text-gray-400">A powerful and extensible validation engine to ensure your data is always correct and secure.</p>
+                </div>
+                <!-- Feature 6: API Ready -->
+                <div class="text-center p-6 bg-white dark:bg-gray-700 rounded-lg shadow-lg">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">API Ready</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Effortlessly build JSON APIs for your JavaScript front-ends or mobile applications with the built-in JSON helper.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ======================================= -->
+    <!-- Code Example Section                    -->
+    <!-- ======================================= -->
+    <section class="py-20 md:py-28">
+        <div class="container mx-auto px-6">
+            <div class="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
+                
+                <div class="mb-12 lg:mb-0">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-4">Focus on Your Logic, Not Boilerplate.</h2>
+                    <p class="text-gray-600 dark:text-gray-400 text-lg mb-6">
+                        Rhapsody's syntax is designed to be intuitive and expressive. Define routes, create controllers, and build your application with a workflow that feels natural and un-obstructive.
+                    </p>
+                    <ul class="space-y-4 text-gray-700 dark:text-gray-300">
+                        <li class="flex items-start"><span class="text-blue-500 mr-3 mt-1">&#10003;</span><span><strong>Expressive Routing:</strong> Dynamic parameters and middleware, right where you need them.</span></li>
+                        <li class="flex items-start"><span class="text-blue-500 mr-3 mt-1">&#10003;</span><span><strong>Dependency Injection:</strong> Write clean, testable code with our integrated service container.</span></li>
+                        <li class="flex items-start"><span class="text-blue-500 mr-3 mt-1">&#10003;</span><span><strong>API-Ready:</strong> Built-in helpers for creating robust JSON APIs for your front-end.</span></li>
+                    </ul>
+                </div>
+
+                <div class="bg-gray-900 dark:bg-black rounded-lg shadow-2xl overflow-hidden">
+                    <div class="p-4 flex justify-between items-center bg-gray-800 dark:bg-gray-900 border-b border-gray-700">
+                        <span class="text-gray-300 font-mono text-sm">routes/web.php</span>
+                        <button class="copy-btn text-gray-400 hover:text-white text-sm font-semibold flex items-center" data-clipboard-target="#code-snippet-b">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg> Copy
+                        </button>
+                    </div>
+                    <pre class="language-php p-6 text-sm" id="code-snippet-b"><code class="text-white">
+use App\Controllers\UserController;
+use Core\Router;
+
+// Simple, expressive, and powerful.
+// This is all it takes to define a protected API endpoint.
+
+Router::get('/api/users/{id}', [UserController::class, 'show'])
+      ->middleware('auth');
+</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======================================= -->
+    <!-- Final CTA Section                       -->
+    <!-- ======================================= -->
+    <section class="bg-gray-100 dark:bg-gray-900 py-20">
+        <div class="container mx-auto text-center px-6">
+            <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">Start Your Symphony Today.</h2>
+            <p class="text-lg text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">Join the growing number of developers choosing simplicity and elegance. Install Rhapsody and begin composing your next web application in minutes.</p>
+            <a href="{{ base_url }}/docs/installation" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 px-10 rounded-lg text-xl transition duration-300 transform hover:scale-105 shadow-lg">
+                Let's Build Something Amazing
+            </a>
+        </div>
+    </section>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Clipboard functionality for code snippets
+    document.querySelectorAll('.copy-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const targetId = button.getAttribute('data-clipboard-target');
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                const textToCopy = targetElement.innerText || targetElement.textContent;
+                const textArea = document.createElement('textarea');
+                textArea.value = textToCopy;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg> Copied!';
+                    setTimeout(() => {
+                        button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg> Copy';
+                    }, 2000);
+                } catch (err) { console.error('Failed to copy text: ', err); }
+                document.body.removeChild(textArea);
+            }
+        });
+    });
+});
+</script>
+
+<style>
+    .bg-grid-gray-700\/\\[0\.3\\] {
+        background-image: linear-gradient(to right, #374151 1px, transparent 1px), linear-gradient(to bottom, #374151 1px, transparent 1px);
+        background-size: 4rem 4rem;
+        opacity: 0.3;
+    }
+</style>
+{% endblock %}

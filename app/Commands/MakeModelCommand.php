@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Command: make:model
+ * Purpose: Creates a new model class.
+ * Usage: php rhapsody make:model [Name]
+ */
+
 namespace App\Commands;
 
 use Symfony\Component\Console\Command\Command;
@@ -36,8 +42,7 @@ class MakeModelCommand extends Command
         $directory = dirname( __DIR__ ) . '/Models';
         $filepath  = $directory . '/' . $modelName . '.php';
 
-        if ( file_exists( $filepath ) )
-        {
+        if ( file_exists( $filepath ) ) {
             $output->writeln( "<error>Model '{$modelName}' already exists!</error>" );
             return Command::FAILURE;
         }
@@ -45,8 +50,7 @@ class MakeModelCommand extends Command
         $stub = file_get_contents( dirname( __DIR__, 2 ) . '/stubs/model.stub' );
         $stub = str_replace( '{{ classname }}', $modelName, $stub );
 
-        if ( file_put_contents( $filepath, $stub ) === false )
-        {
+        if ( file_put_contents( $filepath, $stub ) === false ) {
             $output->writeln( "<error>Failed to create model file.</error>" );
             return Command::FAILURE;
         }

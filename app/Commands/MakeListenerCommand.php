@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Command: make:listener
+ * Purpose: Creates a new event listener class.
+ * Usage: php rhapsody make:listener [Name] --event=[EventName]
+ */
+
 namespace App\Commands;
 
 use Symfony\Component\Console\Command\Command;

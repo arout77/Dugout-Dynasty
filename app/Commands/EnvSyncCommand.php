@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Command: env:sync
+ * Purpose: Synchronizes the .env file with .env.example.
+ * Usage: php rhapsody env:sync
+ */
+
 namespace App\Commands;
 
 use Symfony\Component\Console\Command\Command;
@@ -30,14 +36,12 @@ class EnvSyncCommand extends Command
         $envPath     = $rootPath . '/.env';
         $examplePath = $rootPath . '/.env.example';
 
-        if ( !file_exists( $examplePath ) )
-        {
+        if ( !file_exists( $examplePath ) ) {
             $output->writeln( '<error>.env.example file not found!</error>' );
             return Command::FAILURE;
         }
 
-        if ( !file_exists( $envPath ) )
-        {
+        if ( !file_exists( $envPath ) ) {
             $output->writeln( '<comment>No .env file found. Copying .env.example...</comment>' );
             copy( $examplePath, $envPath );
             $output->writeln( '<info>.env file created successfully. Please configure it now.</info>' );
@@ -50,8 +54,7 @@ class EnvSyncCommand extends Command
 
         $missingKeys = array_diff_key( $exampleKeys, $envKeys );
 
-        if ( empty( $missingKeys ) )
-        {
+        if ( empty( $missingKeys ) ) {
             $output->writeln( '<info>.env file is already up to date. Nothing to sync.</info>' );
             return Command::SUCCESS;
         }
@@ -59,8 +62,7 @@ class EnvSyncCommand extends Command
         $output->writeln( '<comment>The following variables are missing from your .env file and will be added:</comment>' );
         $contentToAppend = "\n";
 
-        foreach ( $missingKeys as $key => $value )
-        {
+        foreach ( $missingKeys as $key => $value ) {
             $output->writeln( " - <options=bold>{$key}</>" );
             $contentToAppend .= "{$key}={$value}\n";
         }
@@ -75,18 +77,16 @@ class EnvSyncCommand extends Command
     /**
      * Parses a .env file and returns an associative array of keys and values.
      */
-    private function getKeysFromFile( string $path ): array {
+    private function getKeysFromFile( string $path ): array
+    {
         $lines = file( $path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES );
         $keys  = [];
-        foreach ( $lines as $line )
-        {
+        foreach ( $lines as $line ) {
             // Ignore comments
-            if ( str_starts_with( trim( $line ), '#' ) )
-            {
+            if ( str_starts_with( trim( $line ), '#' ) ) {
                 continue;
             }
-            if ( str_contains( $line, '=' ) )
-            {
+            if ( str_contains( $line, '=' ) ) {
                 [$key, $value]    = explode( '=', $line, 2 );
                 $keys[trim( $key )] = trim( $value );
             }
