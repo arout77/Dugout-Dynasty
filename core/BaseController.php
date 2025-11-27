@@ -30,8 +30,8 @@ abstract class BaseController
     {
         // Add default values for meta tags
         $defaults = [
-            'title'       => 'Rhapsody - Compose your masterpiece',
-            'description' => 'Rhapsody is a modern PHP framework for developers who find full-stack frameworks like Laravel too heavy for their needs, but find micro-frameworks like Slim too bare-bones. It gives you the modern tooling you love—like a powerful CLI, dependency injection, and an ORM—in a simple, performant, and elegant package. It\'s the perfect choice for building fast, maintainable web applications and APIs without the overhead.',
+            'title'       => 'Dugout Dynasty - The Ultimate Historical Baseball Sim',
+            'description' => 'Dugout Dynasty is a sophisticated, historical baseball simulation game built on the Rhapsody PHP Framework. It allows users to draft legendary players from 1871 to the present, manage franchises, and simulate games using a custom physics engine that normalizes statistics across eras for fair competition.',
         ];
         $args['meta'] = array_merge( $defaults, $meta );
 
